@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="text_normal">22sp</dimen>
+    <dimen name="text_settings">16sp</dimen>
+    <dimen name="btn_corner_radius">16dp</dimen>
+    <dimen name="settings_row_height">61dp</dimen>
+    <dimen name="main_btn_icon_padding">8dp</dimen>
+    <dimen name="start_end_margin">16dp</dimen>
+    <dimen name="settings_image_size">24dp</dimen>
+    <dimen name="settings_marginEnd">12dp</dimen>
 </resources>
