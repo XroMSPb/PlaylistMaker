@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
         val btnSettings = findViewById<Button>(R.id.btn_settings)
         btnSettings.setOnClickListener {
-            Toast.makeText(this@MainActivity,"Вы нажали: "+getString(R.string.searchBtn_text),Toast.LENGTH_SHORT).show()
+            Toast.makeText(this@MainActivity,"Вы нажали: "+getString(R.string.settingsBtn_text),Toast.LENGTH_SHORT).show()
         }
 
     }
