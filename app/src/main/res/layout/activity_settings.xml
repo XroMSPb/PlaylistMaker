@@ -11,16 +11,22 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/search"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginStart="4dp"
             android:backgroundTint="@color/white"
             android:hint="@string/back"
+            android:insetBottom="0dp"
+            android:insetLeft="0dp"
+            android:insetTop="0dp"
+            android:insetRight="0dp"
             style="?android:attr/borderlessButtonStyle"
             app:icon="@drawable/ic_back_arrow"
-            app:iconTint="@color/main_iconTint" />
+            app:iconTint="@color/main_iconTint"
+            app:iconGravity="" />
+
         <TextView
             android:id="@+id/panelHeader"
             android:layout_width="wrap_content"
@@ -42,19 +48,20 @@
             android:layout_width="match_parent"
             android:layout_height="61dp"
             android:text="@string/darkTheme"
-            android:layout_marginStart="@dimen/start_end_margin"
+            android:layout_marginStart="@dimen/default_margin"
             android:layout_marginEnd="6dp"
             android:textSize="@dimen/text_settings"
             android:textColor="@color/black"/>
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/settings_row_height">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/start_end_margin"
+                android:layout_marginStart="@dimen/default_margin"
                 android:backgroundTint="@color/white"
                 android:gravity="start|center_vertical"
                 android:text="@string/share"
@@ -68,16 +75,17 @@
                 android:layout_marginEnd="@dimen/settings_marginEnd"
                 android:contentDescription="@string/share"
                 app:srcCompat="@drawable/ic_share" />
-        </FrameLayout>
+        </LinearLayout>
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/settings_row_height">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/start_end_margin"
+                android:layout_marginStart="@dimen/default_margin"
                 android:backgroundTint="@color/white"
                 android:gravity="start|center_vertical"
                 android:text="@string/support"
@@ -91,16 +99,17 @@
                 android:layout_marginEnd="@dimen/settings_marginEnd"
                 android:contentDescription="@string/support"
                 app:srcCompat="@drawable/ic_support" />
-        </FrameLayout>
+        </LinearLayout>
 
-        <FrameLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/settings_row_height">
 
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/start_end_margin"
+                android:layout_marginStart="@dimen/default_margin"
                 android:backgroundTint="@color/white"
                 android:gravity="start|center_vertical"
                 android:text="@string/terms"
@@ -114,7 +123,7 @@
                 android:layout_marginEnd="@dimen/settings_marginEnd"
                 android:contentDescription="@string/terms"
                 app:srcCompat="@drawable/ic_arrow_forward" />
-        </FrameLayout>
+        </LinearLayout>
 
     </LinearLayout>
 
