@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
@@ -15,7 +14,7 @@ class MainActivity : AppCompatActivity() {
         val btnSearch = findViewById<Button>(R.id.btn_search)
         btnSearch.setOnClickListener {
             //Toast.makeText(this@MainActivity,"Вы нажали: "+getString(R.string.searchBtn_text),Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, SearchActivity::class.java)
+            val intent = Intent(this@MainActivity, SearchActivity::class.java)
             startActivity(intent)
         }
         val btnLibrary = findViewById<Button>(R.id.btn_library)
@@ -29,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         val btnSettings = findViewById<Button>(R.id.btn_settings)
         btnSettings.setOnClickListener {
             //Toast.makeText(this@MainActivity,"Вы нажали: "+getString(R.string.settingsBtn_text),Toast.LENGTH_SHORT).show()
-            val intent = Intent(this, SettingsActivity::class.java)
+            val intent = Intent(this@MainActivity, SettingsActivity::class.java)
             startActivity(intent)
         }
 

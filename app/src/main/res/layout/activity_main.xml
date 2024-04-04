@@ -50,7 +50,7 @@
           app:iconTint="@color/main_iconTint"
           app:iconPadding="@dimen/main_btn_icon_padding"
           android:backgroundTint="@color/white"
-          android:text="@string/searchBtn_text"
+          android:text="@string/search_text"
           android:textColor="@color/btn_text"
           android:textSize="@dimen/text_normal"
           android:textAllCaps="false"
@@ -67,7 +67,7 @@
           app:iconTint="@color/main_iconTint"
           app:iconPadding="@dimen/main_btn_icon_padding"
           android:backgroundTint="@color/white"
-          android:text="@string/libraryBtn_text"
+          android:text="@string/library_text"
           android:textColor="@color/btn_text"
           android:textSize="@dimen/text_normal"
           android:textAllCaps="false"/>
