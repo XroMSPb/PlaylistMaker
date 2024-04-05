@@ -36,6 +36,7 @@
             android:textColor="@color/black"/>
 
         <LinearLayout
+            android:id="@+id/share"
             android:layout_width="match_parent"
             android:layout_height="@dimen/settings_row_height">
 
@@ -51,7 +52,6 @@
                 android:textSize="@dimen/text_settings" />
 
             <ImageView
-                android:id="@+id/share"
                 android:layout_width="@dimen/settings_image_size"
                 android:layout_height="@dimen/settings_image_size"
                 android:layout_gravity="end|center_vertical"
@@ -61,6 +61,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/support"
             android:layout_width="match_parent"
             android:layout_height="@dimen/settings_row_height">
 
@@ -76,7 +77,6 @@
                 android:textSize="@dimen/text_settings" />
 
             <ImageView
-                android:id="@+id/support"
                 android:layout_width="@dimen/settings_image_size"
                 android:layout_height="@dimen/settings_image_size"
                 android:layout_gravity="end|center_vertical"
@@ -86,6 +86,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/terms"
             android:layout_width="match_parent"
             android:layout_height="@dimen/settings_row_height">
 
@@ -101,7 +102,6 @@
                 android:textSize="@dimen/text_settings" />
 
             <ImageView
-                android:id="@+id/terms"
                 android:layout_width="@dimen/settings_image_size"
                 android:layout_height="@dimen/settings_image_size"
                 android:layout_gravity="end|center_vertical"

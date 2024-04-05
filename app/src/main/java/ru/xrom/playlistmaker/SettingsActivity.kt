@@ -1,7 +1,7 @@
 package ru.xrom.playlistmaker
 
 import android.os.Bundle
-import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
@@ -22,18 +22,18 @@ class SettingsActivity : AppCompatActivity() {
             Toast.makeText(this@SettingsActivity,"Вы нажали: "+getString(R.string.darkTheme),Toast.LENGTH_SHORT).show()
         }
 
-        val imgShare = findViewById<ImageView>(R.id.share)
-        imgShare.setOnClickListener {
+        val lineShare = findViewById<LinearLayout>(R.id.share)
+        lineShare.setOnClickListener {
             Toast.makeText(this@SettingsActivity,"Вы нажали: "+getString(R.string.share),Toast.LENGTH_SHORT).show()
         }
 
-        val imgSupport = findViewById<ImageView>(R.id.support)
-        imgSupport.setOnClickListener {
+        val lineSupport = findViewById<LinearLayout>(R.id.support)
+        lineSupport.setOnClickListener {
             Toast.makeText(this@SettingsActivity,"Вы нажали: "+getString(R.string.support),Toast.LENGTH_SHORT).show()
         }
 
-        val imgTerms = findViewById<ImageView>(R.id.terms)
-        imgTerms.setOnClickListener {
+        val lineTerms = findViewById<LinearLayout>(R.id.terms)
+        lineTerms.setOnClickListener {
             Toast.makeText(this@SettingsActivity,"Вы нажали: "+getString(R.string.terms),Toast.LENGTH_SHORT).show()
         }
     }

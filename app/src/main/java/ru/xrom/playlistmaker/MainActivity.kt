@@ -18,11 +18,11 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
         val btnLibrary = findViewById<Button>(R.id.btn_library)
-        val btnLibraryClickListener: View.OnClickListener = object : View.OnClickListener { override fun onClick(v: View?) {
+        val btnLibraryClickListener: View.OnClickListener = View.OnClickListener {
             //Toast.makeText(this@MainActivity,"Вы нажали: "+getString(R.string.libraryBtn_text),Toast.LENGTH_SHORT).show()
             val intent = Intent(this@MainActivity, MediaActivity::class.java)
             startActivity(intent)
-        } }
+        }
         btnLibrary.setOnClickListener(btnLibraryClickListener)
 
         val btnSettings = findViewById<Button>(R.id.btn_settings)
