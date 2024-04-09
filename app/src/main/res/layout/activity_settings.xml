@@ -28,87 +28,49 @@
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/dark_theme"
             android:layout_width="match_parent"
-            android:layout_height="61dp"
+            android:layout_height="@dimen/settings_row_height"
             android:text="@string/darkTheme"
             android:layout_marginStart="@dimen/default_margin"
             android:layout_marginEnd="6dp"
             android:textSize="@dimen/text_settings"
             android:textColor="@color/black"/>
 
-        <LinearLayout
-            android:id="@+id/share"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/settings_row_height">
-
             <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/default_margin"
+                android:id="@+id/share"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_row_height"
                 android:backgroundTint="@color/white"
-                android:gravity="start|center_vertical"
                 android:text="@string/share"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_settings" />
+                android:textSize="@dimen/text_settings"
+                android:drawableRight="@drawable/ic_share"
+                android:padding="16dp" />
 
-            <ImageView
-                android:layout_width="@dimen/settings_image_size"
-                android:layout_height="@dimen/settings_image_size"
-                android:layout_gravity="end|center_vertical"
-                android:layout_marginEnd="@dimen/settings_marginEnd"
-                android:contentDescription="@string/share"
-                app:srcCompat="@drawable/ic_share" />
-        </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/support"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/settings_row_height">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/default_margin"
+                android:id="@+id/support"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_row_height"
                 android:backgroundTint="@color/white"
-                android:gravity="start|center_vertical"
                 android:text="@string/support"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_settings" />
+                android:textSize="@dimen/text_settings"
+                android:drawableRight="@drawable/ic_support"
+                android:padding="16dp" />
 
-            <ImageView
-                android:layout_width="@dimen/settings_image_size"
-                android:layout_height="@dimen/settings_image_size"
-                android:layout_gravity="end|center_vertical"
-                android:layout_marginEnd="@dimen/settings_marginEnd"
-                android:contentDescription="@string/support"
-                app:srcCompat="@drawable/ic_support" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/terms"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/settings_row_height">
 
             <TextView
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/default_margin"
+                android:id="@+id/terms"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/settings_row_height"
                 android:backgroundTint="@color/white"
-                android:gravity="start|center_vertical"
                 android:text="@string/terms"
                 android:textColor="@color/black"
-                android:textSize="@dimen/text_settings" />
+                android:textSize="@dimen/text_settings"
+                android:drawableRight="@drawable/ic_arrow_forward"
+                android:padding="16dp" />/>
 
-            <ImageView
-                android:layout_width="@dimen/settings_image_size"
-                android:layout_height="@dimen/settings_image_size"
-                android:layout_gravity="end|center_vertical"
-                android:layout_marginEnd="@dimen/settings_marginEnd"
-                android:contentDescription="@string/terms"
-                app:srcCompat="@drawable/ic_arrow_forward" />
-        </LinearLayout>
 
     </LinearLayout>
 

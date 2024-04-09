@@ -1,7 +1,7 @@
 package ru.xrom.playlistmaker
 
 import android.os.Bundle
-import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
@@ -22,17 +22,17 @@ class SettingsActivity : AppCompatActivity() {
             Toast.makeText(this@SettingsActivity,"Вы нажали: "+getString(R.string.darkTheme),Toast.LENGTH_SHORT).show()
         }
 
-        val lineShare = findViewById<LinearLayout>(R.id.share)
+        val lineShare = findViewById<TextView>(R.id.share)
         lineShare.setOnClickListener {
             Toast.makeText(this@SettingsActivity,"Вы нажали: "+getString(R.string.share),Toast.LENGTH_SHORT).show()
         }
 
-        val lineSupport = findViewById<LinearLayout>(R.id.support)
+        val lineSupport = findViewById<TextView>(R.id.support)
         lineSupport.setOnClickListener {
             Toast.makeText(this@SettingsActivity,"Вы нажали: "+getString(R.string.support),Toast.LENGTH_SHORT).show()
         }
 
-        val lineTerms = findViewById<LinearLayout>(R.id.terms)
+        val lineTerms = findViewById<TextView>(R.id.terms)
         lineTerms.setOnClickListener {
             Toast.makeText(this@SettingsActivity,"Вы нажали: "+getString(R.string.terms),Toast.LENGTH_SHORT).show()
         }
