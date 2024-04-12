@@ -3,21 +3,20 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="?attr/colorPrimary"
     android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@color/white"
         app:navigationIcon="@drawable/ic_back_arrow"
+        app:tint="?attr/colorOnPrimary"
         app:title="@string/settings"
         app:titleTextAppearance="@style/Toolbar.TitleText"
-        app:titleTextColor="@color/black"
+        app:titleTextColor="?attr/colorOnPrimary"
         app:contentInsetStartWithNavigation="0dp"
         android:foreground="?attr/selectableItemBackground"/>
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,50 +25,28 @@
         android:layout_marginTop="24dp">
 
         <androidx.appcompat.widget.SwitchCompat
+            style="@style/SettingsTextViewStyle"
             android:id="@+id/dark_theme"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/settings_row_height"
-            android:text="@string/darkTheme"
-            android:layout_marginStart="@dimen/default_margin"
-            android:layout_marginEnd="6dp"
-            android:textSize="@dimen/text_settings"
-            android:textColor="@color/black"/>
+            android:text="@string/darkTheme" />
 
-            <TextView
+        <TextView
+            style="@style/SettingsTextViewStyle"
                 android:id="@+id/share"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/settings_row_height"
-                android:backgroundTint="@color/white"
                 android:text="@string/share"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_settings"
-                android:drawableRight="@drawable/ic_share"
-                android:padding="16dp" />
+            app:drawableRightCompat="@drawable/ic_share" />
 
 
+        <TextView
+            android:id="@+id/support"
+            style="@style/SettingsTextViewStyle"
+            android:text="@string/support"
+            app:drawableRightCompat="@drawable/ic_support" />
 
-            <TextView
-                android:id="@+id/support"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/settings_row_height"
-                android:backgroundTint="@color/white"
-                android:text="@string/support"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_settings"
-                android:drawableRight="@drawable/ic_support"
-                android:padding="16dp" />
-
-
-            <TextView
+        <TextView
+            style="@style/SettingsTextViewStyle"
                 android:id="@+id/terms"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/settings_row_height"
-                android:backgroundTint="@color/white"
                 android:text="@string/terms"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_settings"
-                android:drawableRight="@drawable/ic_arrow_forward"
-                android:padding="16dp" />/>
+            app:drawableRightCompat="@drawable/ic_arrow_forward" />
 
 
     </LinearLayout>
