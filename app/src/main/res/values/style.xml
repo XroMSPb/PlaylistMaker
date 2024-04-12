@@ -10,9 +10,6 @@
     </style>
 
     <style name="MainButtonStyle" parent="Widget.MaterialComponents.Button">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">0dp</item>
-        <item name="android:layout_weight">1</item>
         <item name="cornerRadius">@dimen/btn_corner_radius</item>
         <item name="iconGravity">textStart</item>
         <item name="iconTint">?attr/colorOnSecondary</item>
@@ -26,8 +23,6 @@
     </style>
 
     <style name="SettingsTextViewStyle" parent="Widget.MaterialComponents.TextView">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/settings_row_height</item>
         <item name="android:backgroundTint">?attr/colorSecondaryVariant</item>
         <item name="android:textColor">?attr/colorOnPrimary</item>
         <item name="android:textSize">@dimen/text_settings</item>
