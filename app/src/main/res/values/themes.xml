@@ -29,6 +29,20 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="Theme.PlaylistMakerSearch" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Customize your light theme here. -->
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorSecondaryVariant">@color/light_grayish_silver</item>
+        <item name="colorOnSecondary">@color/sett_iconTint</item>
+        <item name="toolbarNavigationButtonStyle">@style/TintedNavigation</item>
+        <!-- Status bar color. -->
+        <!--        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>-->
+        <!-- Customize your theme here. -->
+    </style>
+
     <!--    <style name="Theme.PlaylistMakerTemp" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         &lt;!&ndash; Customize your light theme here. &ndash;&gt;
         <item name="colorPrimary">#990223</item>

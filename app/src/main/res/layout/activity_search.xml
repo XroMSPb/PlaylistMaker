@@ -16,5 +16,22 @@
         app:contentInsetStartWithNavigation="0dp"
         android:foreground="?attr/selectableItemBackground"/>
 
+    <EditText
+        android:id="@+id/search_bar"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginHorizontal="@dimen/small_padding"
+        android:layout_marginVertical="@dimen/large_padding"
+        android:maxLines="1"
+        android:hint="@string/search_text"
+        android:textColorHint="?attr/colorOnSecondary"
+        android:inputType="text"
+        android:drawableStart="@drawable/search_icon"
+        android:drawableTint="?attr/colorOnSecondary"
+        android:drawablePadding="@dimen/small_padding"
+        android:padding="@dimen/medium_padding"
+        android:background="@drawable/edittext_background"
+        android:textCursorDrawable="@color/cursor"
+        android:autofillHints="" />
 
 </LinearLayout>
