@@ -1,5 +1,7 @@
 package ru.xrom.playlistmaker
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.TextView
 import android.widget.Toast
@@ -24,17 +26,36 @@ class SettingsActivity : AppCompatActivity() {
 
         val lineShare = findViewById<TextView>(R.id.share)
         lineShare.setOnClickListener {
-            Toast.makeText(this@SettingsActivity,"Вы нажали: "+getString(R.string.share),Toast.LENGTH_SHORT).show()
+            val share = Intent.createChooser(Intent().apply {
+                action = Intent.ACTION_SEND
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.practikumLink))
+                setType("text/plain")
+                putExtra(Intent.EXTRA_TITLE, getString(R.string.practikumHeader))
+            }, null)
+            startActivity(share)
         }
 
         val lineSupport = findViewById<TextView>(R.id.support)
         lineSupport.setOnClickListener {
-            Toast.makeText(this@SettingsActivity,"Вы нажали: "+getString(R.string.support),Toast.LENGTH_SHORT).show()
+            val share = Intent.createChooser(Intent().apply {
+                action = Intent.ACTION_SENDTO
+                data = Uri.parse("mailto:")
+                putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.supportMail)))
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.suportSubject))
+                putExtra(Intent.EXTRA_TEXT, getString(R.string.supportText))
+            }, getString(R.string.practikumHeader))
+            if (share.resolveActivity(packageManager) != null) {
+                startActivity(share)
+            }
         }
 
         val lineTerms = findViewById<TextView>(R.id.terms)
         lineTerms.setOnClickListener {
-            Toast.makeText(this@SettingsActivity,"Вы нажали: "+getString(R.string.terms),Toast.LENGTH_SHORT).show()
+            val share = Intent.createChooser(Intent().apply {
+                action = Intent.ACTION_VIEW
+                data = Uri.parse(getString(R.string.termsLink))
+            }, null)
+            startActivity(share)
         }
     }
 
