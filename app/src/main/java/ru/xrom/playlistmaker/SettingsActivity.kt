@@ -1,9 +1,11 @@
 package ru.xrom.playlistmaker
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
@@ -47,8 +49,10 @@ class SettingsActivity : AppCompatActivity() {
                 putExtra(Intent.EXTRA_SUBJECT, getString(R.string.suportSubject))
                 putExtra(Intent.EXTRA_TEXT, getString(R.string.supportText))
             }, getString(R.string.practikumHeader))
-            if (share.resolveActivity(packageManager) != null) {
+            try {
                 startActivity(share)
+            } catch (ex: ActivityNotFoundException) {
+                Toast.makeText(this, R.string.application_not_found, Toast.LENGTH_SHORT).show()
             }
         }
 

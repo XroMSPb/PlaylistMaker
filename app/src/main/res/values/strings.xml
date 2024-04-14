@@ -15,4 +15,5 @@
     <string name="suportSubject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
     <string name="supportText">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="termsLink">https://yandex.ru/legal/practicum_offer/</string>
+    <string name="application_not_found">Не удалось найти приложения для этого действия!</string>
 </resources>
