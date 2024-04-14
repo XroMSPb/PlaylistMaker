@@ -16,13 +16,22 @@ import androidx.appcompat.widget.Toolbar
 
 class SearchActivity : AppCompatActivity() {
     private var clearButtonVisibility = false
+    private var searchValue = TEXT_DEF
+
+    companion object {
+        const val SEARCH_TEXT = "SEARCH_TEXT"
+        const val TEXT_DEF = ""
+        const val DRAWABLE_RIGHT = 2
+    }
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
-        val DRAWABLE_RIGHT = 2
+
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+
+
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar.setNavigationOnClickListener{
             onBackPressedDispatcher.onBackPressed()
@@ -30,6 +39,7 @@ class SearchActivity : AppCompatActivity() {
 
         val searchBar = findViewById<EditText>(R.id.search_bar)
         searchBar.requestFocus()
+        searchBar.setText(searchValue)
 
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -38,6 +48,7 @@ class SearchActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButtonVisibility(s, searchBar)
+                searchValue = s.toString()
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -46,7 +57,7 @@ class SearchActivity : AppCompatActivity() {
         }
         searchBar.addTextChangedListener(simpleTextWatcher)
 
-        searchBar.setOnTouchListener(OnTouchListener { v, event ->
+        searchBar.setOnTouchListener(OnTouchListener { _, event ->
             if (clearButtonVisibility) {
                 if (event.action == MotionEvent.ACTION_UP) {
                     if (event.rawX + searchBar.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds()
@@ -62,6 +73,15 @@ class SearchActivity : AppCompatActivity() {
         })
     }
 
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(SEARCH_TEXT, searchValue)
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        searchValue = savedInstanceState.getString(SEARCH_TEXT, TEXT_DEF)
+    }
     private fun clearButtonVisibility(s: CharSequence?, v: EditText) {
         clearButtonVisibility = if (s.isNullOrEmpty()) {
             v.setCompoundDrawablesWithIntrinsicBounds(R.drawable.search_icon, 0, 0, 0);
