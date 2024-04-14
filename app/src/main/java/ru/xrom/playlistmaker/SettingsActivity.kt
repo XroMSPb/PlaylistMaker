@@ -4,8 +4,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
 
@@ -21,7 +21,10 @@ class SettingsActivity : AppCompatActivity() {
 
         val swDarkTheme = findViewById<SwitchCompat>(R.id.dark_theme)
         swDarkTheme.setOnClickListener {
-            Toast.makeText(this@SettingsActivity,"Вы нажали: "+getString(R.string.darkTheme),Toast.LENGTH_SHORT).show()
+            if (swDarkTheme.isChecked)
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            else
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         }
 
         val lineShare = findViewById<TextView>(R.id.share)
