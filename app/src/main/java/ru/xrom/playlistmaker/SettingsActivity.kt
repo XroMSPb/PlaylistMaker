@@ -24,7 +24,7 @@ class SettingsActivity : AppCompatActivity() {
             if (swDarkTheme.isChecked)
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             else
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
 
         val lineShare = findViewById<TextView>(R.id.share)
