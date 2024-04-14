@@ -26,14 +26,14 @@
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/dark_theme"
-            style="@style/SettingsTextViewStyle"
+            style="@style/SettingsViewStyle"
             android:layout_width="match_parent"
             android:layout_height="@dimen/settings_row_height"
             android:text="@string/darkTheme" />
 
         <TextView
             android:id="@+id/share"
-            style="@style/SettingsTextViewStyle"
+            style="@style/SettingsViewStyle"
             android:layout_width="match_parent"
             android:layout_height="@dimen/settings_row_height"
             android:text="@string/share"
@@ -42,7 +42,7 @@
 
         <TextView
             android:id="@+id/support"
-            style="@style/SettingsTextViewStyle"
+            style="@style/SettingsViewStyle"
             android:layout_width="match_parent"
             android:layout_height="@dimen/settings_row_height"
             android:text="@string/support"
@@ -50,7 +50,7 @@
 
         <TextView
             android:id="@+id/terms"
-            style="@style/SettingsTextViewStyle"
+            style="@style/SettingsViewStyle"
             android:layout_width="match_parent"
             android:layout_height="@dimen/settings_row_height"
             android:text="@string/terms"
