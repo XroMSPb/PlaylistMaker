@@ -9,4 +9,11 @@
     <string name="share">Поделиться приложением</string>
     <string name="support">Написать в поддержку</string>
     <string name="terms">Пользовательское соглашение</string>
+    <string name="practikumLink">https://practicum.yandex.ru/learn/android-developer</string>
+    <string name="practikumHeader">Yandex Practucum</string>
+    <string name="supportMail">mih-xrom@ya.ru</string>
+    <string name="suportSubject">Сообщение разработчикам и разработчицам приложения Playlist Maker</string>
+    <string name="supportText">Спасибо разработчикам и разработчицам за крутое приложение!</string>
+    <string name="termsLink">https://yandex.ru/legal/practicum_offer/</string>
+    <string name="application_not_found">Не удалось найти приложения для этого действия!</string>
 </resources>

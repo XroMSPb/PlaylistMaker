@@ -3,19 +3,27 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/white"
+    android:background="?attr/colorPrimary"
     android:orientation="vertical">
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="@color/white"
         app:navigationIcon="@drawable/ic_back_arrow"
         app:title="@string/search_text"
         app:titleTextAppearance="@style/Toolbar.TitleText"
-        app:titleTextColor="@color/black"
+        app:titleTextColor="?attr/colorOnPrimary"
         app:contentInsetStartWithNavigation="0dp"
         android:foreground="?attr/selectableItemBackground"/>
 
+    <EditText
+        android:id="@+id/search_bar"
+        style="@style/SearchEditViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:layout_marginHorizontal="@dimen/small_padding"
+        android:layout_marginVertical="@dimen/large_padding"
+        android:autofillHints="" />
+    <!--    android:drawableEnd="@drawable/cancel_icon"-->
 
 </LinearLayout>
