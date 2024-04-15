@@ -18,18 +18,13 @@
         app:contentInsetStartWithNavigation="0dp"
         android:foreground="?attr/selectableItemBackground"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="24dp">
-
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/dark_theme"
             style="@style/SettingsViewStyle"
             android:layout_width="match_parent"
             android:layout_height="@dimen/settings_row_height"
-            android:text="@string/darkTheme" />
+            android:text="@string/darkTheme"
+            android:layout_marginTop="24dp" />
 
         <TextView
             android:id="@+id/share"
@@ -56,7 +51,5 @@
             android:text="@string/terms"
             app:drawableRightCompat="@drawable/ic_arrow_forward" />
 
-
-    </LinearLayout>
 
 </LinearLayout>
