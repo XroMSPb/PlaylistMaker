@@ -6,10 +6,11 @@ import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.MotionEvent
-import android.view.View.OnTouchListener
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 
@@ -37,17 +38,20 @@ class SearchActivity : AppCompatActivity() {
             onBackPressedDispatcher.onBackPressed()
         }
 
+        val cancelBtn = findViewById<ImageView>(R.id.cancel_button)
         val searchBar = findViewById<EditText>(R.id.search_bar)
         searchBar.requestFocus()
         searchBar.setText(searchValue)
-
+        cancelBtn.setOnClickListener {
+            searchBar.text.clear()
+        }
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // empty
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                clearButtonVisibility(s, searchBar)
+                clearButtonVisibility(s, cancelBtn)
                 searchValue = s.toString()
             }
 
@@ -57,20 +61,6 @@ class SearchActivity : AppCompatActivity() {
         }
         searchBar.addTextChangedListener(simpleTextWatcher)
 
-        searchBar.setOnTouchListener(OnTouchListener { _, event ->
-            if (clearButtonVisibility) {
-                if (event.action == MotionEvent.ACTION_UP) {
-                    if (event.rawX + searchBar.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds()
-                            .width() >= searchBar.right - searchBar.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds()
-                            .width()
-                    ) {
-                        searchBar.setText("")
-                        return@OnTouchListener true
-                    }
-                }
-            }
-            false
-        })
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -82,21 +72,14 @@ class SearchActivity : AppCompatActivity() {
         super.onRestoreInstanceState(savedInstanceState)
         searchValue = savedInstanceState.getString(SEARCH_TEXT, TEXT_DEF)
     }
-    private fun clearButtonVisibility(s: CharSequence?, v: EditText) {
-        clearButtonVisibility = if (s.isNullOrEmpty()) {
-            v.setCompoundDrawablesWithIntrinsicBounds(R.drawable.search_icon, 0, 0, 0);
+    private fun clearButtonVisibility(s: CharSequence?, v: ImageView) {
+        if (s.isNullOrEmpty()) {
+            v.visibility = GONE
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(v.windowToken, 0)
-            false
         } else {
-            v.setCompoundDrawablesWithIntrinsicBounds(
-                R.drawable.search_icon,
-                0,
-                R.drawable.cancel_icon,
-                0
-            );
-            true
+            v.visibility = VISIBLE
         }
     }
 

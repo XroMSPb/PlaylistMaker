@@ -39,7 +39,7 @@
         <item name="android:drawableStart">@drawable/search_icon</item>
         <item name="android:drawableTint">?attr/colorOnSecondary</item>
         <item name="android:drawablePadding">@dimen/small_padding</item>
-        <item name="android:padding">@dimen/medium_padding</item>
+        <item name="android:paddingHorizontal">14dp</item>
         <item name="android:background">@drawable/edittext_background</item>
         <item name="android:textCursorDrawable">@drawable/edit_cursor</item>
         <item name="android:textColor">?attr/colorSecondary</item>
