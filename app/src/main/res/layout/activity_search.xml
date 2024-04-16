@@ -16,14 +16,28 @@
         app:contentInsetStartWithNavigation="0dp"
         android:foreground="?attr/selectableItemBackground"/>
 
-    <EditText
-        android:id="@+id/search_bar"
-        style="@style/SearchEditViewStyle"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:layout_marginHorizontal="@dimen/small_padding"
-        android:layout_marginVertical="@dimen/large_padding"
-        android:autofillHints="" />
-    <!--    android:drawableEnd="@drawable/cancel_icon"-->
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/large_padding"
+        android:layout_marginVertical="@dimen/small_padding">
+
+        <EditText
+            android:id="@+id/search_bar"
+            style="@style/SearchEditViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:autofillHints="" />
+        <!--    android:drawableEnd="@drawable/cancel_icon"-->
+        <ImageView
+            android:id="@+id/cancel_button"
+            android:layout_width="@dimen/small_icon_size"
+            android:layout_height="@dimen/small_icon_size"
+            android:layout_gravity="center_vertical|end"
+            android:src="@drawable/cancel_icon"
+            app:tint="?attr/colorOnSecondary"
+            android:layout_marginEnd="14dp"
+            android:visibility="gone" />
+    </FrameLayout>
 
 </LinearLayout>
