@@ -2,6 +2,8 @@ package ru.xrom.playlistmaker
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.res.Configuration.UI_MODE_NIGHT_MASK
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.net.Uri
 import android.os.Bundle
 import android.widget.TextView
@@ -28,6 +30,8 @@ class SettingsActivity : AppCompatActivity() {
             else
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
         }
+        swDarkTheme.isChecked =
+            resources.configuration.uiMode and UI_MODE_NIGHT_MASK == UI_MODE_NIGHT_YES
 
         val lineShare = findViewById<TextView>(R.id.share)
         lineShare.setOnClickListener {
