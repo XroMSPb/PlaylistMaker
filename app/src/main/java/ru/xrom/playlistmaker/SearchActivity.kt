@@ -15,12 +15,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import ru.xrom.playlistmaker.recycleView.SearchAdapter
+import ru.xrom.playlistmaker.recycleView.TrackAdapter
 
 
 class SearchActivity : AppCompatActivity() {
     private var searchValue = TEXT_DEF
-    lateinit var adapter: SearchAdapter
+    lateinit var adapter: TrackAdapter
 
     companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
@@ -64,7 +64,7 @@ class SearchActivity : AppCompatActivity() {
 
         val recyclerView = findViewById<RecyclerView>(R.id.recycle_view)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = SearchAdapter(createList())
+        adapter = TrackAdapter(createList())
         recyclerView.adapter = adapter
 
     }
