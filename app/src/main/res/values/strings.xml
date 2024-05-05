@@ -16,4 +16,5 @@
     <string name="supportText">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="termsLink">https://yandex.ru/legal/practicum_offer/</string>
     <string name="application_not_found">Не удалось найти приложения для этого действия!</string>
+    <string name="text_separator">" • "</string>
 </resources>
