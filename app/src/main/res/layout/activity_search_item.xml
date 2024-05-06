@@ -27,12 +27,13 @@
         <TextView
             android:id="@+id/track_name"
             style="@style/SearchTextViewStyle"
+            android:maxLines="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/settings_track_text_padding"
             android:textColor="?attr/colorOnPrimary"
             android:textSize="@dimen/main_text_size"
-            tools:text="Yesterday (Remastered 2009)"
+            tools:text="Yesterday (Remastered 2009) terday terday terday"
             android:gravity="start|center_vertical" />
 
         <LinearLayout
@@ -46,16 +47,19 @@
             <TextView
                 android:id="@+id/artist_name"
                 style="@style/SearchTextViewStyle"
-                android:layout_width="wrap_content"
+                android:maxLines="1"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:textSize="@dimen/small_text_size"
                 android:textColor="?attr/colorSecondaryVariant"
-                tools:text="The Beatles" />
+                tools:text="Guns N' Roses uns N' Rose uns N' Rose Guns N' Roses uns N' Rose uns N' Rose" />
 
             <TextView
                 android:id="@+id/text_spacer"
                 style="@style/SearchTextViewStyle"
                 android:layout_width="wrap_content"
+                android:maxLines="1"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/small_text_size"
                 android:textColor="?attr/colorSecondaryVariant"
@@ -64,6 +68,7 @@
             <TextView
                 android:id="@+id/track_time"
                 style="@style/SearchTextViewStyle"
+                android:maxLines="1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="@dimen/small_text_size"
