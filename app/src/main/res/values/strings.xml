@@ -17,4 +17,7 @@
     <string name="termsLink">https://yandex.ru/legal/practicum_offer/</string>
     <string name="application_not_found">Не удалось найти приложения для этого действия!</string>
     <string name="text_separator">" • "</string>
+    <string name="nothing_found">Ничего не нашлось</string>
+    <string name="something_went_wrong">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
+    <string name="update_response">Обновить</string>
 </resources>
