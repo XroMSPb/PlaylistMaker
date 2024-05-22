@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="text_normal">22sp</dimen>
+    <dimen name="big_text_size">22sp</dimen>
+    <dimen name="medium_text_size">19sp</dimen>
     <dimen name="main_text_size">16sp</dimen>
     <dimen name="small_text_size">11sp</dimen>
     <dimen name="small_corner_radius">8dp</dimen>

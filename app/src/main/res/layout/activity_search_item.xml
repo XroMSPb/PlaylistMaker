@@ -37,7 +37,7 @@
             android:gravity="start|center_vertical" />
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
             android:orientation="horizontal"
@@ -48,31 +48,23 @@
                 android:id="@+id/artist_name"
                 style="@style/SearchTextViewStyle"
                 android:maxLines="1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:textSize="@dimen/small_text_size"
                 android:textColor="?attr/colorSecondaryVariant"
-                tools:text="Guns N' Roses uns N' Rose uns N' Rose Guns N' Roses uns N' Rose uns N' Rose" />
-
-            <TextView
-                android:id="@+id/text_spacer"
-                style="@style/SearchTextViewStyle"
-                android:layout_width="wrap_content"
-                android:maxLines="1"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/small_text_size"
-                android:textColor="?attr/colorSecondaryVariant"
-                android:text="@string/text_separator" />
+                tools:text="Guns N' Roses" />
 
             <TextView
                 android:id="@+id/track_time"
                 style="@style/SearchTextViewStyle"
                 android:maxLines="1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
                 android:textSize="@dimen/small_text_size"
                 android:textColor="?attr/colorSecondaryVariant"
+                app:drawableStartCompat="@drawable/point"
                 tools:text="5:45" />
         </LinearLayout>
 

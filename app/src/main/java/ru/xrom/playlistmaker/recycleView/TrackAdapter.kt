@@ -6,7 +6,8 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.Track
 
-class TrackAdapter(private val items: List<Track>) : RecyclerView.Adapter<TrackViewHolder>() {
+class TrackAdapter() : RecyclerView.Adapter<TrackViewHolder>() {
+    var trackList = ArrayList<Track>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.activity_search_item, parent, false)
@@ -14,11 +15,11 @@ class TrackAdapter(private val items: List<Track>) : RecyclerView.Adapter<TrackV
     }
 
     override fun getItemCount(): Int {
-        return items.size
+        return trackList.size
     }
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
-        holder.bind(items[position])
+        holder.bind(trackList[position])
     }
 
 }
