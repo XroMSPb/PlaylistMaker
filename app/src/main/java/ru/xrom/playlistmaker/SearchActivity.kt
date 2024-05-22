@@ -25,6 +25,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.xrom.playlistmaker.itunes.ItunesResponse
+import ru.xrom.playlistmaker.itunes.ResultResponse
 import ru.xrom.playlistmaker.itunes.api
 import ru.xrom.playlistmaker.recycleView.TrackAdapter
 
@@ -72,7 +73,7 @@ class SearchActivity : AppCompatActivity() {
             searchBar.text.clear()
             tracks.clear()
             adapter.notifyDataSetChanged()
-            showMessage("", "", 0)
+            showMessage("", "", ResultResponse.SUCCESS)
         }
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -143,37 +144,45 @@ class SearchActivity : AppCompatActivity() {
                                 tracks.clear()
                                 tracks.addAll(response.body()?.results!!)
                                 adapter.notifyDataSetChanged()
-                                showMessage("", "", 0)
+                                showMessage("", "", ResultResponse.SUCCESS)
                             } else {
-                                showMessage(getString(R.string.nothing_found), "", 1)
+                                showMessage(
+                                    getString(R.string.nothing_found),
+                                    "",
+                                    ResultResponse.EMPTY
+                                )
                             }
                         }
 
                         else -> showMessage(
                             getString(R.string.something_went_wrong),
                             response.code().toString(),
-                            2
+                            ResultResponse.ERROR
                         )
                     }
                 }
 
                 override fun onFailure(call: Call<ItunesResponse>, t: Throwable) {
-                    showMessage(getString(R.string.something_went_wrong), t.message.toString(), 2)
+                    showMessage(
+                        getString(R.string.something_went_wrong),
+                        t.message.toString(),
+                        ResultResponse.ERROR
+                    )
                 }
 
             })
     }
 
-    private fun showMessage(text: String, additionalMessage: String, errorType: Int) {
+    private fun showMessage(text: String, additionalMessage: String, errorType: ResultResponse) {
         when (errorType) {
-            0 -> {
+            ResultResponse.SUCCESS -> {
                 placeholderMessage.visibility = GONE
                 placeholderImage.visibility = GONE
                 recyclerView.visibility = VISIBLE
                 updateButton.visibility = GONE
             }
 
-            1 -> {
+            ResultResponse.EMPTY -> {
                 recyclerView.visibility = GONE
                 placeholderMessage.visibility = VISIBLE
                 placeholderImage.visibility = VISIBLE
@@ -188,7 +197,7 @@ class SearchActivity : AppCompatActivity() {
                 }
             }
 
-            2 -> {
+            ResultResponse.ERROR -> {
                 recyclerView.visibility = GONE
                 placeholderMessage.visibility = VISIBLE
                 placeholderImage.visibility = VISIBLE
