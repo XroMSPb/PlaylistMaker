@@ -49,6 +49,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var placeholderImage: ImageView
     private lateinit var updateButton: Button
     private lateinit var historyLayout: LinearLayout
+    private lateinit var searchHistory: SearchHistory
 
 
     private val retrofit = Retrofit.Builder()
@@ -93,6 +94,11 @@ class SearchActivity : AppCompatActivity() {
             historyLayout.visibility = if (hasFocus && searchBar.text.isEmpty()) VISIBLE else GONE
         }
 
+        val clearHistoryBtn = findViewById<Button>(R.id.clear_history)
+        clearHistoryBtn.setOnClickListener {
+            searchHistory.clearHistory()
+        }
+
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
@@ -126,7 +132,7 @@ class SearchActivity : AppCompatActivity() {
         historyAdapter.items = historyTracks
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
         historyRecyclerView.adapter = historyAdapter
-        val searchHistory = SearchHistory(
+        searchHistory = SearchHistory(
             getSharedPreferences(
                 PLAYLISTMAKER_PREFERENCES,
                 MODE_PRIVATE
