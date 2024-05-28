@@ -13,6 +13,7 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +28,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 import ru.xrom.playlistmaker.itunes.ItunesResponse
 import ru.xrom.playlistmaker.itunes.ResultResponse
 import ru.xrom.playlistmaker.itunes.api
+import ru.xrom.playlistmaker.pref.SearchHistory
+import ru.xrom.playlistmaker.recycleView.HistoryTrackAdapter
+import ru.xrom.playlistmaker.recycleView.OnItemClickListener
 import ru.xrom.playlistmaker.recycleView.TrackAdapter
 
 
@@ -34,13 +38,18 @@ class SearchActivity : AppCompatActivity() {
     private var searchValue = TEXT_DEF
     private val baseUrl = "https://itunes.apple.com/"
 
-    private lateinit var adapter: TrackAdapter
+    private lateinit var searchAdapter: TrackAdapter
+    private lateinit var historyAdapter: HistoryTrackAdapter
     private val tracks = ArrayList<Track>()
+    private val historyTracks = ArrayList<Track>()
 
     private lateinit var recyclerView: RecyclerView
+    private lateinit var historyRecyclerView: RecyclerView
     private lateinit var placeholderMessage: TextView
     private lateinit var placeholderImage: ImageView
     private lateinit var updateButton: Button
+    private lateinit var historyLayout: LinearLayout
+
 
     private val retrofit = Retrofit.Builder()
         .baseUrl(baseUrl)
@@ -58,7 +67,12 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
-
+        placeholderImage = findViewById(R.id.placeholder_image)
+        placeholderMessage = findViewById(R.id.placeholder_message)
+        updateButton = findViewById(R.id.update_response)
+        recyclerView = findViewById(R.id.recycle_view)
+        historyRecyclerView = findViewById(R.id.recycle_history_view)
+        historyLayout = findViewById(R.id.history_layout)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar.setNavigationOnClickListener{
@@ -72,9 +86,13 @@ class SearchActivity : AppCompatActivity() {
         cancelBtn.setOnClickListener {
             searchBar.text.clear()
             tracks.clear()
-            adapter.notifyDataSetChanged()
-            showMessage("", "", ResultResponse.SUCCESS)
+            searchAdapter.notifyDataSetChanged()
+            //showMessage("", "", ResultResponse.SUCCESS)
         }
+        searchBar.setOnFocusChangeListener { view, hasFocus ->
+            historyLayout.visibility = if (hasFocus && searchBar.text.isEmpty()) VISIBLE else GONE
+        }
+
         val simpleTextWatcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
 
@@ -83,6 +101,16 @@ class SearchActivity : AppCompatActivity() {
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 clearButtonVisibility(s, cancelBtn)
                 searchValue = s.toString()
+                if (searchBar.hasFocus() && s?.isEmpty() == true) {
+                    historyLayout.visibility = VISIBLE
+                    /*placeholderMessage.visibility = GONE
+                    placeholderImage.visibility = GONE
+                    recyclerView.visibility = GONE
+                    updateButton.visibility = GONE*/
+                } else {
+                    historyLayout.visibility = GONE
+
+                }
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -98,15 +126,36 @@ class SearchActivity : AppCompatActivity() {
             false
         }
 
-        recyclerView = findViewById<RecyclerView>(R.id.recycle_view)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        adapter = TrackAdapter()
-        adapter.trackList = tracks
-        recyclerView.adapter = adapter
+        historyAdapter = HistoryTrackAdapter()
+        historyAdapter.items = historyTracks
+        historyRecyclerView.adapter = historyAdapter
+        val searchHistory = SearchHistory(
+            getSharedPreferences(
+                PLAYLISTMAKER_PREFERENCES,
+                MODE_PRIVATE
+            ), historyAdapter
+        )
 
-        placeholderImage = findViewById(R.id.placeholderImage)
-        placeholderMessage = findViewById(R.id.placeholderMessage)
-        updateButton = findViewById(R.id.updateResponse)
+
+        val onItemClickListener = object : OnItemClickListener {
+            override fun onItemClick(item: Track) {
+                //val position = tracks.indexOf(item)
+                searchHistory.addTrack(item)
+                //  adapter.notifyItemRemoved(position)
+                //  adapter.notifyItemRangeChanged(position, items.size)
+                Toast.makeText(
+                    this@SearchActivity,
+                    "Track added: " + item.trackName,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        searchAdapter = TrackAdapter(tracks, onItemClickListener)
+        recyclerView.adapter = searchAdapter
+
+
         updateButton.setOnClickListener {
             search()
         }
@@ -143,7 +192,7 @@ class SearchActivity : AppCompatActivity() {
                             if (response.body()?.results?.isNotEmpty() == true) {
                                 tracks.clear()
                                 tracks.addAll(response.body()?.results!!)
-                                adapter.notifyDataSetChanged()
+                                searchAdapter.notifyDataSetChanged()
                                 showMessage("", "", ResultResponse.SUCCESS)
                             } else {
                                 showMessage(
@@ -188,7 +237,7 @@ class SearchActivity : AppCompatActivity() {
                 placeholderImage.visibility = VISIBLE
                 updateButton.visibility = GONE
                 tracks.clear()
-                adapter.notifyDataSetChanged()
+                searchAdapter.notifyDataSetChanged()
                 placeholderMessage.text = text
                 placeholderImage.setImageResource(R.drawable.nothing_found)
                 if (additionalMessage.isNotEmpty()) {
@@ -203,7 +252,7 @@ class SearchActivity : AppCompatActivity() {
                 placeholderImage.visibility = VISIBLE
                 updateButton.visibility = VISIBLE
                 tracks.clear()
-                adapter.notifyDataSetChanged()
+                searchAdapter.notifyDataSetChanged()
                 placeholderMessage.text = text
                 placeholderImage.setImageResource(R.drawable.something_went_wrong)
                 if (additionalMessage.isNotEmpty()) {

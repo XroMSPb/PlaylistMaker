@@ -52,7 +52,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:textSize="@dimen/small_text_size"
-                android:textColor="?attr/colorSecondaryVariant"
+                android:textColor="?attr/colorSecondaryContainer"
                 tools:text="Guns N' Roses" />
 
             <TextView
@@ -63,7 +63,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="0"
                 android:textSize="@dimen/small_text_size"
-                android:textColor="?attr/colorSecondaryVariant"
+                android:textColor="?attr/colorSecondaryContainer"
                 app:drawableStartCompat="@drawable/point"
                 tools:text="5:45" />
         </LinearLayout>

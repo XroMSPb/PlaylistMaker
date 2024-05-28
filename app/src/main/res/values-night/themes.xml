@@ -23,7 +23,9 @@
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorSecondary">@color/black</item>
         <item name="colorSecondaryVariant">@color/white</item>
-        <item name="colorOnSecondary">@color/graphite_black</item>
+        <item name="colorOnContainer">@color/graphite_black</item>
+        <item name="colorSecondaryContainer">@color/white</item>
+        <item name="colorOnSecondary">@color/white</item>
         <item name="toolbarNavigationButtonStyle">@style/TintedNavigation</item>
     </style>
 </resources>

@@ -19,7 +19,6 @@ class App : Application() {
         switchTheme(sharedPrefs.getBoolean(DARKTHEME_ENABLED, darkTheme))
     }
 
-
     fun switchTheme(darkThemeEnabled: Boolean) {
         darkTheme = darkThemeEnabled
         sharedPrefs.edit().putBoolean(DARKTHEME_ENABLED, darkTheme).apply()
