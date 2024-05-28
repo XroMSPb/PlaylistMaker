@@ -124,6 +124,7 @@ class SearchActivity : AppCompatActivity() {
 
         historyAdapter = HistoryTrackAdapter()
         historyAdapter.items = historyTracks
+        historyRecyclerView.layoutManager = LinearLayoutManager(this)
         historyRecyclerView.adapter = historyAdapter
         val searchHistory = SearchHistory(
             getSharedPreferences(
