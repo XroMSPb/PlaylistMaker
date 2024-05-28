@@ -47,6 +47,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var placeholderMessage: TextView
     private lateinit var placeholderImage: ImageView
     private lateinit var updateButton: Button
+    private lateinit var placeholderLayout: LinearLayout
     private lateinit var historyLayout: LinearLayout
     private lateinit var searchHistory: SearchHistory
 
@@ -70,6 +71,7 @@ class SearchActivity : AppCompatActivity() {
         placeholderImage = findViewById(R.id.placeholder_image)
         placeholderMessage = findViewById(R.id.placeholder_message)
         updateButton = findViewById(R.id.update_response)
+        placeholderLayout = findViewById(R.id.placeholder_layout)
         recyclerView = findViewById(R.id.recycle_view)
         historyRecyclerView = findViewById(R.id.recycle_history_view)
         historyLayout = findViewById(R.id.history_layout)
@@ -101,6 +103,7 @@ class SearchActivity : AppCompatActivity() {
         val clearHistoryBtn = findViewById<Button>(R.id.clear_history)
         clearHistoryBtn.setOnClickListener {
             searchHistory.clearHistory()
+            historyLayout.visibility = GONE
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -135,7 +138,7 @@ class SearchActivity : AppCompatActivity() {
         val onHistoryItemClickListener = OnItemClickListener { item ->
             Toast.makeText(
                 this@SearchActivity,
-                "Track: " + item.artistName + " " + item.trackName,
+                "Track: " + item.artistName + " - " + item.trackName,
                 Toast.LENGTH_SHORT
             ).show()
         }
@@ -235,18 +238,15 @@ class SearchActivity : AppCompatActivity() {
     private fun showMessage(text: String, additionalMessage: String, errorType: ResultResponse) {
         when (errorType) {
             ResultResponse.SUCCESS -> {
-                placeholderMessage.visibility = GONE
-                placeholderImage.visibility = GONE
                 recyclerView.visibility = VISIBLE
-                updateButton.visibility = GONE
+                placeholderLayout.visibility = GONE
                 historyLayout.visibility = GONE
             }
 
             ResultResponse.EMPTY -> {
                 recyclerView.visibility = GONE
                 historyLayout.visibility = GONE
-                placeholderMessage.visibility = VISIBLE
-                placeholderImage.visibility = VISIBLE
+                placeholderLayout.visibility = VISIBLE
                 updateButton.visibility = GONE
                 tracks.clear()
                 searchAdapter.notifyDataSetChanged()
@@ -261,8 +261,7 @@ class SearchActivity : AppCompatActivity() {
             ResultResponse.ERROR -> {
                 recyclerView.visibility = GONE
                 historyLayout.visibility = GONE
-                placeholderMessage.visibility = VISIBLE
-                placeholderImage.visibility = VISIBLE
+                placeholderLayout.visibility = VISIBLE
                 updateButton.visibility = VISIBLE
                 tracks.clear()
                 searchAdapter.notifyDataSetChanged()
@@ -275,10 +274,8 @@ class SearchActivity : AppCompatActivity() {
             }
 
             ResultResponse.HISTORY -> {
-                placeholderMessage.visibility = GONE
-                placeholderImage.visibility = GONE
                 recyclerView.visibility = GONE
-                updateButton.visibility = GONE
+                placeholderLayout.visibility = GONE
                 if (historyAdapter.items.isNotEmpty())
                     historyLayout.visibility = VISIBLE
                 else

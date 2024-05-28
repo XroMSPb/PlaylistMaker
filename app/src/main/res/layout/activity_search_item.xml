@@ -5,7 +5,8 @@
     android:minHeight="@dimen/settings_row_height"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:foreground="?attr/selectableItemBackground">
 
     <ImageView
         android:id="@+id/albumImage"
