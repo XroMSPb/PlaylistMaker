@@ -48,7 +48,7 @@
                 android:id="@+id/artist_name"
                 style="@style/SearchTextViewStyle"
                 android:maxLines="1"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:textSize="@dimen/small_text_size"

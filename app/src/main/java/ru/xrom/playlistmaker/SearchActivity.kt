@@ -87,9 +87,9 @@ class SearchActivity : AppCompatActivity() {
             searchBar.text.clear()
             tracks.clear()
             searchAdapter.notifyDataSetChanged()
-            //showMessage("", "", ResultResponse.SUCCESS)
+            showMessage("", "", ResultResponse.HISTORY)
         }
-        searchBar.setOnFocusChangeListener { view, hasFocus ->
+        searchBar.setOnFocusChangeListener { _, hasFocus ->
             historyLayout.visibility = if (hasFocus && searchBar.text.isEmpty()) VISIBLE else GONE
         }
 
@@ -102,11 +102,7 @@ class SearchActivity : AppCompatActivity() {
                 clearButtonVisibility(s, cancelBtn)
                 searchValue = s.toString()
                 if (searchBar.hasFocus() && s?.isEmpty() == true) {
-                    historyLayout.visibility = VISIBLE
-                    /*placeholderMessage.visibility = GONE
-                    placeholderImage.visibility = GONE
-                    recyclerView.visibility = GONE
-                    updateButton.visibility = GONE*/
+                    showMessage("", "", ResultResponse.HISTORY)
                 } else {
                     historyLayout.visibility = GONE
 
@@ -137,18 +133,13 @@ class SearchActivity : AppCompatActivity() {
         )
 
 
-        val onItemClickListener = object : OnItemClickListener {
-            override fun onItemClick(item: Track) {
-                //val position = tracks.indexOf(item)
-                searchHistory.addTrack(item)
-                //  adapter.notifyItemRemoved(position)
-                //  adapter.notifyItemRangeChanged(position, items.size)
-                Toast.makeText(
-                    this@SearchActivity,
-                    "Track added: " + item.trackName,
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
+        val onItemClickListener = OnItemClickListener { item ->
+            searchHistory.addTrack(item)
+            Toast.makeText(
+                this@SearchActivity,
+                "Track added: " + item.trackName,
+                Toast.LENGTH_SHORT
+            ).show()
         }
 
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -229,10 +220,12 @@ class SearchActivity : AppCompatActivity() {
                 placeholderImage.visibility = GONE
                 recyclerView.visibility = VISIBLE
                 updateButton.visibility = GONE
+                historyLayout.visibility = GONE
             }
 
             ResultResponse.EMPTY -> {
                 recyclerView.visibility = GONE
+                historyLayout.visibility = GONE
                 placeholderMessage.visibility = VISIBLE
                 placeholderImage.visibility = VISIBLE
                 updateButton.visibility = GONE
@@ -248,6 +241,7 @@ class SearchActivity : AppCompatActivity() {
 
             ResultResponse.ERROR -> {
                 recyclerView.visibility = GONE
+                historyLayout.visibility = GONE
                 placeholderMessage.visibility = VISIBLE
                 placeholderImage.visibility = VISIBLE
                 updateButton.visibility = VISIBLE
@@ -259,6 +253,14 @@ class SearchActivity : AppCompatActivity() {
                     Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
                         .show()
                 }
+            }
+
+            ResultResponse.HISTORY -> {
+                placeholderMessage.visibility = GONE
+                placeholderImage.visibility = GONE
+                recyclerView.visibility = GONE
+                updateButton.visibility = GONE
+                historyLayout.visibility = VISIBLE
             }
         }
     }

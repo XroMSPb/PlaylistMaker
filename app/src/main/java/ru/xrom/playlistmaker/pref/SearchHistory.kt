@@ -23,8 +23,8 @@ class SearchHistory(
                     val jsonTracks = sharedPreferences?.getString(HISTORY_KEY, null)
                     if (jsonTracks != null) {
                         val tracks = createTracksFromJson(jsonTracks)
-
-                        adapter.items = tracks
+                        adapter.items.clear()
+                        adapter.items.addAll(tracks)
                         adapter.notifyDataSetChanged()
                     }
                 }
