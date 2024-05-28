@@ -29,7 +29,6 @@ import ru.xrom.playlistmaker.itunes.ItunesResponse
 import ru.xrom.playlistmaker.itunes.ResultResponse
 import ru.xrom.playlistmaker.itunes.api
 import ru.xrom.playlistmaker.pref.SearchHistory
-import ru.xrom.playlistmaker.recycleView.HistoryTrackAdapter
 import ru.xrom.playlistmaker.recycleView.OnItemClickListener
 import ru.xrom.playlistmaker.recycleView.TrackAdapter
 
@@ -39,9 +38,9 @@ class SearchActivity : AppCompatActivity() {
     private val baseUrl = "https://itunes.apple.com/"
 
     private lateinit var searchAdapter: TrackAdapter
-    private lateinit var historyAdapter: HistoryTrackAdapter
+    private lateinit var historyAdapter: TrackAdapter
     private val tracks = ArrayList<Track>()
-    private val historyTracks = ArrayList<Track>()
+    //private val historyTracks = ArrayList<Track>()
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var historyRecyclerView: RecyclerView
@@ -91,7 +90,12 @@ class SearchActivity : AppCompatActivity() {
             showMessage("", "", ResultResponse.HISTORY)
         }
         searchBar.setOnFocusChangeListener { _, hasFocus ->
-            historyLayout.visibility = if (hasFocus && searchBar.text.isEmpty()) VISIBLE else GONE
+            if (hasFocus && searchBar.text.isEmpty()) {
+                showMessage("", "", ResultResponse.HISTORY)
+            } else {
+                historyLayout.visibility = GONE
+
+            }
         }
 
         val clearHistoryBtn = findViewById<Button>(R.id.clear_history)
@@ -128,8 +132,14 @@ class SearchActivity : AppCompatActivity() {
             false
         }
 
-        historyAdapter = HistoryTrackAdapter()
-        historyAdapter.items = historyTracks
+        val onHistoryItemClickListener = OnItemClickListener { item ->
+            Toast.makeText(
+                this@SearchActivity,
+                "Track: " + item.artistName + " " + item.trackName,
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+        historyAdapter = TrackAdapter(onHistoryItemClickListener)
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
         historyRecyclerView.adapter = historyAdapter
         searchHistory = SearchHistory(
@@ -142,21 +152,23 @@ class SearchActivity : AppCompatActivity() {
 
         val onItemClickListener = OnItemClickListener { item ->
             searchHistory.addTrack(item)
-            Toast.makeText(
+            /*Toast.makeText(
                 this@SearchActivity,
                 "Track added: " + item.trackName,
                 Toast.LENGTH_SHORT
-            ).show()
+            ).show()*/
         }
 
         recyclerView.layoutManager = LinearLayoutManager(this)
-        searchAdapter = TrackAdapter(tracks, onItemClickListener)
+        searchAdapter = TrackAdapter(onItemClickListener)
+        searchAdapter.items = tracks
         recyclerView.adapter = searchAdapter
 
 
         updateButton.setOnClickListener {
             search()
         }
+        showMessage("", "", ResultResponse.HISTORY)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -267,7 +279,10 @@ class SearchActivity : AppCompatActivity() {
                 placeholderImage.visibility = GONE
                 recyclerView.visibility = GONE
                 updateButton.visibility = GONE
-                historyLayout.visibility = VISIBLE
+                if (historyAdapter.items.isNotEmpty())
+                    historyLayout.visibility = VISIBLE
+                else
+                    historyLayout.visibility = GONE
             }
         }
     }

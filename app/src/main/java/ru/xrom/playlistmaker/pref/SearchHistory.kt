@@ -4,14 +4,14 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ru.xrom.playlistmaker.Track
-import ru.xrom.playlistmaker.recycleView.HistoryTrackAdapter
+import ru.xrom.playlistmaker.recycleView.TrackAdapter
 
 const val HISTORY_KEY = "track_history"
 private lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
 
 class SearchHistory(
     private val preferences: SharedPreferences,
-    private val adapter: HistoryTrackAdapter
+    private val adapter: TrackAdapter,
 ) {
 
     init {
