@@ -1,5 +1,5 @@
 package ru.xrom.playlistmaker.itunes
 
 enum class ResultResponse {
-    SUCCESS, EMPTY, ERROR
+    SUCCESS, EMPTY, ERROR, HISTORY
 }
