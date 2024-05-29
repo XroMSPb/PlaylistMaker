@@ -6,7 +6,8 @@ import com.google.gson.reflect.TypeToken
 import ru.xrom.playlistmaker.Track
 import ru.xrom.playlistmaker.recycleView.TrackAdapter
 
-const val HISTORY_KEY = "track_history"
+private const val HISTORY_KEY = "track_history"
+private const val MAX_HISTORY_SIZE = 10
 private lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
 
 class SearchHistory(
@@ -43,8 +44,8 @@ class SearchHistory(
         if (jsonTracks != null) {
             trackList = createTracksFromJson(jsonTracks)
             trackList.removeIf { it.trackId == newTrack.trackId }
-            if (trackList.size >= 10)
-                trackList.removeAt(9)
+            if (trackList.size >= MAX_HISTORY_SIZE)
+                trackList.removeAt(MAX_HISTORY_SIZE - 1)
         }
 
         trackList.add(0, newTrack)

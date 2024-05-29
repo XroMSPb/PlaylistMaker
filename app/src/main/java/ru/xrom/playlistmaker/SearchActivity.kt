@@ -40,8 +40,6 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var searchAdapter: TrackAdapter
     private lateinit var historyAdapter: TrackAdapter
     private val tracks = ArrayList<Track>()
-    //private val historyTracks = ArrayList<Track>()
-
     private lateinit var recyclerView: RecyclerView
     private lateinit var historyRecyclerView: RecyclerView
     private lateinit var placeholderMessage: TextView
@@ -68,6 +66,8 @@ class SearchActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search)
+        window.statusBarColor = resources.getColor(R.color.status_bar, theme)
+        window.navigationBarColor = resources.getColor(R.color.navigation_bar, theme)
         placeholderImage = findViewById(R.id.placeholder_image)
         placeholderMessage = findViewById(R.id.placeholder_message)
         updateButton = findViewById(R.id.update_response)
@@ -95,8 +95,7 @@ class SearchActivity : AppCompatActivity() {
             if (hasFocus && searchBar.text.isEmpty()) {
                 showMessage("", "", ResultResponse.HISTORY)
             } else {
-                historyLayout.visibility = GONE
-
+                showMessage("", "", ResultResponse.SUCCESS)
             }
         }
 
@@ -117,8 +116,7 @@ class SearchActivity : AppCompatActivity() {
                 if (searchBar.hasFocus() && s?.isEmpty() == true) {
                     showMessage("", "", ResultResponse.HISTORY)
                 } else {
-                    historyLayout.visibility = GONE
-
+                    showMessage("", "", ResultResponse.SUCCESS)
                 }
             }
 
@@ -155,11 +153,6 @@ class SearchActivity : AppCompatActivity() {
 
         val onItemClickListener = OnItemClickListener { item ->
             searchHistory.addTrack(item)
-            /*Toast.makeText(
-                this@SearchActivity,
-                "Track added: " + item.trackName,
-                Toast.LENGTH_SHORT
-            ).show()*/
         }
 
         recyclerView.layoutManager = LinearLayoutManager(this)

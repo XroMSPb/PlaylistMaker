@@ -34,13 +34,15 @@
 
         <ImageView
             android:id="@+id/cancel_button"
-            android:layout_width="@dimen/small_icon_size"
-            android:layout_height="@dimen/small_icon_size"
+            android:layout_width="16dp"
+            android:layout_height="match_parent"
             android:layout_gravity="center_vertical|end"
-            android:src="@drawable/ic_cancel_icon"
-            app:tint="?attr/colorOnContainer"
             android:layout_marginEnd="14dp"
-            android:visibility="gone" />
+            android:contentDescription="@string/clear_text"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_cancel_icon"
+            android:visibility="gone"
+            app:tint="?attr/colorOnContainer" />
     </FrameLayout>
 
     <androidx.recyclerview.widget.RecyclerView
@@ -48,8 +50,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:listitem="@layout/activity_search_item"
-        android:layout_marginTop="@dimen/large_padding"
-        android:visibility="gone">
+        android:layout_marginTop="@dimen/large_padding">
 
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -109,9 +110,9 @@
             android:id="@+id/recycle_history_view"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="@dimen/small_padding"
             android:layout_weight="1"
-            tools:listitem="@layout/activity_search_item"
-            android:layout_marginTop="@dimen/small_padding">
+            tools:listitem="@layout/activity_search_item">
 
         </androidx.recyclerview.widget.RecyclerView>
 

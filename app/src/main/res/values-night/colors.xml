@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="main_status_bar">@color/graphite_black</color>
+    <color name="status_bar">@color/graphite_black</color>
+    <color name="main_navigation_bar">@color/graphite_black</color>
+    <color name="navigation_bar">@color/graphite_black</color>
+</resources>

@@ -44,6 +44,7 @@
         <item name="android:background">@drawable/edittext_background</item>
         <item name="android:textCursorDrawable">@drawable/edit_cursor</item>
         <item name="android:textColor">?attr/colorSecondary</item>
+        <item name="android:textSize">@dimen/main_text_size</item>
         <item name="android:textIsSelectable">true</item>
         <item name="android:focusedByDefault">true</item>
     </style>

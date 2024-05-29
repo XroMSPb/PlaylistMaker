@@ -9,6 +9,10 @@ const val DARKTHEME_ENABLED = "darktheme_enabled"
 
 class App : Application() {
     var darkTheme = false
+        private set(value) {
+            field = value
+        }
+
     private lateinit var sharedPrefs: SharedPreferences
 
     override fun onCreate() {
@@ -17,6 +21,8 @@ class App : Application() {
             PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE
         )
         switchTheme(sharedPrefs.getBoolean(DARKTHEME_ENABLED, darkTheme))
+
+
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {

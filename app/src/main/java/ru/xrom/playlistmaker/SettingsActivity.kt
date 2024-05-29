@@ -13,8 +13,9 @@ import androidx.appcompat.widget.Toolbar
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //enableEdgeToEdge()
         setContentView(R.layout.activity_settings)
+        window.statusBarColor = resources.getColor(R.color.status_bar, theme)
+        window.navigationBarColor = resources.getColor(R.color.navigation_bar, theme)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar.setNavigationOnClickListener{
             onBackPressedDispatcher.onBackPressed()
@@ -22,7 +23,7 @@ class SettingsActivity : AppCompatActivity() {
 
         val swDarkTheme = findViewById<SwitchCompat>(R.id.dark_theme)
         swDarkTheme.isChecked = (applicationContext as App).darkTheme
-        swDarkTheme.setOnCheckedChangeListener { switcher, checked ->
+        swDarkTheme.setOnCheckedChangeListener { _, checked ->
             (applicationContext as App).switchTheme(checked)
         }
 

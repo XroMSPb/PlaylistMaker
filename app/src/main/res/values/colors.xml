@@ -7,4 +7,8 @@
     <color name="light_silver">#AEAFB4</color>
     <color name="semi_blue">#9FBBF3</color>
     <color name="blue">#3772E7</color>
+    <color name="main_status_bar">@color/blue</color>
+    <color name="status_bar">@color/semi_blue</color>
+    <color name="main_navigation_bar">@color/blue</color>
+    <color name="navigation_bar">@color/white</color>
 </resources>
