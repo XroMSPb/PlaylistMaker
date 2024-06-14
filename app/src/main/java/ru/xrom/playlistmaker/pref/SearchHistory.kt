@@ -4,36 +4,21 @@ import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ru.xrom.playlistmaker.Track
-import ru.xrom.playlistmaker.recycleView.TrackAdapter
 
 private const val HISTORY_KEY = "track_history"
 private const val MAX_HISTORY_SIZE = 10
 private lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
 
 class SearchHistory(
-    private val preferences: SharedPreferences,
-    private val adapter: TrackAdapter
+    private val preferences: SharedPreferences
 ) {
-
-    init {
-        updateAdapter(preferences)
-        listener =
-            SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
-                if (key == HISTORY_KEY) {
-                    updateAdapter(sharedPreferences)
-                }
-            }
-        preferences.registerOnSharedPreferenceChangeListener(listener)
-    }
-
-    private fun updateAdapter(sharedPreferences: SharedPreferences?) {
-        val jsonTracks = sharedPreferences?.getString(HISTORY_KEY, null)
+    fun updateTracks(): ArrayList<Track> {
+        var tracks = ArrayList<Track>()
+        val jsonTracks = preferences.getString(HISTORY_KEY, null)
         if (jsonTracks != null) {
-            val tracks = createTracksFromJson(jsonTracks)
-            adapter.items.clear()
-            adapter.items.addAll(tracks)
-            adapter.notifyDataSetChanged()
+            tracks = createTracksFromJson(jsonTracks)
         }
+        return tracks
     }
 
     fun addTrack(newTrack: Track) {
@@ -51,8 +36,6 @@ class SearchHistory(
 
     fun clearHistory() {
         preferences.edit().remove(HISTORY_KEY).apply()
-        adapter.items.clear()
-        adapter.notifyDataSetChanged()
     }
 
     private fun createJsonFromTracks(tracks: ArrayList<Track>): String {
