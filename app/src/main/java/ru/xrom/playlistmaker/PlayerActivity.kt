@@ -45,7 +45,10 @@ class PlayerActivity : AppCompatActivity() {
             year.text = track.releaseDate.split("-")[0]
             genre.text = track.primaryGenreName
             country.text = track.country
+        } else {
+            albumCover.setImageResource(R.drawable.ic_nothing_found)
         }
+
     }
 
 }
