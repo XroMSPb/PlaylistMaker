@@ -244,7 +244,7 @@ class SearchActivity : AppCompatActivity() {
                 tracks.clear()
                 searchAdapter.notifyDataSetChanged()
                 placeholderMessage.text = text
-                placeholderImage.setImageResource(R.drawable.nothing_found)
+                placeholderImage.setImageResource(R.drawable.ic_nothing_found)
                 if (additionalMessage.isNotEmpty()) {
                     Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
                         .show()
@@ -259,7 +259,7 @@ class SearchActivity : AppCompatActivity() {
                 tracks.clear()
                 searchAdapter.notifyDataSetChanged()
                 placeholderMessage.text = text
-                placeholderImage.setImageResource(R.drawable.something_went_wrong)
+                placeholderImage.setImageResource(R.drawable.ic_something_went_wrong)
                 if (additionalMessage.isNotEmpty()) {
                     Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
                         .show()

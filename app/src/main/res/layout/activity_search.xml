@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:background="?attr/colorPrimary"
     android:orientation="vertical">
+
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:foreground="?attr/selectableItemBackground"
+        app:contentInsetStartWithNavigation="0dp"
         app:navigationIcon="@drawable/ic_back_arrow"
         app:title="@string/search_text"
         app:titleTextAppearance="@style/Toolbar.TitleText"
-        app:titleTextColor="?attr/colorOnPrimary"
-        app:contentInsetStartWithNavigation="0dp"
-        android:foreground="?attr/selectableItemBackground"/>
+        app:titleTextColor="?attr/colorOnPrimary" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -49,8 +50,8 @@
         android:id="@+id/recycle_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/activity_search_item"
-        android:layout_marginTop="@dimen/large_padding">
+        android:layout_marginTop="@dimen/large_padding"
+        tools:listitem="@layout/activity_search_item">
 
     </androidx.recyclerview.widget.RecyclerView>
 
@@ -65,21 +66,21 @@
             android:layout_width="120dp"
             android:layout_height="120dp"
             android:layout_gravity="center_horizontal"
-            tools:src="@drawable/nothing_found"
             android:layout_marginTop="120dp"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            tools:src="@drawable/ic_nothing_found" />
 
         <TextView
             android:id="@+id/placeholder_message"
             android:layout_width="312dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:fontFamily="@font/ys_display_medium"
             android:textAlignment="center"
             android:textColor="?attr/colorOnPrimary"
-            android:textSize="@dimen/medium_text_size"
-            tools:text="@string/something_went_wrong"
             android:textFontWeight="400"
-            android:fontFamily="@font/ys_display_medium" />
+            android:textSize="@dimen/medium_text_size"
+            tools:text="@string/something_went_wrong" />
 
         <Button
             android:id="@+id/update_response"
@@ -99,12 +100,12 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="52dp"
-            android:text="@string/history_title"
-            android:gravity="center"
+            android:layout_marginTop="@dimen/extra_padding"
             android:fontFamily="@font/ys_display_medium"
-            android:textSize="@dimen/medium_text_size"
+            android:gravity="center"
+            android:text="@string/history_title"
             android:textColor="?attr/colorOnSecondary"
-            android:layout_marginTop="@dimen/extra_padding" />
+            android:textSize="@dimen/medium_text_size" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycle_history_view"

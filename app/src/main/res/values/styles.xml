@@ -37,7 +37,7 @@
         <item name="android:hint">@string/search_text</item>
         <item name="android:textColorHint">?attr/colorOnContainer</item>
         <item name="android:inputType">text</item>
-        <item name="android:drawableStart">@drawable/search_icon</item>
+        <item name="android:drawableStart">@drawable/ic_search_small</item>
         <item name="android:drawableTint">?attr/colorOnContainer</item>
         <item name="android:drawablePadding">@dimen/small_padding</item>
         <item name="android:paddingHorizontal">14dp</item>

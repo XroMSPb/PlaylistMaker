@@ -9,9 +9,7 @@ const val DARKTHEME_ENABLED = "darktheme_enabled"
 
 class App : Application() {
     var darkTheme = false
-        private set(value) {
-            field = value
-        }
+        private set
 
     private lateinit var sharedPrefs: SharedPreferences
 
