@@ -1,71 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground"
     android:minHeight="@dimen/settings_row_height"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
-    android:foreground="?attr/selectableItemBackground">
+    android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/albumImage"
         android:layout_width="@dimen/settings_album_image_size"
         android:layout_height="@dimen/settings_album_image_size"
+        android:layout_gravity="center_vertical"
         android:layout_marginVertical="@dimen/small_padding"
         android:layout_marginStart="@dimen/medium_padding"
         android:scaleType="fitCenter"
-        android:layout_gravity="center_vertical"
-        tools:srcCompat="@drawable/ic_placeholder" />
+        tools:srcCompat="@drawable/ic_cover_placeholder" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_marginStart="@dimen/small_padding"
+        android:layout_weight="1"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/track_name"
             style="@style/SearchTextViewStyle"
-            android:maxLines="1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/settings_track_text_padding"
+            android:gravity="start|center_vertical"
+            android:maxLines="1"
             android:textColor="?attr/colorOnPrimary"
             android:textSize="@dimen/main_text_size"
-            tools:text="Yesterday (Remastered 2009) terday terday terday"
-            android:gravity="start|center_vertical" />
+            tools:text="Yesterday (Remastered 2009) terday terday terday" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
-            android:orientation="horizontal"
             android:layout_marginBottom="@dimen/settings_track_text_padding"
-            android:gravity="start|center_vertical">
+            android:gravity="start|center_vertical"
+            android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/artist_name"
                 style="@style/SearchTextViewStyle"
-                android:maxLines="1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="@dimen/small_text_size"
+                android:maxLines="1"
                 android:textColor="?attr/colorSecondaryContainer"
+                android:textSize="@dimen/small_text_size"
                 tools:text="Guns N' Roses" />
 
             <TextView
                 android:id="@+id/track_time"
                 style="@style/SearchTextViewStyle"
-                android:maxLines="1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="0"
-                android:textSize="@dimen/small_text_size"
+                android:maxLines="1"
                 android:textColor="?attr/colorSecondaryContainer"
-                app:drawableStartCompat="@drawable/point"
+                android:textSize="@dimen/small_text_size"
+                app:drawableStartCompat="@drawable/ic_point"
                 tools:text="5:45" />
         </LinearLayout>
 
@@ -77,7 +77,7 @@
         android:layout_gravity="center"
         android:layout_marginStart="@dimen/small_padding"
         android:layout_marginEnd="@dimen/medium_padding"
-        app:srcCompat="@drawable/ic_arrow_forward"
-        android:backgroundTint="?attr/colorSecondaryVariant" />
+        android:backgroundTint="?attr/colorSecondaryVariant"
+        app:srcCompat="@drawable/ic_arrow_forward" />
 
 </LinearLayout>

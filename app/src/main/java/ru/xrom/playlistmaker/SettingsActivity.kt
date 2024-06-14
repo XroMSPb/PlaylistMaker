@@ -17,7 +17,7 @@ class SettingsActivity : AppCompatActivity() {
         window.statusBarColor = resources.getColor(R.color.status_bar, theme)
         window.navigationBarColor = resources.getColor(R.color.navigation_bar, theme)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        toolbar.setNavigationOnClickListener{
+        toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 

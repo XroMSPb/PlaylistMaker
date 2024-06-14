@@ -27,7 +27,7 @@ class TrackViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             SimpleDateFormat("mm:ss", Locale.getDefault()).format(model.trackTimeMillis)
         Glide.with(itemView)
             .load(model.artworkUrl100)
-            .placeholder(R.drawable.ic_placeholder)
+            .placeholder(R.drawable.ic_cover_placeholder)
             .centerCrop()
             .transform(RoundedCorners(dpToPx(2f, itemView.context)))
             .into(albumImage)

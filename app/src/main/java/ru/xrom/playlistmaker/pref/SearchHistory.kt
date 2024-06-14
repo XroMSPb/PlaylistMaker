@@ -57,6 +57,7 @@ class SearchHistory(
         adapter.items.clear()
         adapter.notifyDataSetChanged()
     }
+
     private fun createJsonFromTracks(tracks: ArrayList<Track>): String {
         return Gson().toJson(tracks)
     }
