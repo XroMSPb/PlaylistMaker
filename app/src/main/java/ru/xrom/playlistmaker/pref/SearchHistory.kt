@@ -12,19 +12,17 @@ private lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListene
 
 class SearchHistory(
     private val preferences: SharedPreferences,
-    private val adapter: TrackAdapter,
+    private val adapter: TrackAdapter
 ) {
 
     init {
         updateAdapter(preferences)
         listener =
             SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
-
                 if (key == HISTORY_KEY) {
                     updateAdapter(sharedPreferences)
                 }
             }
-
         preferences.registerOnSharedPreferenceChangeListener(listener)
     }
 
@@ -47,7 +45,6 @@ class SearchHistory(
             if (trackList.size >= MAX_HISTORY_SIZE)
                 trackList.removeAt(MAX_HISTORY_SIZE - 1)
         }
-
         trackList.add(0, newTrack)
         preferences.edit().putString(HISTORY_KEY, createJsonFromTracks(trackList)).apply()
     }

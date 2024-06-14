@@ -1,20 +1,51 @@
 package ru.xrom.playlistmaker
 
+import android.icu.text.SimpleDateFormat
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
+import androidx.appcompat.widget.Toolbar
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import ru.xrom.playlistmaker.Helpers.dpToPx
+import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_player)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
+        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+        val track = intent.getParcelableExtra(SearchActivity.TRACK_DATA) as? Track
+        val albumCover = findViewById<ImageView>(R.id.album_cover)
+        val title = findViewById<TextView>(R.id.title)
+        val artistName = findViewById<TextView>(R.id.artist_name)
+        val playingTime = findViewById<TextView>(R.id.playing_time)
+        val duration = findViewById<TextView>(R.id.duration)
+        val album = findViewById<TextView>(R.id.album)
+        val year = findViewById<TextView>(R.id.year)
+        val genre = findViewById<TextView>(R.id.genre)
+        val country = findViewById<TextView>(R.id.country)
+        if (track != null) {
+            Glide.with(this)
+                .load(track.getCoverArtwork())
+                .placeholder(R.drawable.ic_cover_placeholder)
+                .centerCrop()
+                .transform(RoundedCorners(dpToPx(8f, this)))
+                .into(albumCover)
+            title.text = track.trackName
+            artistName.text = track.artistName
+            playingTime.text = "00:00"
+            duration.text =
+                SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
+            album.text = track.collectionName
+            year.text = track.releaseDate.split("-")[0]
+            genre.text = track.primaryGenreName
+            country.text = track.country
         }
     }
+
 }
