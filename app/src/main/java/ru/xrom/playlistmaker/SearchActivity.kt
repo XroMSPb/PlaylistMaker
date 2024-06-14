@@ -63,7 +63,6 @@ class SearchActivity : AppCompatActivity() {
         const val TRACK_DATA = "track_data"
     }
 
-
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,6 +103,8 @@ class SearchActivity : AppCompatActivity() {
         val clearHistoryBtn = findViewById<Button>(R.id.clear_history)
         clearHistoryBtn.setOnClickListener {
             searchHistory.clearHistory()
+            historyAdapter.items.clear()
+            historyAdapter.notifyDataSetChanged()
             historyLayout.visibility = GONE
         }
 
@@ -140,17 +141,20 @@ class SearchActivity : AppCompatActivity() {
         }
         historyAdapter = TrackAdapter(onHistoryItemClickListener)
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
-        historyRecyclerView.adapter = historyAdapter
+
         searchHistory = SearchHistory(
             getSharedPreferences(
                 PLAYLISTMAKER_PREFERENCES,
                 MODE_PRIVATE
-            ), historyAdapter
+            )
         )
+        historyAdapter.items = searchHistory.updateTracks()
+        historyRecyclerView.adapter = historyAdapter
 
         val onItemClickListener = OnItemClickListener { item ->
             searchHistory.addTrack(item)
             openPlayer(item)
+            updateSearchHistoryAdapter()
         }
 
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -162,6 +166,12 @@ class SearchActivity : AppCompatActivity() {
             search()
         }
         showMessage("", "", ResultResponse.HISTORY)
+    }
+
+    private fun updateSearchHistoryAdapter() {
+        historyAdapter.items.clear()
+        historyAdapter.items.addAll(searchHistory.updateTracks())
+        historyAdapter.notifyDataSetChanged()
     }
 
     private fun openPlayer(track: Track) {
