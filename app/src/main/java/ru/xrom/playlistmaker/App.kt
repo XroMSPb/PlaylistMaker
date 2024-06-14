@@ -19,8 +19,6 @@ class App : Application() {
             PLAYLISTMAKER_PREFERENCES, MODE_PRIVATE
         )
         switchTheme(sharedPrefs.getBoolean(DARKTHEME_ENABLED, darkTheme))
-
-
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {

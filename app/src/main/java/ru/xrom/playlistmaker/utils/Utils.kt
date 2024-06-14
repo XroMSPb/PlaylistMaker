@@ -1,9 +1,9 @@
-package ru.xrom.playlistmaker
+package ru.xrom.playlistmaker.utils
 
 import android.content.Context
 import android.util.TypedValue
 
-object Helpers {
+object Utils {
     fun dpToPx(dp: Float, context: Context): Int {
         return TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_DIP,

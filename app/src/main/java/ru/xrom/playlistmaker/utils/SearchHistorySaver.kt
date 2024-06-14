@@ -1,15 +1,14 @@
-package ru.xrom.playlistmaker.pref
+package ru.xrom.playlistmaker.utils
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
-import ru.xrom.playlistmaker.Track
 
 private const val HISTORY_KEY = "track_history"
 private const val MAX_HISTORY_SIZE = 10
 private lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
 
-class SearchHistory(
+class SearchHistorySaver(
     private val preferences: SharedPreferences
 ) {
     fun updateTracks(): ArrayList<Track> {
