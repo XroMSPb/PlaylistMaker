@@ -5,23 +5,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:foreground="?attr/selectableItemBackground"
-    android:minHeight="@dimen/settings_row_height"
+    android:minHeight="@dimen/dp61"
     android:orientation="horizontal">
 
     <ImageView
         android:id="@+id/albumImage"
-        android:layout_width="@dimen/settings_album_image_size"
-        android:layout_height="@dimen/settings_album_image_size"
+        android:layout_width="@dimen/dp45"
+        android:layout_height="@dimen/dp45"
         android:layout_gravity="center_vertical"
-        android:layout_marginVertical="@dimen/small_padding"
-        android:layout_marginStart="@dimen/medium_padding"
+        android:layout_marginVertical="@dimen/dp8"
+        android:layout_marginStart="@dimen/dp12"
         android:scaleType="fitCenter"
         tools:srcCompat="@drawable/ic_cover_placeholder" />
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/small_padding"
+        android:layout_marginStart="@dimen/dp8"
         android:layout_weight="1"
         android:orientation="vertical">
 
@@ -30,18 +30,18 @@
             style="@style/SearchTextViewStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/settings_track_text_padding"
+            android:layout_marginTop="@dimen/dp14"
             android:gravity="start|center_vertical"
             android:maxLines="1"
             android:textColor="?attr/colorOnPrimary"
-            android:textSize="@dimen/main_text_size"
+            android:textSize="@dimen/text_size_16sp"
             tools:text="Yesterday (Remastered 2009) terday terday terday" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp"
-            android:layout_marginBottom="@dimen/settings_track_text_padding"
+            android:layout_marginBottom="@dimen/dp14"
             android:gravity="start|center_vertical"
             android:orientation="horizontal">
 
@@ -53,7 +53,7 @@
                 android:layout_weight="1"
                 android:maxLines="1"
                 android:textColor="?attr/colorSecondaryContainer"
-                android:textSize="@dimen/small_text_size"
+                android:textSize="@dimen/text_size_11sp"
                 tools:text="Guns N' Roses" />
 
             <TextView
@@ -64,7 +64,7 @@
                 android:layout_weight="0"
                 android:maxLines="1"
                 android:textColor="?attr/colorSecondaryContainer"
-                android:textSize="@dimen/small_text_size"
+                android:textSize="@dimen/text_size_11sp"
                 app:drawableStartCompat="@drawable/ic_point"
                 tools:text="5:45" />
         </LinearLayout>
@@ -72,11 +72,11 @@
     </LinearLayout>
 
     <ImageView
-        android:layout_width="@dimen/big_icon_size"
-        android:layout_height="@dimen/big_icon_size"
+        android:layout_width="@dimen/dp24"
+        android:layout_height="@dimen/dp24"
         android:layout_gravity="center"
-        android:layout_marginStart="@dimen/small_padding"
-        android:layout_marginEnd="@dimen/medium_padding"
+        android:layout_marginStart="@dimen/dp8"
+        android:layout_marginEnd="@dimen/dp12"
         android:backgroundTint="?attr/colorSecondaryVariant"
         app:srcCompat="@drawable/ic_arrow_forward" />
 

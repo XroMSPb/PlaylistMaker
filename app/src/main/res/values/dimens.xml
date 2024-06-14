@@ -1,18 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="big_text_size">22sp</dimen>
-    <dimen name="medium_text_size">19sp</dimen>
-    <dimen name="main_text_size">16sp</dimen>
-    <dimen name="small_text_size">11sp</dimen>
-    <dimen name="small_corner_radius">8dp</dimen>
-    <dimen name="medium_corner_radius">16dp</dimen>
-    <dimen name="settings_row_height">61dp</dimen>
-    <dimen name="settings_album_image_size">45dp</dimen>
-    <dimen name="settings_track_text_padding">14dp</dimen>
-    <dimen name="small_padding">8dp</dimen>
-    <dimen name="medium_padding">12dp</dimen>
-    <dimen name="large_padding">16dp</dimen>
-    <dimen name="extra_padding">24dp</dimen>
-    <dimen name="small_icon_size">18dp</dimen>
-    <dimen name="big_icon_size">24dp</dimen>
+    <dimen name="text_size_22sp">22sp</dimen>
+    <dimen name="text_size_19sp">19sp</dimen>
+    <dimen name="text_size_16sp">16sp</dimen>
+    <dimen name="text_size_14sp">14sp</dimen>
+    <dimen name="text_size_11sp">11sp</dimen>
+    <dimen name="dp8">8dp</dimen>
+    <dimen name="dp12">12dp</dimen>
+    <dimen name="dp14">14dp</dimen>
+    <dimen name="dp16">16dp</dimen>
+    <dimen name="dp18">18dp</dimen>
+    <dimen name="dp24">24dp</dimen>
+    <dimen name="dp45">45dp</dimen>
+    <dimen name="dp61">61dp</dimen>
 </resources>
