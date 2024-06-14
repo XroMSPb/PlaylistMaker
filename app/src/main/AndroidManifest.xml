@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -15,10 +16,13 @@
         android:theme="@style/Theme.PlaylistMaker"
         tools:targetApi="31">
         <activity
+            android:name=".PlayerActivity"
+            android:exported="false" />
+        <activity
             android:name=".SearchActivity"
-            android:windowSoftInputMode="stateVisible"
             android:exported="false"
-            android:theme="@style/Theme.PlaylistMakerSearch" />
+            android:theme="@style/Theme.PlaylistMakerSearch"
+            android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".MediaActivity"
             android:exported="false" />
@@ -35,7 +39,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>
