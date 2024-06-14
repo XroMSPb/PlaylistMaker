@@ -2,7 +2,7 @@
 <resources>
 
     <style name="SearchButtonStyle" parent="Widget.MaterialComponents.Button.UnelevatedButton">
-        <item name="cornerRadius">@dimen/medium_corner_radius</item>
+        <item name="cornerRadius">@dimen/dp16</item>
         <item name="android:textColor">@color/graphite_black</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textAllCaps">false</item>
