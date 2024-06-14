@@ -15,6 +15,8 @@ class PlayerActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_player)
+        window.statusBarColor = resources.getColor(R.color.status_bar, theme)
+        window.navigationBarColor = resources.getColor(R.color.navigation_bar, theme)
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
