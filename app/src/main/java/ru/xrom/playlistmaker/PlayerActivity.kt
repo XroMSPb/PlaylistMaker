@@ -9,7 +9,7 @@ import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.xrom.playlistmaker.utils.Track
-import ru.xrom.playlistmaker.utils.Utils.dpToPx
+import ru.xrom.playlistmaker.utils.dpToPx
 import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
