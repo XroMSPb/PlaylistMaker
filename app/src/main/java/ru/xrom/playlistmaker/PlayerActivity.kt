@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import ru.xrom.playlistmaker.Helpers.dpToPx
 import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
@@ -40,11 +39,11 @@ class PlayerActivity : AppCompatActivity() {
                 .into(albumCover)
             title.text = track.trackName
             artistName.text = track.artistName
-            playingTime.text = "00:00"
+            playingTime.text = getString(R.string.time_zero)
             duration.text =
                 SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
             album.text = track.collectionName
-            year.text = track.releaseDate.split("-")[0]
+            year.text = track.releaseDate.substring(0, 4)
             genre.text = track.primaryGenreName
             country.text = track.country
         } else {

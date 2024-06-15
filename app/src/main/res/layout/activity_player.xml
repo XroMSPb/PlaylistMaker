@@ -128,8 +128,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/dp16"
         android:text="@string/duration"
-        app:layout_constraintBottom_toTopOf="@id/album"
-        app:layout_constraintHorizontal_chainStyle="spread"
+        app:layout_constraintBottom_toTopOf="@id/album_label"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/playing_time" />
 
@@ -140,6 +139,8 @@
         android:layout_height="wrap_content"
         android:text="@string/album"
         app:layout_constraintBottom_toTopOf="@id/year_label"
+        app:layout_constraintEnd_toStartOf="@id/album"
+        app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="@id/duration_label"
         app:layout_constraintTop_toBottomOf="@id/duration_label" />
 
@@ -181,17 +182,21 @@
         android:layout_marginEnd="@dimen/dp16"
         app:layout_constraintBottom_toTopOf="@id/album"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintTop_toBottomOf="@id/playing_time"
         tools:text="5:35" />
 
     <TextView
         android:id="@+id/album"
         style="@style/PlayerTextRight"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/dp30"
+        android:ellipsize="end"
+        android:gravity="end"
+        android:singleLine="true"
         app:layout_constraintBottom_toTopOf="@id/year"
         app:layout_constraintEnd_toEndOf="@id/duration"
+        app:layout_constraintStart_toEndOf="@id/album_label"
         app:layout_constraintTop_toBottomOf="@id/duration"
         tools:text="Yesterday (Remastered 2009)" />
 
