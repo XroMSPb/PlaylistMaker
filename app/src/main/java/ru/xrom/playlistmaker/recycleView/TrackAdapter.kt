@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.xrom.playlistmaker.R
-import ru.xrom.playlistmaker.Track
+import ru.xrom.playlistmaker.utils.Track
 
 
 class TrackAdapter(

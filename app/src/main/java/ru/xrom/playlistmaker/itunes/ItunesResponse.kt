@@ -1,7 +1,5 @@
 package ru.xrom.playlistmaker.itunes
 
-import ru.xrom.playlistmaker.Track
+import ru.xrom.playlistmaker.utils.Track
 
-class ItunesResponse(val results: ArrayList<Track>) {
-
-}
+class ItunesResponse(val results: ArrayList<Track>)

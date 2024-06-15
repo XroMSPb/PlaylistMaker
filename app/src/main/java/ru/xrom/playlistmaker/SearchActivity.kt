@@ -29,9 +29,10 @@ import retrofit2.converter.gson.GsonConverterFactory
 import ru.xrom.playlistmaker.itunes.ItunesResponse
 import ru.xrom.playlistmaker.itunes.ResultResponse
 import ru.xrom.playlistmaker.itunes.api
-import ru.xrom.playlistmaker.pref.SearchHistory
 import ru.xrom.playlistmaker.recycleView.OnItemClickListener
 import ru.xrom.playlistmaker.recycleView.TrackAdapter
+import ru.xrom.playlistmaker.utils.SearchHistorySaver
+import ru.xrom.playlistmaker.utils.Track
 
 
 class SearchActivity : AppCompatActivity() {
@@ -48,7 +49,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var updateButton: Button
     private lateinit var placeholderLayout: LinearLayout
     private lateinit var historyLayout: LinearLayout
-    private lateinit var searchHistory: SearchHistory
+    private lateinit var searchHistorySaver: SearchHistorySaver
 
 
     private val retrofit = Retrofit.Builder()
@@ -62,7 +63,6 @@ class SearchActivity : AppCompatActivity() {
         const val TEXT_DEF = ""
         const val TRACK_DATA = "track_data"
     }
-
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -103,7 +103,9 @@ class SearchActivity : AppCompatActivity() {
 
         val clearHistoryBtn = findViewById<Button>(R.id.clear_history)
         clearHistoryBtn.setOnClickListener {
-            searchHistory.clearHistory()
+            searchHistorySaver.clearHistory()
+            historyAdapter.items.clear()
+            historyAdapter.notifyDataSetChanged()
             historyLayout.visibility = GONE
         }
 
@@ -140,17 +142,20 @@ class SearchActivity : AppCompatActivity() {
         }
         historyAdapter = TrackAdapter(onHistoryItemClickListener)
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
-        historyRecyclerView.adapter = historyAdapter
-        searchHistory = SearchHistory(
+
+        searchHistorySaver = SearchHistorySaver(
             getSharedPreferences(
                 PLAYLISTMAKER_PREFERENCES,
                 MODE_PRIVATE
-            ), historyAdapter
+            )
         )
+        historyAdapter.items = searchHistorySaver.updateTracks()
+        historyRecyclerView.adapter = historyAdapter
 
         val onItemClickListener = OnItemClickListener { item ->
-            searchHistory.addTrack(item)
+            searchHistorySaver.addTrack(item)
             openPlayer(item)
+            updateSearchHistoryAdapter()
         }
 
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -162,6 +167,12 @@ class SearchActivity : AppCompatActivity() {
             search()
         }
         showMessage("", "", ResultResponse.HISTORY)
+    }
+
+    private fun updateSearchHistoryAdapter() {
+        historyAdapter.items.clear()
+        historyAdapter.items.addAll(searchHistorySaver.updateTracks())
+        historyAdapter.notifyDataSetChanged()
     }
 
     private fun openPlayer(track: Track) {
