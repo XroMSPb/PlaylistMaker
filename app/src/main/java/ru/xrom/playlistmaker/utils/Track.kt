@@ -1,4 +1,4 @@
-package ru.xrom.playlistmaker
+package ru.xrom.playlistmaker.utils
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
