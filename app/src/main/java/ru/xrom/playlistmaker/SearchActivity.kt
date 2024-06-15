@@ -3,6 +3,7 @@ package ru.xrom.playlistmaker
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -59,6 +60,7 @@ class SearchActivity : AppCompatActivity() {
     companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
         const val TEXT_DEF = ""
+        const val TRACK_DATA = "track_data"
     }
 
 
@@ -77,7 +79,7 @@ class SearchActivity : AppCompatActivity() {
         historyLayout = findViewById(R.id.history_layout)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        toolbar.setNavigationOnClickListener{
+        toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
@@ -134,11 +136,7 @@ class SearchActivity : AppCompatActivity() {
         }
 
         val onHistoryItemClickListener = OnItemClickListener { item ->
-            Toast.makeText(
-                this@SearchActivity,
-                "Track: " + item.artistName + " - " + item.trackName,
-                Toast.LENGTH_SHORT
-            ).show()
+            openPlayer(item)
         }
         historyAdapter = TrackAdapter(onHistoryItemClickListener)
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
@@ -150,9 +148,9 @@ class SearchActivity : AppCompatActivity() {
             ), historyAdapter
         )
 
-
         val onItemClickListener = OnItemClickListener { item ->
             searchHistory.addTrack(item)
+            openPlayer(item)
         }
 
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -160,11 +158,16 @@ class SearchActivity : AppCompatActivity() {
         searchAdapter.items = tracks
         recyclerView.adapter = searchAdapter
 
-
         updateButton.setOnClickListener {
             search()
         }
         showMessage("", "", ResultResponse.HISTORY)
+    }
+
+    private fun openPlayer(track: Track) {
+        val intent = Intent(this, PlayerActivity::class.java)
+        intent.putExtra(TRACK_DATA, track)
+        startActivity(intent)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -176,6 +179,7 @@ class SearchActivity : AppCompatActivity() {
         super.onRestoreInstanceState(savedInstanceState)
         searchValue = savedInstanceState.getString(SEARCH_TEXT, TEXT_DEF)
     }
+
     private fun clearButtonVisibility(s: CharSequence?, v: ImageView) {
         if (s.isNullOrEmpty()) {
             v.visibility = GONE
@@ -186,6 +190,7 @@ class SearchActivity : AppCompatActivity() {
             v.visibility = VISIBLE
         }
     }
+
     private fun search() {
         iTunesService.search(searchValue)
             .enqueue(object : Callback<ItunesResponse> {
