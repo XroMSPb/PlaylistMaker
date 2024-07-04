@@ -99,6 +99,7 @@ class PlayerActivity : AppCompatActivity() {
             playerState = STATE_PREPARED
         }
         mediaPlayer.setOnCompletionListener {
+            handler.removeCallbacks(timerRunnable)
             playerState = STATE_PREPARED
             playButton.setImageResource(R.drawable.ic_play)
             playingTime.text =
