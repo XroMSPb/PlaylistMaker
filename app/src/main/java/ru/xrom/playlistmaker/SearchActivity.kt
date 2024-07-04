@@ -180,6 +180,11 @@ class SearchActivity : AppCompatActivity() {
         showMessage("", "", ResultResponse.HISTORY)
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        handler.removeCallbacks(searchRunnable)
+    }
+
     private fun updateSearchHistoryAdapter() {
         historyAdapter.items.clear()
         historyAdapter.items.addAll(searchHistorySaver.updateTracks())
