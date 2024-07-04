@@ -5,6 +5,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.View.GONE
@@ -15,6 +17,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -50,6 +53,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var placeholderLayout: LinearLayout
     private lateinit var historyLayout: LinearLayout
     private lateinit var searchHistorySaver: SearchHistorySaver
+    private lateinit var progressBar: ProgressBar
 
 
     private val retrofit = Retrofit.Builder()
@@ -62,7 +66,13 @@ class SearchActivity : AppCompatActivity() {
         const val SEARCH_TEXT = "SEARCH_TEXT"
         const val TEXT_DEF = ""
         const val TRACK_DATA = "track_data"
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
+
+    private val searchRunnable = Runnable { search() }
+    private var isClickAllowed = true
+    private val handler = Handler(Looper.getMainLooper())
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,6 +87,7 @@ class SearchActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recycle_view)
         historyRecyclerView = findViewById(R.id.recycle_history_view)
         historyLayout = findViewById(R.id.history_layout)
+        progressBar = findViewById(R.id.progress_bar)
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         toolbar.setNavigationOnClickListener {
@@ -120,8 +131,10 @@ class SearchActivity : AppCompatActivity() {
                 if (searchBar.hasFocus() && s?.isEmpty() == true) {
                     showMessage("", "", ResultResponse.HISTORY)
                 } else {
+                    searchDebounce()
                     showMessage("", "", ResultResponse.SUCCESS)
                 }
+
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -176,9 +189,11 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun openPlayer(track: Track) {
-        val intent = Intent(this, PlayerActivity::class.java)
-        intent.putExtra(TRACK_DATA, track)
-        startActivity(intent)
+        if (clickDebounce()) {
+            val intent = Intent(this, PlayerActivity::class.java)
+            intent.putExtra(TRACK_DATA, track)
+            startActivity(intent)
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -203,6 +218,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun search() {
+        progressBar.visibility = VISIBLE
         iTunesService.search(searchValue)
             .enqueue(object : Callback<ItunesResponse> {
                 override fun onResponse(
@@ -245,6 +261,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun showMessage(text: String, additionalMessage: String, errorType: ResultResponse) {
+        progressBar.visibility = GONE
         when (errorType) {
             ResultResponse.SUCCESS -> {
                 recyclerView.visibility = VISIBLE
@@ -291,6 +308,20 @@ class SearchActivity : AppCompatActivity() {
                     historyLayout.visibility = GONE
             }
         }
+    }
+
+    private fun searchDebounce() {
+        handler.removeCallbacks(searchRunnable)
+        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
+    }
+
+    private fun clickDebounce(): Boolean {
+        val current = isClickAllowed
+        if (isClickAllowed) {
+            isClickAllowed = false
+            handler.postDelayed({ isClickAllowed = true }, CLICK_DEBOUNCE_DELAY)
+        }
+        return current
     }
 
 }
