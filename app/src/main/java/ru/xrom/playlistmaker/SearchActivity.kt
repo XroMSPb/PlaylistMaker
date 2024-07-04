@@ -166,9 +166,7 @@ class SearchActivity : AppCompatActivity() {
         historyRecyclerView.adapter = historyAdapter
 
         val onItemClickListener = OnItemClickListener { item ->
-            searchHistorySaver.addTrack(item)
             openPlayer(item)
-            updateSearchHistoryAdapter()
         }
 
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -193,6 +191,8 @@ class SearchActivity : AppCompatActivity() {
             val intent = Intent(this, PlayerActivity::class.java)
             intent.putExtra(TRACK_DATA, track)
             startActivity(intent)
+            searchHistorySaver.addTrack(track)
+            updateSearchHistoryAdapter()
         }
     }
 
