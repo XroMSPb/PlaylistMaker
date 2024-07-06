@@ -31,7 +31,17 @@ class PlayerActivity : AppCompatActivity() {
     private lateinit var playButton: ImageButton
     private lateinit var playingTime: TextView
     private val handler = Handler(Looper.getMainLooper())
-    private val timerRunnable = timer()
+    private val timerRunnable by lazy {
+        object : Runnable {
+            override fun run() {
+                if (playerState == STATE_PLAYING) {
+                    playingTime.text = dateFormat.format(mediaPlayer.currentPosition)
+                    handler.postDelayed(this, TIMER_UPDATE_DELAY)
+                }
+            }
+        }
+    }
+    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,8 +112,7 @@ class PlayerActivity : AppCompatActivity() {
             handler.removeCallbacks(timerRunnable)
             playerState = STATE_PREPARED
             playButton.setImageResource(R.drawable.ic_play)
-            playingTime.text =
-                SimpleDateFormat("mm:ss", Locale.getDefault()).format(0)
+            playingTime.text = dateFormat.format(0)
         }
     }
 
@@ -133,16 +142,4 @@ class PlayerActivity : AppCompatActivity() {
         handler.removeCallbacks(timerRunnable)
     }
 
-    private fun timer(): Runnable {
-        return Runnable {
-            if (playerState == STATE_PLAYING) {
-                playingTime.text =
-                    SimpleDateFormat(
-                        "mm:ss",
-                        Locale.getDefault()
-                    ).format(mediaPlayer.currentPosition)
-                handler.postDelayed(timerRunnable, TIMER_UPDATE_DELAY)
-            }
-        }
-    }
 }
