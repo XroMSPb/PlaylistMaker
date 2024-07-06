@@ -31,7 +31,8 @@
             android:layout_height="36dp"
             android:autofillHints=""
             android:imeOptions="actionDone"
-            android:singleLine="true" />
+            android:singleLine="true"
+            tools:text="WWwwwWWWWWWWwWWWwwwWWWwwwWWW" />
 
         <ImageView
             android:id="@+id/cancel_button"
@@ -46,13 +47,21 @@
             app:tint="?attr/colorOnContainer" />
     </FrameLayout>
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="44dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:indeterminateTint="@color/progress_bar"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycle_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/dp16"
-        tools:listitem="@layout/activity_search_item">
-
+        tools:listitem="@layout/activity_search_item"
+        android:visibility="gone">
     </androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout

@@ -23,7 +23,7 @@ class TrackAdapter(
 
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(items[position])
-        holder.itemView.setOnClickListener { onItemClickListener.onItemClick(items[holder.adapterPosition]) }
+        holder.itemView.setOnClickListener { onItemClickListener.onItemClick(items[position]) }
     }
 
 }

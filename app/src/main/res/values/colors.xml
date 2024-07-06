@@ -11,4 +11,5 @@
     <color name="status_bar">@color/semi_blue</color>
     <color name="main_navigation_bar">@color/blue</color>
     <color name="navigation_bar">@color/white</color>
+    <color name="progress_bar">#6200EE</color>
 </resources>
