@@ -26,9 +26,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.creator.Creator
-import ru.xrom.playlistmaker.creator.Creator.provideSharedPreferences
-import ru.xrom.playlistmaker.data.repository.SearchHistoryRepositoryImpl
+import ru.xrom.playlistmaker.creator.Creator.provideSearchHistoryRepository
 import ru.xrom.playlistmaker.domain.api.OnItemClickListener
+import ru.xrom.playlistmaker.domain.api.SearchHistoryRepository
 import ru.xrom.playlistmaker.domain.api.TrackInteractor
 import ru.xrom.playlistmaker.domain.model.Track
 import ru.xrom.playlistmaker.presentation.ui.player.PlayerActivity
@@ -48,7 +48,7 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var updateButton: Button
     private lateinit var placeholderLayout: LinearLayout
     private lateinit var historyLayout: LinearLayout
-    private lateinit var searchHistorySaver: SearchHistoryRepositoryImpl
+    private lateinit var searchHistorySaver: SearchHistoryRepository
     private lateinit var progressBar: ProgressBar
 
 
@@ -146,9 +146,7 @@ class SearchActivity : AppCompatActivity() {
         historyAdapter = TrackAdapter(onHistoryItemClickListener)
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        searchHistorySaver = SearchHistoryRepositoryImpl(
-            provideSharedPreferences()
-        )
+        searchHistorySaver = provideSearchHistoryRepository()
         historyAdapter.items = searchHistorySaver.updateTracks().toMutableList()
         historyRecyclerView.adapter = historyAdapter
 

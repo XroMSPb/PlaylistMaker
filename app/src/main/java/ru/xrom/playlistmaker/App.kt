@@ -3,6 +3,7 @@ package ru.xrom.playlistmaker
 import android.app.Application
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
+import ru.xrom.playlistmaker.creator.Creator.initApplication
 import ru.xrom.playlistmaker.creator.Creator.provideSharedPreferences
 
 
@@ -16,6 +17,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        initApplication(this)
         sharedPrefs = provideSharedPreferences()
         switchTheme(sharedPrefs.getBoolean(DARKTHEME_ENABLED, darkTheme))
     }
