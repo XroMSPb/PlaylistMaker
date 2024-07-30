@@ -1,4 +1,4 @@
-package ru.xrom.playlistmaker.utils
+package ru.xrom.playlistmaker.presentation
 
 import android.content.Context
 import android.util.TypedValue

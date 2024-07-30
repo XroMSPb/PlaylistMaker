@@ -1,17 +1,19 @@
-package ru.xrom.playlistmaker.utils
+package ru.xrom.playlistmaker.data.repository
 
 import android.content.SharedPreferences
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import ru.xrom.playlistmaker.domain.api.SearchHistoryRepository
+import ru.xrom.playlistmaker.domain.model.Track
 
-private const val HISTORY_KEY = "track_history"
-private const val MAX_HISTORY_SIZE = 10
-private lateinit var listener: SharedPreferences.OnSharedPreferenceChangeListener
+class SearchHistoryRepositoryImpl(private val preferences: SharedPreferences) :
+    SearchHistoryRepository {
+    companion object {
+        private const val HISTORY_KEY = "track_history"
+        private const val MAX_HISTORY_SIZE = 10
+    }
 
-class SearchHistorySaver(
-    private val preferences: SharedPreferences
-) {
-    fun updateTracks(): ArrayList<Track> {
+    override fun updateTracks(): List<Track> {
         var tracks = ArrayList<Track>()
         val jsonTracks = preferences.getString(HISTORY_KEY, null)
         if (jsonTracks != null) {
@@ -20,7 +22,7 @@ class SearchHistorySaver(
         return tracks
     }
 
-    fun addTrack(newTrack: Track) {
+    override fun addTrack(newTrack: Track) {
         var trackList = ArrayList<Track>()
         val jsonTracks = preferences.getString(HISTORY_KEY, null)
         if (jsonTracks != null) {
@@ -33,7 +35,7 @@ class SearchHistorySaver(
         preferences.edit().putString(HISTORY_KEY, createJsonFromTracks(trackList)).apply()
     }
 
-    fun clearHistory() {
+    override fun clearHistory() {
         preferences.edit().remove(HISTORY_KEY).apply()
     }
 
