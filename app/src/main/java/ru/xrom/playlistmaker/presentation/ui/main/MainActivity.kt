@@ -1,10 +1,14 @@
-package ru.xrom.playlistmaker
+package ru.xrom.playlistmaker.presentation.ui.main
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import ru.xrom.playlistmaker.R
+import ru.xrom.playlistmaker.presentation.ui.media.MediaActivity
+import ru.xrom.playlistmaker.presentation.ui.search.SearchActivity
+import ru.xrom.playlistmaker.presentation.ui.settings.SettingsActivity
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -1,4 +1,4 @@
-package ru.xrom.playlistmaker.recycleView
+package ru.xrom.playlistmaker.presentation.ui.search
 
 import android.icu.text.SimpleDateFormat
 import android.view.View
@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.xrom.playlistmaker.R
-import ru.xrom.playlistmaker.utils.Track
-import ru.xrom.playlistmaker.utils.dpToPx
+import ru.xrom.playlistmaker.domain.model.Track
+import ru.xrom.playlistmaker.presentation.dpToPx
 import java.util.Locale
 
 

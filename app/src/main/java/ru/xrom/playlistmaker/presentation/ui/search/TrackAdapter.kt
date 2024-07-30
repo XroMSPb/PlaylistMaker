@@ -1,16 +1,17 @@
-package ru.xrom.playlistmaker.recycleView
+package ru.xrom.playlistmaker.presentation.ui.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.xrom.playlistmaker.R
-import ru.xrom.playlistmaker.utils.Track
+import ru.xrom.playlistmaker.domain.api.OnItemClickListener
+import ru.xrom.playlistmaker.domain.model.Track
 
 
 class TrackAdapter(
-    private val onItemClickListener: OnItemClickListener
+    private val onItemClickListener: OnItemClickListener,
 ) : RecyclerView.Adapter<TrackViewHolder>() {
-    var items = ArrayList<Track>()
+    var items = mutableListOf<Track>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.activity_search_item, parent, false)
