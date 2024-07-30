@@ -11,7 +11,7 @@ import ru.xrom.playlistmaker.domain.api.TrackRepository
 import ru.xrom.playlistmaker.domain.impl.TrackInteractorImpl
 
 object Creator {
-    const val PLAYLISTMAKER_PREFERENCES = "_preferences"
+    private const val PLAYLISTMAKER_PREFERENCES = "_preferences"
 
     private lateinit var application: Application
 
