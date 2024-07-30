@@ -15,6 +15,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.domain.model.Track
 import ru.xrom.playlistmaker.presentation.dpToPx
+import ru.xrom.playlistmaker.presentation.getReleaseYear
 import ru.xrom.playlistmaker.presentation.ui.search.SearchActivity
 import java.util.Locale
 
@@ -81,7 +82,7 @@ class PlayerActivity : AppCompatActivity() {
             duration.text =
                 SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
             album.text = track.collectionName
-            year.text = track.releaseDate.substring(0, 4)
+            year.text = getReleaseYear(track.releaseDate)
             genre.text = track.primaryGenreName
             country.text = track.country
             playButton.setOnClickListener {

@@ -11,3 +11,11 @@ fun dpToPx(dp: Float, context: Context): Int {
     ).toInt()
 }
 
+fun getReleaseYear(str: String): String {
+    return if (str.length >= 4) {
+        str.substring(0, 4)
+    } else {
+        "1900"
+    }
+}
+
