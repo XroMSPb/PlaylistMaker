@@ -6,8 +6,11 @@ import android.content.SharedPreferences
 import ru.xrom.playlistmaker.data.network.RetrofitNetworkClient
 import ru.xrom.playlistmaker.data.repository.SearchHistoryRepositoryImpl
 import ru.xrom.playlistmaker.data.repository.TrackRepositoryImpl
+import ru.xrom.playlistmaker.domain.api.SearchHistoryInteractor
+import ru.xrom.playlistmaker.domain.api.SearchHistoryRepository
 import ru.xrom.playlistmaker.domain.api.TrackInteractor
 import ru.xrom.playlistmaker.domain.api.TrackRepository
+import ru.xrom.playlistmaker.domain.impl.SearchHistoryInteractorImpl
 import ru.xrom.playlistmaker.domain.impl.TrackInteractorImpl
 
 object Creator {
@@ -27,8 +30,11 @@ object Creator {
         return TrackInteractorImpl(getTrackRepository())
     }
 
+    fun provideSearchHistoryGetHistoryInteractor(): SearchHistoryInteractor {
+        return SearchHistoryInteractorImpl(provideSearchHistoryRepository())
+    }
 
-    fun provideSearchHistoryRepository(): SearchHistoryRepositoryImpl {
+    private fun provideSearchHistoryRepository(): SearchHistoryRepository {
         return SearchHistoryRepositoryImpl(provideSharedPreferences())
     }
 

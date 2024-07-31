@@ -1,4 +1,4 @@
-package ru.xrom.playlistmaker.domain.api
+package ru.xrom.playlistmaker.presentation.ui.search
 
 import ru.xrom.playlistmaker.domain.model.Track
 

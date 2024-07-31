@@ -26,9 +26,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.creator.Creator
-import ru.xrom.playlistmaker.creator.Creator.provideSearchHistoryRepository
-import ru.xrom.playlistmaker.domain.api.OnItemClickListener
-import ru.xrom.playlistmaker.domain.api.SearchHistoryRepository
+import ru.xrom.playlistmaker.creator.Creator.provideSearchHistoryGetHistoryInteractor
+import ru.xrom.playlistmaker.domain.api.SearchHistoryInteractor
 import ru.xrom.playlistmaker.domain.api.TrackInteractor
 import ru.xrom.playlistmaker.domain.model.Track
 import ru.xrom.playlistmaker.presentation.ui.player.PlayerActivity
@@ -36,7 +35,6 @@ import ru.xrom.playlistmaker.presentation.ui.player.PlayerActivity
 
 class SearchActivity : AppCompatActivity() {
     private var searchValue = TEXT_DEF
-
 
     private lateinit var searchAdapter: TrackAdapter
     private lateinit var historyAdapter: TrackAdapter
@@ -48,9 +46,8 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var updateButton: Button
     private lateinit var placeholderLayout: LinearLayout
     private lateinit var historyLayout: LinearLayout
-    private lateinit var searchHistorySaver: SearchHistoryRepository
+    private lateinit var searchHistorySaver: SearchHistoryInteractor
     private lateinit var progressBar: ProgressBar
-
 
     companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
@@ -146,8 +143,8 @@ class SearchActivity : AppCompatActivity() {
         historyAdapter = TrackAdapter(onHistoryItemClickListener)
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        searchHistorySaver = provideSearchHistoryRepository()
-        historyAdapter.items = searchHistorySaver.updateTracks().toMutableList()
+        searchHistorySaver = provideSearchHistoryGetHistoryInteractor()
+        historyAdapter.items = searchHistorySaver.getHistory().toMutableList()
         historyRecyclerView.adapter = historyAdapter
 
         val onItemClickListener = OnItemClickListener { item ->
@@ -172,7 +169,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun updateSearchHistoryAdapter() {
         historyAdapter.items.clear()
-        historyAdapter.items.addAll(searchHistorySaver.updateTracks())
+        historyAdapter.items.addAll(searchHistorySaver.getHistory())
         historyAdapter.notifyDataSetChanged()
     }
 
@@ -181,7 +178,7 @@ class SearchActivity : AppCompatActivity() {
             val intent = Intent(this, PlayerActivity::class.java)
             intent.putExtra(TRACK_DATA, track)
             startActivity(intent)
-            searchHistorySaver.addTrack(track)
+            searchHistorySaver.addToHistory(track)
             updateSearchHistoryAdapter()
         }
     }
