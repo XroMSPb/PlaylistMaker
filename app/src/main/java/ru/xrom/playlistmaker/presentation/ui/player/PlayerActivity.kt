@@ -1,4 +1,4 @@
-package ru.xrom.playlistmaker
+package ru.xrom.playlistmaker.presentation.ui.player
 
 import android.icu.text.SimpleDateFormat
 import android.media.MediaPlayer
@@ -12,8 +12,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import ru.xrom.playlistmaker.utils.Track
-import ru.xrom.playlistmaker.utils.dpToPx
+import ru.xrom.playlistmaker.R
+import ru.xrom.playlistmaker.domain.model.Track
+import ru.xrom.playlistmaker.presentation.dpToPx
+import ru.xrom.playlistmaker.presentation.getReleaseYear
+import ru.xrom.playlistmaker.presentation.ui.search.SearchActivity
 import java.util.Locale
 
 class PlayerActivity : AppCompatActivity() {
@@ -79,7 +82,7 @@ class PlayerActivity : AppCompatActivity() {
             duration.text =
                 SimpleDateFormat("mm:ss", Locale.getDefault()).format(track.trackTimeMillis)
             album.text = track.collectionName
-            year.text = track.releaseDate.substring(0, 4)
+            year.text = getReleaseYear(track.releaseDate)
             genre.text = track.primaryGenreName
             country.text = track.country
             playButton.setOnClickListener {

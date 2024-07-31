@@ -1,4 +1,4 @@
-package ru.xrom.playlistmaker
+package ru.xrom.playlistmaker.presentation.ui.settings
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -9,6 +9,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SwitchCompat
 import androidx.appcompat.widget.Toolbar
+import ru.xrom.playlistmaker.App
+import ru.xrom.playlistmaker.R
 
 class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

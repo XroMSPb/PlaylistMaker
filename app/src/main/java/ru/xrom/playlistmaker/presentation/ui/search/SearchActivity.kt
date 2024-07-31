@@ -1,4 +1,4 @@
-package ru.xrom.playlistmaker
+package ru.xrom.playlistmaker.presentation.ui.search
 
 
 import android.annotation.SuppressLint
@@ -24,27 +24,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import ru.xrom.playlistmaker.itunes.ItunesResponse
-import ru.xrom.playlistmaker.itunes.ResultResponse
-import ru.xrom.playlistmaker.itunes.api
-import ru.xrom.playlistmaker.recycleView.OnItemClickListener
-import ru.xrom.playlistmaker.recycleView.TrackAdapter
-import ru.xrom.playlistmaker.utils.SearchHistorySaver
-import ru.xrom.playlistmaker.utils.Track
+import ru.xrom.playlistmaker.R
+import ru.xrom.playlistmaker.creator.Creator
+import ru.xrom.playlistmaker.creator.Creator.provideSearchHistoryGetHistoryInteractor
+import ru.xrom.playlistmaker.domain.api.SearchHistoryInteractor
+import ru.xrom.playlistmaker.domain.api.TrackInteractor
+import ru.xrom.playlistmaker.domain.model.Track
+import ru.xrom.playlistmaker.presentation.ui.player.PlayerActivity
 
 
 class SearchActivity : AppCompatActivity() {
     private var searchValue = TEXT_DEF
-    private val baseUrl = "https://itunes.apple.com/"
 
     private lateinit var searchAdapter: TrackAdapter
     private lateinit var historyAdapter: TrackAdapter
-    private val tracks = ArrayList<Track>()
+    private val tracks = mutableListOf<Track>()
     private lateinit var recyclerView: RecyclerView
     private lateinit var historyRecyclerView: RecyclerView
     private lateinit var placeholderMessage: TextView
@@ -52,15 +46,8 @@ class SearchActivity : AppCompatActivity() {
     private lateinit var updateButton: Button
     private lateinit var placeholderLayout: LinearLayout
     private lateinit var historyLayout: LinearLayout
-    private lateinit var searchHistorySaver: SearchHistorySaver
+    private lateinit var searchHistorySaver: SearchHistoryInteractor
     private lateinit var progressBar: ProgressBar
-
-
-    private val retrofit = Retrofit.Builder()
-        .baseUrl(baseUrl)
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-    private val iTunesService = retrofit.create(api::class.java)
 
     companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
@@ -156,13 +143,8 @@ class SearchActivity : AppCompatActivity() {
         historyAdapter = TrackAdapter(onHistoryItemClickListener)
         historyRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        searchHistorySaver = SearchHistorySaver(
-            getSharedPreferences(
-                PLAYLISTMAKER_PREFERENCES,
-                MODE_PRIVATE
-            )
-        )
-        historyAdapter.items = searchHistorySaver.updateTracks()
+        searchHistorySaver = provideSearchHistoryGetHistoryInteractor()
+        historyAdapter.items = searchHistorySaver.getHistory().toMutableList()
         historyRecyclerView.adapter = historyAdapter
 
         val onItemClickListener = OnItemClickListener { item ->
@@ -187,7 +169,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun updateSearchHistoryAdapter() {
         historyAdapter.items.clear()
-        historyAdapter.items.addAll(searchHistorySaver.updateTracks())
+        historyAdapter.items.addAll(searchHistorySaver.getHistory())
         historyAdapter.notifyDataSetChanged()
     }
 
@@ -196,7 +178,7 @@ class SearchActivity : AppCompatActivity() {
             val intent = Intent(this, PlayerActivity::class.java)
             intent.putExtra(TRACK_DATA, track)
             startActivity(intent)
-            searchHistorySaver.addTrack(track)
+            searchHistorySaver.addToHistory(track)
             updateSearchHistoryAdapter()
         }
     }
@@ -224,44 +206,31 @@ class SearchActivity : AppCompatActivity() {
 
     private fun search() {
         progressBar.visibility = VISIBLE
-        iTunesService.search(searchValue)
-            .enqueue(object : Callback<ItunesResponse> {
-                override fun onResponse(
-                    call: Call<ItunesResponse>,
-                    response: Response<ItunesResponse>,
-                ) {
-                    when (response.code()) {
-                        200 -> {
-                            if (response.body()?.results?.isNotEmpty() == true) {
-                                tracks.clear()
-                                tracks.addAll(response.body()?.results!!)
-                                searchAdapter.notifyDataSetChanged()
-                                showMessage("", "", ResultResponse.SUCCESS)
-                            } else {
-                                showMessage(
-                                    getString(R.string.nothing_found),
-                                    "",
-                                    ResultResponse.EMPTY
-                                )
-                            }
+        Creator.provideTrackInteractor()
+            .search(searchValue, object : TrackInteractor.TrackConsumer {
+                override fun consume(foundTracks: List<Track>) {
+                    runOnUiThread {
+                        progressBar.visibility = GONE
+
+                        if (foundTracks.isNotEmpty()) {
+                            tracks.clear()
+                            tracks.addAll(foundTracks)
+                            searchAdapter.notifyDataSetChanged()
+                            showMessage("", "", ResultResponse.SUCCESS)
+                        } else {
+                            showMessage(getString(R.string.nothing_found), "", ResultResponse.EMPTY)
                         }
 
-                        else -> showMessage(
-                            getString(R.string.something_went_wrong),
-                            response.code().toString(),
-                            ResultResponse.ERROR
-                        )
                     }
                 }
 
-                override fun onFailure(call: Call<ItunesResponse>, t: Throwable) {
+                override fun onFailure(t: Throwable) {
                     showMessage(
                         getString(R.string.something_went_wrong),
                         t.message.toString(),
                         ResultResponse.ERROR
                     )
                 }
-
             })
     }
 
