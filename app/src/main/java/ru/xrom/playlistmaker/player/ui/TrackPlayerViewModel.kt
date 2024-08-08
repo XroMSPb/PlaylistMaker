@@ -10,14 +10,12 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import ru.xrom.playlistmaker.player.domain.api.TrackPlayerInteractor
 import ru.xrom.playlistmaker.player.domain.model.PlayingState
-import ru.xrom.playlistmaker.player.domain.model.State
 import ru.xrom.playlistmaker.utils.Creator
 
 class TrackPlayerViewModel(
     private val trackPlayerInteractor: TrackPlayerInteractor,
 ) : ViewModel() {
 
-    private var playerState = State.STATE_DEFAULT
     private val playingState = MutableLiveData<PlayingState>(PlayingState.Default)
     private val positionState = MutableLiveData(0)
     fun observePlayingState(): LiveData<PlayingState> = playingState
@@ -54,13 +52,7 @@ class TrackPlayerViewModel(
     }
 
     fun stateControl() {
-        val intState = trackPlayerInteractor.state
-        when (intState) {
-            State.STATE_DEFAULT -> playingState.postValue(PlayingState.Default)
-            State.STATE_PREPARED -> playingState.postValue(PlayingState.Prepared)
-            State.STATE_PLAYING -> playingState.postValue(PlayingState.Playing)
-            State.STATE_PAUSED -> playingState.postValue(PlayingState.Paused)
-        }
+        playingState.postValue(trackPlayerInteractor.state)
     }
 
     fun playingControl() {
@@ -72,7 +64,7 @@ class TrackPlayerViewModel(
     private val timerRunnable by lazy {
         object : Runnable {
             override fun run() {
-                if (playerState == State.STATE_PLAYING) {
+                if (playingState.value is PlayingState.Playing) {
                     positionState.postValue(trackPlayerInteractor.getCurrentPosition())
                     handler.postDelayed(this, TIMER_UPDATE_DELAY)
                 }
@@ -81,12 +73,12 @@ class TrackPlayerViewModel(
     }
 
     private fun startPlayer() {
-        playerState = State.STATE_PLAYING
+        playingState.value = PlayingState.Playing
         handler.post(timerRunnable)
     }
 
     private fun pausePlayer() {
-        playerState = State.STATE_PAUSED
+        playingState.value = PlayingState.Paused
         handler.removeCallbacks(timerRunnable)
     }
 

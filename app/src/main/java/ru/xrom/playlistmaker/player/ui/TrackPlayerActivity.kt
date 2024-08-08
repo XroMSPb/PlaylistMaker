@@ -35,14 +35,7 @@ class TrackPlayerActivity : AppCompatActivity() {
         val track = intent.getParcelableExtra(SearchActivity.TRACK_DATA) as? Track
         binding.playButton.isEnabled = false
 
-        viewModel.observePlayingState().observe(this) {
-            setButtonImage(it)
-            viewModel.stateControl()
-        }
-        viewModel.observePositionState().observe(this) {
-            binding.playingTime.text = dateFormat.format(it)
 
-        }
 
         if (track != null) {
             viewModel = ViewModelProvider(
@@ -66,6 +59,15 @@ class TrackPlayerActivity : AppCompatActivity() {
             binding.country.text = track.country
             binding.playButton.setOnClickListener {
                 viewModel.playingControl()
+            }
+            viewModel.observePlayingState().observe(this) { state ->
+                binding.playButton.isEnabled = state != PlayingState.Default
+                setButtonImage(state)
+                viewModel.stateControl()
+            }
+            viewModel.observePositionState().observe(this) {
+                binding.playingTime.text = dateFormat.format(it)
+
             }
         } else {
             binding.albumCover.setImageResource(R.drawable.ic_nothing_found)
