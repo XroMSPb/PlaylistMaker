@@ -42,13 +42,13 @@ class TrackPlayerViewModel(
     private fun onPlay() {
         playingState.postValue(PlayingState.Playing)
         trackPlayerInteractor.start()
-        startPlayer()
+        startTimer()
     }
 
     private fun onPause() {
         playingState.postValue(PlayingState.Paused)
         trackPlayerInteractor.pause()
-        pausePlayer()
+        pauseTimer()
     }
 
     fun stateControl() {
@@ -72,18 +72,17 @@ class TrackPlayerViewModel(
         }
     }
 
-    private fun startPlayer() {
-        playingState.value = PlayingState.Playing
+    private fun startTimer() {
         handler.post(timerRunnable)
     }
 
-    private fun pausePlayer() {
-        playingState.value = PlayingState.Paused
+    private fun pauseTimer() {
         handler.removeCallbacks(timerRunnable)
     }
 
     override fun onCleared() {
         super.onCleared()
+        pauseTimer()
         trackPlayerInteractor.release()
     }
 

@@ -17,7 +17,7 @@ class TrackPlayerImpl(
             state = PlayingState.Prepared
         }
         mediaPlayer.setOnCompletionListener {
-            state = PlayingState.Prepared
+            state = PlayingState.Complete
         }
     }
 
