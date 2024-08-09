@@ -4,34 +4,35 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SwitchCompat
-import androidx.appcompat.widget.Toolbar
 import ru.xrom.playlistmaker.R
+import ru.xrom.playlistmaker.databinding.ActivitySettingsBinding
 import ru.xrom.playlistmaker.utils.App
 
 class SettingsActivity : AppCompatActivity() {
+    private val binding: ActivitySettingsBinding by lazy {
+        ActivitySettingsBinding.inflate(layoutInflater)
+    }
+
+    private lateinit var viewModel: SettingsViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_settings)
+        setContentView(binding.root)
         window.statusBarColor = resources.getColor(R.color.status_bar, theme)
         window.navigationBarColor = resources.getColor(R.color.navigation_bar, theme)
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
-        toolbar.setNavigationOnClickListener {
+
+        binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
 
-        val swDarkTheme = findViewById<SwitchCompat>(R.id.dark_theme)
-        swDarkTheme.isChecked = (applicationContext as App).darkTheme
-        swDarkTheme.setOnCheckedChangeListener { _, checked ->
+        binding.darkTheme.isChecked = (applicationContext as App).darkTheme
+        binding.darkTheme.setOnCheckedChangeListener { _, checked ->
             (applicationContext as App).switchTheme(checked)
         }
 
-
-        val lineShare = findViewById<TextView>(R.id.share)
-        lineShare.setOnClickListener {
+        binding.share.setOnClickListener {
             val share = Intent.createChooser(Intent().apply {
                 action = Intent.ACTION_SEND
                 putExtra(Intent.EXTRA_TEXT, getString(R.string.practikumLink))
@@ -41,8 +42,7 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(share)
         }
 
-        val lineSupport = findViewById<TextView>(R.id.support)
-        lineSupport.setOnClickListener {
+        binding.support.setOnClickListener {
             val share = Intent.createChooser(Intent().apply {
                 action = Intent.ACTION_SENDTO
                 data = Uri.parse("mailto:")
@@ -57,8 +57,7 @@ class SettingsActivity : AppCompatActivity() {
             }
         }
 
-        val lineTerms = findViewById<TextView>(R.id.terms)
-        lineTerms.setOnClickListener {
+        binding.terms.setOnClickListener {
             val share = Intent.createChooser(Intent().apply {
                 action = Intent.ACTION_VIEW
                 data = Uri.parse(getString(R.string.termsLink))
@@ -66,5 +65,4 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(share)
         }
     }
-
 }

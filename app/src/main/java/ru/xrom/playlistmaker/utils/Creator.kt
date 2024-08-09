@@ -15,6 +15,8 @@ import ru.xrom.playlistmaker.search.domain.api.TrackInteractor
 import ru.xrom.playlistmaker.search.domain.api.TrackRepository
 import ru.xrom.playlistmaker.search.domain.impl.SearchHistoryInteractorImpl
 import ru.xrom.playlistmaker.search.domain.impl.TrackInteractorImpl
+import ru.xrom.playlistmaker.sharing.data.SharingRepositoryImpl
+import ru.xrom.playlistmaker.sharing.domain.api.SharingRepository
 
 object Creator {
     private const val PLAYLISTMAKER_PREFERENCES = "_preferences"
@@ -56,5 +58,7 @@ object Creator {
         )
     }
 
-
+    fun provideSharingRepositoryInteractor(): SharingRepository {
+        return SharingRepositoryImpl(application.applicationContext)
+    }
 }
