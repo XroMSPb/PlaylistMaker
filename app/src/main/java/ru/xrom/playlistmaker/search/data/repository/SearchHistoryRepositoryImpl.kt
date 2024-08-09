@@ -1,6 +1,7 @@
 package ru.xrom.playlistmaker.search.data.repository
 
 import android.content.SharedPreferences
+import androidx.core.content.edit
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import ru.xrom.playlistmaker.search.domain.api.SearchHistoryRepository
@@ -32,11 +33,16 @@ class SearchHistoryRepositoryImpl(private val preferences: SharedPreferences) :
                 trackList.removeAt(MAX_HISTORY_SIZE - 1)
         }
         trackList.add(0, newTrack)
-        preferences.edit().putString(HISTORY_KEY, createJsonFromTracks(trackList)).apply()
+        preferences.edit {
+            putString(HISTORY_KEY, createJsonFromTracks(trackList))
+        }
     }
 
     override fun clearHistory() {
-        preferences.edit().remove(HISTORY_KEY).apply()
+        preferences.edit {
+            remove(HISTORY_KEY)
+        }
+
     }
 
     private fun createJsonFromTracks(tracks: ArrayList<Track>): String {
