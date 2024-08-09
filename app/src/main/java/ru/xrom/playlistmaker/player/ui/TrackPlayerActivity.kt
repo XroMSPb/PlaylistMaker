@@ -28,49 +28,49 @@ class TrackPlayerActivity : AppCompatActivity() {
         setContentView(binding.root)
         window.statusBarColor = resources.getColor(R.color.status_bar, theme)
         window.navigationBarColor = resources.getColor(R.color.navigation_bar, theme)
-
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
         val track = intent.getParcelableExtra(SearchActivity.TRACK_DATA) as? Track
-        binding.playButton.isEnabled = false
-
-
 
         if (track != null) {
-            viewModel = ViewModelProvider(
-                this,
-                TrackPlayerViewModel.getViewModelFactory(track.previewUrl)
-            )[TrackPlayerViewModel::class.java]
-            viewModel.onPrepare()
-            Glide.with(this)
-                .load(track.getCoverArtwork())
-                .placeholder(R.drawable.ic_cover_placeholder)
-                .centerCrop()
-                .transform(RoundedCorners(dpToPx(8f, this)))
-                .into(binding.albumCover)
-            binding.title.text = track.trackName
-            binding.artistName.text = track.artistName
-            binding.playingTime.text = getString(R.string.time_zero)
-            binding.duration.text = dateFormat.format(track.trackTimeMillis)
-            binding.album.text = track.collectionName
-            binding.year.text = getReleaseYear(track.releaseDate)
-            binding.genre.text = track.primaryGenreName
-            binding.country.text = track.country
-            binding.playButton.setOnClickListener {
-                viewModel.playingControl()
-            }
-            viewModel.observePlayingState().observe(this) { state ->
-                binding.playButton.isEnabled = state != PlayingState.Default
-                setButtonImage(state)
-                viewModel.stateControl()
-            }
-            viewModel.observePositionState().observe(this) {
-                binding.playingTime.text = dateFormat.format(it)
-
-            }
+            render(track)
         } else {
             binding.albumCover.setImageResource(R.drawable.ic_nothing_found)
+        }
+    }
+
+    private fun render(track: Track) {
+        viewModel = ViewModelProvider(
+            this,
+            TrackPlayerViewModel.getViewModelFactory(track.previewUrl)
+        )[TrackPlayerViewModel::class.java]
+        binding.playButton.isEnabled = false
+        Glide.with(this)
+            .load(track.getCoverArtwork())
+            .placeholder(R.drawable.ic_cover_placeholder)
+            .centerCrop()
+            .transform(RoundedCorners(dpToPx(8f, this)))
+            .into(binding.albumCover)
+        binding.title.text = track.trackName
+        binding.artistName.text = track.artistName
+        binding.playingTime.text = getString(R.string.time_zero)
+        binding.duration.text = dateFormat.format(track.trackTimeMillis)
+        binding.album.text = track.collectionName
+        binding.year.text = getReleaseYear(track.releaseDate)
+        binding.genre.text = track.primaryGenreName
+        binding.country.text = track.country
+        binding.playButton.setOnClickListener {
+            viewModel.playingControl()
+        }
+        viewModel.observePlayingState().observe(this) { state ->
+            binding.playButton.isEnabled = state != PlayingState.Default
+            setButtonImage(state)
+            viewModel.stateControl()
+        }
+        viewModel.observePositionState().observe(this) {
+            binding.playingTime.text = dateFormat.format(it)
+
         }
     }
 
