@@ -34,17 +34,25 @@ class TrackPlayerActivity : AppCompatActivity() {
         val track = intent.getParcelableExtra(SearchActivity.TRACK_DATA) as? Track
 
         if (track != null) {
+            viewModel = ViewModelProvider(
+                this,
+                TrackPlayerViewModel.getViewModelFactory(track.previewUrl)
+            )[TrackPlayerViewModel::class.java]
             render(track)
+            viewModel.observePlayingState().observe(this) { state ->
+                binding.playButton.isEnabled = state != PlayingState.Default
+                setButtonImage(state)
+                viewModel.stateControl()
+            }
+            viewModel.observePositionState().observe(this) {
+                binding.playingTime.text = dateFormat.format(it)
+            }
         } else {
             binding.albumCover.setImageResource(R.drawable.ic_nothing_found)
         }
     }
 
     private fun render(track: Track) {
-        viewModel = ViewModelProvider(
-            this,
-            TrackPlayerViewModel.getViewModelFactory(track.previewUrl)
-        )[TrackPlayerViewModel::class.java]
         binding.playButton.isEnabled = false
         Glide.with(this)
             .load(track.getCoverArtwork())
@@ -62,15 +70,6 @@ class TrackPlayerActivity : AppCompatActivity() {
         binding.country.text = track.country
         binding.playButton.setOnClickListener {
             viewModel.playingControl()
-        }
-        viewModel.observePlayingState().observe(this) { state ->
-            binding.playButton.isEnabled = state != PlayingState.Default
-            setButtonImage(state)
-            viewModel.stateControl()
-        }
-        viewModel.observePositionState().observe(this) {
-            binding.playingTime.text = dateFormat.format(it)
-
         }
     }
 

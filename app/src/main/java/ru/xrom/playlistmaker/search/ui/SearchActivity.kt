@@ -1,22 +1,18 @@
 package ru.xrom.playlistmaker.search.ui
 
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.text.Editable
-import android.text.TextWatcher
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.xrom.playlistmaker.R
@@ -41,7 +37,6 @@ class SearchActivity : AppCompatActivity() {
 
     private lateinit var searchAdapter: TrackAdapter
     private lateinit var historyAdapter: TrackAdapter
-    private val tracks = mutableListOf<Track>()
 
 
     companion object {
@@ -54,7 +49,6 @@ class SearchActivity : AppCompatActivity() {
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -71,50 +65,34 @@ class SearchActivity : AppCompatActivity() {
         binding.searchBar.setText(searchValue)
         binding.cancelButton.setOnClickListener {
             binding.searchBar.text.clear()
-            tracks.clear()
-            searchAdapter.notifyDataSetChanged()
-            showMessage("", "", ResultResponse.HISTORY)
+            searchAdapter.notifyItemRangeChanged(0, searchAdapter.itemCount)
+            showHistory()
         }
         binding.searchBar.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && binding.searchBar.text.isEmpty()) {
-                showMessage("", "", ResultResponse.HISTORY)
+                showHistory()
             } else {
-                showMessage("", "", ResultResponse.SUCCESS)
+                showContentSearch()
             }
         }
-
 
         binding.clearHistory.setOnClickListener {
             viewModel.clearHistory()
             binding.historyLayout.isVisible = false
         }
 
-        val simpleTextWatcher = object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                clearButtonVisibility(s, binding.cancelButton)
-                searchValue = s.toString()
-                if (binding.searchBar.hasFocus() && s?.isEmpty() == true) {
-                    showMessage("", "", ResultResponse.HISTORY)
-                } else {
-                    viewModel.searchDebounce(searchValue)
-                    showMessage("", "", ResultResponse.SUCCESS)
-                }
-
-            }
-
-            override fun afterTextChanged(s: Editable?) {
-
-            }
+        binding.searchBar.doOnTextChanged { s, _, _, _ ->
+            clearButtonVisibility(s, binding.cancelButton)
+            searchValue = s.toString()
+            if (binding.searchBar.hasFocus() && s?.isEmpty() == false)
+                viewModel.searchDebounce(searchValue)
+            else
+                showHistory()
         }
-        binding.searchBar.addTextChangedListener(simpleTextWatcher)
+
         binding.searchBar.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 viewModel.searchDebounce(searchValue)
-                true
             }
             false
         }
@@ -124,9 +102,6 @@ class SearchActivity : AppCompatActivity() {
         }
         historyAdapter = TrackAdapter(onHistoryItemClickListener)
         binding.recycleHistoryView.layoutManager = LinearLayoutManager(this)
-
-
-        // historyAdapter.items = searchHistorySaver.getHistory().toMutableList()
         binding.recycleHistoryView.adapter = historyAdapter
 
         val onItemClickListener = OnItemClickListener { item ->
@@ -135,30 +110,22 @@ class SearchActivity : AppCompatActivity() {
 
         binding.recycleView.layoutManager = LinearLayoutManager(this)
         searchAdapter = TrackAdapter(onItemClickListener)
-        searchAdapter.items = tracks
         binding.recycleView.adapter = searchAdapter
 
         binding.updateResponse.setOnClickListener {
             viewModel.searchDebounce(searchValue)
         }
-        showMessage("", "", ResultResponse.HISTORY)
     }
 
-    private fun showContentSearch(tracks: List<Track>) {
-        searchAdapter.items.clear()
-        searchAdapter.items.addAll(tracks)
-        searchAdapter.notifyDataSetChanged()
-        showMessage("", "", ResultResponse.SUCCESS)
-    }
 
     private fun renderState(state: SearchState) {
         when (state) {
-            is SearchState.ContentHistory -> updateSearchHistoryAdapter(state.data)
-            is SearchState.ContentSearch -> showContentSearch(state.tracks)
-            SearchState.EmptyHistory -> updateSearchHistoryAdapter(state)
-            is SearchState.Error -> TODO()
-            SearchState.Loading -> showLoading(true)
-            SearchState.NothingFound -> TODO()
+            is SearchState.ContentHistory -> updateSearchHistoryAdapter(state)
+            is SearchState.ContentSearch -> updateContentSearch(state.tracks)
+            is SearchState.EmptyHistory -> updateSearchHistoryAdapter(state)
+            is SearchState.Error -> showErrorMessage(state.errorMessage)
+            is SearchState.Loading -> showLoading(true)
+            is SearchState.NothingFound -> showEmptyView()
         }
     }
 
@@ -166,20 +133,41 @@ class SearchActivity : AppCompatActivity() {
         binding.progressBar.isVisible = isLoading
     }
 
+    private fun showContentSearch() {
+        binding.recycleView.isVisible = true
+        binding.placeholderLayout.isVisible = false
+        binding.historyLayout.isVisible = false
+    }
 
-    private fun updateSearchHistoryAdapter(sdata: List<Track>) {
+    private fun updateContentSearch(tracks: List<Track>) {
+        showLoading(false)
+        searchAdapter.items.clear()
+        searchAdapter.items.addAll(tracks)
+        searchAdapter.notifyItemRangeChanged(0, searchAdapter.itemCount)
+        showContentSearch()
+    }
+
+    private fun showHistory() {
+        binding.recycleView.isVisible = false
+        binding.placeholderLayout.isVisible = false
+        binding.historyLayout.isVisible = (historyAdapter.itemCount != 0)
+    }
+
+    private fun updateSearchHistoryAdapter(sdata: SearchState) {
         historyAdapter.items.clear()
-        historyAdapter.items.addAll(sdata)
-        historyAdapter.notifyDataSetChanged()
+        if (sdata is SearchState.ContentHistory) {
+            historyAdapter.items.addAll(sdata.data)
+        }
+        historyAdapter.notifyItemRangeChanged(0, historyAdapter.itemCount)
+        showHistory()
     }
 
     private fun openPlayer(track: Track) {
         if (clickDebounce()) {
+            viewModel.addToHistory(track)
             val intent = Intent(this, TrackPlayerActivity::class.java)
             intent.putExtra(TRACK_DATA, track)
             startActivity(intent)
-            searchHistorySaver.addToHistory(track)
-            updateSearchHistoryAdapter()
         }
     }
 
@@ -195,63 +183,36 @@ class SearchActivity : AppCompatActivity() {
 
     private fun clearButtonVisibility(s: CharSequence?, v: ImageView) {
         if (s.isNullOrEmpty()) {
-            v.visibility = GONE
+            v.isVisible = false
             val inputMethodManager =
                 getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
             inputMethodManager?.hideSoftInputFromWindow(v.windowToken, 0)
         } else {
-            v.visibility = VISIBLE
+            v.isVisible = true
         }
     }
 
-
-    private fun showMessage(text: String, additionalMessage: String, errorType: ResultResponse) {
+    private fun showEmptyView() {
         showLoading(false)
-        when (errorType) {
-            ResultResponse.SUCCESS -> {
-                binding.recycleView.visibility = VISIBLE
-                binding.placeholderLayout.visibility = GONE
-                binding.historyLayout.visibility = GONE
-            }
+        binding.recycleView.isVisible = false
+        binding.historyLayout.isVisible = false
+        binding.placeholderLayout.isVisible = true
+        binding.updateResponse.isVisible = false
+        searchAdapter.notifyItemRangeChanged(0, searchAdapter.itemCount)
+        binding.placeholderImage.setImageResource(R.drawable.ic_nothing_found)
+    }
 
-            ResultResponse.EMPTY -> {
-                binding.recycleView.visibility = GONE
-                binding.historyLayout.visibility = GONE
-                binding.placeholderLayout.visibility = VISIBLE
-                binding.updateResponse.visibility = GONE
-                tracks.clear()
-                searchAdapter.notifyDataSetChanged()
-                binding.placeholderMessage.text = text
-                binding.placeholderImage.setImageResource(R.drawable.ic_nothing_found)
-                if (additionalMessage.isNotEmpty()) {
-                    Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
-                        .show()
-                }
-            }
-
-            ResultResponse.ERROR -> {
-                binding.recycleView.visibility = GONE
-                binding.historyLayout.visibility = GONE
-                binding.placeholderLayout.visibility = VISIBLE
-                binding.updateResponse.visibility = VISIBLE
-                tracks.clear()
-                searchAdapter.notifyDataSetChanged()
-                binding.placeholderMessage.text = text
-                binding.placeholderImage.setImageResource(R.drawable.ic_something_went_wrong)
-                if (additionalMessage.isNotEmpty()) {
-                    Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
-                        .show()
-                }
-            }
-
-            ResultResponse.HISTORY -> {
-                binding.recycleView.visibility = GONE
-                binding.placeholderLayout.visibility = GONE
-                if (historyAdapter.items.isNotEmpty())
-                    binding.historyLayout.visibility = VISIBLE
-                else
-                    binding.historyLayout.visibility = GONE
-            }
+    private fun showErrorMessage(additionalMessage: String) {
+        showLoading(false)
+        binding.recycleView.isVisible = false
+        binding.historyLayout.isVisible = false
+        binding.placeholderLayout.isVisible = true
+        binding.updateResponse.isVisible = true
+        searchAdapter.notifyItemRangeChanged(0, searchAdapter.itemCount)
+        binding.placeholderImage.setImageResource(R.drawable.ic_something_went_wrong)
+        if (additionalMessage.isNotEmpty()) {
+            Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
+                .show()
         }
     }
 
@@ -263,6 +224,4 @@ class SearchActivity : AppCompatActivity() {
         }
         return current
     }
-
-
 }
