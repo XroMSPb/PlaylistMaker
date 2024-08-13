@@ -16,15 +16,13 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.databinding.ActivitySearchBinding
 import ru.xrom.playlistmaker.player.ui.TrackPlayerActivity
-import ru.xrom.playlistmaker.search.domain.api.SearchHistoryInteractor
-import ru.xrom.playlistmaker.search.domain.api.TrackInteractor
 import ru.xrom.playlistmaker.search.domain.model.Track
-import ru.xrom.playlistmaker.utils.Creator
-import ru.xrom.playlistmaker.utils.Creator.provideSearchHistoryGetHistoryInteractor
 
 
 class SearchActivity : AppCompatActivity() {
@@ -34,22 +32,25 @@ class SearchActivity : AppCompatActivity() {
         ActivitySearchBinding.inflate(layoutInflater)
     }
 
+    private val viewModel: SearchViewModel by lazy {
+        ViewModelProvider(
+            this,
+            SearchViewModel.getViewModelFactory()
+        )[SearchViewModel::class.java]
+    }
+
     private lateinit var searchAdapter: TrackAdapter
     private lateinit var historyAdapter: TrackAdapter
     private val tracks = mutableListOf<Track>()
 
-    private lateinit var searchHistorySaver: SearchHistoryInteractor
 
     companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
         const val TEXT_DEF = ""
         const val TRACK_DATA = "track_data"
         private const val CLICK_DEBOUNCE_DELAY = 1000L
-        private const val SEARCH_DEBOUNCE_DELAY = 2000L
     }
 
-
-    private val searchRunnable = Runnable { search() }
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
 
@@ -63,7 +64,9 @@ class SearchActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-
+        viewModel.observeSearchState().observe(this) { state ->
+            renderState(state)
+        }
         binding.searchBar.requestFocus()
         binding.searchBar.setText(searchValue)
         binding.cancelButton.setOnClickListener {
@@ -82,10 +85,8 @@ class SearchActivity : AppCompatActivity() {
 
 
         binding.clearHistory.setOnClickListener {
-            searchHistorySaver.clearHistory()
-            historyAdapter.items.clear()
-            historyAdapter.notifyDataSetChanged()
-            binding.historyLayout.visibility = GONE
+            viewModel.clearHistory()
+            binding.historyLayout.isVisible = false
         }
 
         val simpleTextWatcher = object : TextWatcher {
@@ -99,7 +100,7 @@ class SearchActivity : AppCompatActivity() {
                 if (binding.searchBar.hasFocus() && s?.isEmpty() == true) {
                     showMessage("", "", ResultResponse.HISTORY)
                 } else {
-                    searchDebounce()
+                    viewModel.searchDebounce(searchValue)
                     showMessage("", "", ResultResponse.SUCCESS)
                 }
 
@@ -112,7 +113,7 @@ class SearchActivity : AppCompatActivity() {
         binding.searchBar.addTextChangedListener(simpleTextWatcher)
         binding.searchBar.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                search()
+                viewModel.searchDebounce(searchValue)
                 true
             }
             false
@@ -124,8 +125,8 @@ class SearchActivity : AppCompatActivity() {
         historyAdapter = TrackAdapter(onHistoryItemClickListener)
         binding.recycleHistoryView.layoutManager = LinearLayoutManager(this)
 
-        searchHistorySaver = provideSearchHistoryGetHistoryInteractor()
-        historyAdapter.items = searchHistorySaver.getHistory().toMutableList()
+
+        // historyAdapter.items = searchHistorySaver.getHistory().toMutableList()
         binding.recycleHistoryView.adapter = historyAdapter
 
         val onItemClickListener = OnItemClickListener { item ->
@@ -138,19 +139,37 @@ class SearchActivity : AppCompatActivity() {
         binding.recycleView.adapter = searchAdapter
 
         binding.updateResponse.setOnClickListener {
-            search()
+            viewModel.searchDebounce(searchValue)
         }
         showMessage("", "", ResultResponse.HISTORY)
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        handler.removeCallbacks(searchRunnable)
+    private fun showContentSearch(tracks: List<Track>) {
+        searchAdapter.items.clear()
+        searchAdapter.items.addAll(tracks)
+        searchAdapter.notifyDataSetChanged()
+        showMessage("", "", ResultResponse.SUCCESS)
     }
 
-    private fun updateSearchHistoryAdapter() {
+    private fun renderState(state: SearchState) {
+        when (state) {
+            is SearchState.ContentHistory -> updateSearchHistoryAdapter(state.data)
+            is SearchState.ContentSearch -> showContentSearch(state.tracks)
+            SearchState.EmptyHistory -> updateSearchHistoryAdapter(state)
+            is SearchState.Error -> TODO()
+            SearchState.Loading -> showLoading(true)
+            SearchState.NothingFound -> TODO()
+        }
+    }
+
+    private fun showLoading(isLoading: Boolean) {
+        binding.progressBar.isVisible = isLoading
+    }
+
+
+    private fun updateSearchHistoryAdapter(sdata: List<Track>) {
         historyAdapter.items.clear()
-        historyAdapter.items.addAll(searchHistorySaver.getHistory())
+        historyAdapter.items.addAll(sdata)
         historyAdapter.notifyDataSetChanged()
     }
 
@@ -185,38 +204,9 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-    private fun search() {
-        binding.progressBar.visibility = VISIBLE
-        Creator.provideTrackInteractor()
-            .search(searchValue, object : TrackInteractor.TrackConsumer {
-                override fun consume(foundTracks: List<Track>) {
-                    runOnUiThread {
-                        binding.progressBar.visibility = GONE
-
-                        if (foundTracks.isNotEmpty()) {
-                            tracks.clear()
-                            tracks.addAll(foundTracks)
-                            searchAdapter.notifyDataSetChanged()
-                            showMessage("", "", ResultResponse.SUCCESS)
-                        } else {
-                            showMessage(getString(R.string.nothing_found), "", ResultResponse.EMPTY)
-                        }
-
-                    }
-                }
-
-                override fun onFailure(t: Throwable) {
-                    showMessage(
-                        getString(R.string.something_went_wrong),
-                        t.message.toString(),
-                        ResultResponse.ERROR
-                    )
-                }
-            })
-    }
 
     private fun showMessage(text: String, additionalMessage: String, errorType: ResultResponse) {
-        binding.progressBar.visibility = GONE
+        showLoading(false)
         when (errorType) {
             ResultResponse.SUCCESS -> {
                 binding.recycleView.visibility = VISIBLE
@@ -263,11 +253,6 @@ class SearchActivity : AppCompatActivity() {
                     binding.historyLayout.visibility = GONE
             }
         }
-    }
-
-    private fun searchDebounce() {
-        handler.removeCallbacks(searchRunnable)
-        handler.postDelayed(searchRunnable, SEARCH_DEBOUNCE_DELAY)
     }
 
     private fun clickDebounce(): Boolean {
