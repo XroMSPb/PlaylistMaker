@@ -15,6 +15,8 @@ import ru.xrom.playlistmaker.search.domain.api.TrackInteractor
 import ru.xrom.playlistmaker.search.domain.api.TrackRepository
 import ru.xrom.playlistmaker.search.domain.impl.SearchHistoryInteractorImpl
 import ru.xrom.playlistmaker.search.domain.impl.TrackInteractorImpl
+import ru.xrom.playlistmaker.settings.data.MainThemeInteractorImpl
+import ru.xrom.playlistmaker.settings.domain.MainThemeInteractor
 import ru.xrom.playlistmaker.sharing.data.SharingRepositoryImpl
 import ru.xrom.playlistmaker.sharing.domain.api.SharingRepository
 
@@ -60,5 +62,9 @@ object Creator {
 
     fun provideSharingRepositoryInteractor(): SharingRepository {
         return SharingRepositoryImpl(application.applicationContext)
+    }
+
+    fun provideMainThemeInteractor(): MainThemeInteractor {
+        return MainThemeInteractorImpl(provideSharedPreferences())
     }
 }
