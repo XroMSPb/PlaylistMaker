@@ -117,7 +117,6 @@ class SearchActivity : AppCompatActivity() {
         }
     }
 
-
     private fun renderState(state: SearchState) {
         when (state) {
             is SearchState.ContentHistory -> updateSearchHistoryAdapter(state)
