@@ -84,15 +84,15 @@ class SearchActivity : AppCompatActivity() {
         binding.searchBar.doOnTextChanged { s, _, _, _ ->
             clearButtonVisibility(s, binding.cancelButton)
             searchValue = s.toString()
-            if (binding.searchBar.hasFocus() && s?.isEmpty() == false)
-                viewModel.searchDebounce(searchValue)
-            else
+            if (binding.searchBar.hasFocus() && s?.isEmpty() == true)
                 showHistory()
+            else
+                viewModel.searchDebounce(searchValue)
         }
 
         binding.searchBar.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                viewModel.searchDebounce(searchValue)
+                viewModel.searchRequest(searchValue)
             }
             false
         }
@@ -199,6 +199,7 @@ class SearchActivity : AppCompatActivity() {
         binding.historyLayout.isVisible = false
         binding.placeholderLayout.isVisible = true
         binding.updateResponse.isVisible = false
+        binding.placeholderMessage.text = getString(R.string.nothing_found)
         searchAdapter.notifyItemRangeChanged(0, searchAdapter.itemCount)
         binding.placeholderImage.setImageResource(R.drawable.ic_nothing_found)
     }
@@ -211,6 +212,7 @@ class SearchActivity : AppCompatActivity() {
         binding.updateResponse.isVisible = true
         searchAdapter.notifyItemRangeChanged(0, searchAdapter.itemCount)
         binding.placeholderImage.setImageResource(R.drawable.ic_something_went_wrong)
+        binding.placeholderMessage.text = getString(R.string.something_went_wrong)
         if (additionalMessage.isNotEmpty()) {
             Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
                 .show()

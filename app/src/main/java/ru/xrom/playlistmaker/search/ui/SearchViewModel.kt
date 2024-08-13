@@ -66,7 +66,7 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
             renderState(SearchState.ContentHistory(searchHistory))
     }
 
-    private fun searchRequest(newSearchText: String) {
+    fun searchRequest(newSearchText: String) {
         renderState(SearchState.Loading)
         Creator.provideTrackInteractor()
             .search(newSearchText, object : TrackInteractor.TrackConsumer {
