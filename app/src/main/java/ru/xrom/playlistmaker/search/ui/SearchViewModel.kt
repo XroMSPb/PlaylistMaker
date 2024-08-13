@@ -36,7 +36,6 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
     }
 
-
     private val searchHistorySaver: SearchHistoryInteractor by lazy {
         provideSearchHistoryGetHistoryInteractor()
     }
