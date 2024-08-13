@@ -163,6 +163,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun openPlayer(track: Track) {
         if (clickDebounce()) {
+            binding.searchBar.text.clear()
             viewModel.addToHistory(track)
             val intent = Intent(this, TrackPlayerActivity::class.java)
             intent.putExtra(TRACK_DATA, track)
