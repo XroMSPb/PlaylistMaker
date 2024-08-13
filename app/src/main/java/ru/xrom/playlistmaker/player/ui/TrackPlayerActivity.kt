@@ -17,14 +17,16 @@ import ru.xrom.playlistmaker.utils.getReleaseYear
 import java.util.Locale
 
 class TrackPlayerActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityPlayerBinding
+
+    private val binding: ActivityPlayerBinding by lazy {
+        ActivityPlayerBinding.inflate(layoutInflater)
+    }
     private lateinit var viewModel: TrackPlayerViewModel
 
     private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityPlayerBinding.inflate(layoutInflater)
         setContentView(binding.root)
         window.statusBarColor = resources.getColor(R.color.status_bar, theme)
         window.navigationBarColor = resources.getColor(R.color.navigation_bar, theme)
@@ -39,14 +41,17 @@ class TrackPlayerActivity : AppCompatActivity() {
                 TrackPlayerViewModel.getViewModelFactory(track.previewUrl)
             )[TrackPlayerViewModel::class.java]
             render(track)
+
             viewModel.observePlayingState().observe(this) { state ->
                 binding.playButton.isEnabled = state != PlayingState.Default
                 setButtonImage(state)
                 viewModel.stateControl()
             }
+
             viewModel.observePositionState().observe(this) {
                 binding.playingTime.text = dateFormat.format(it)
             }
+
         } else {
             binding.albumCover.setImageResource(R.drawable.ic_nothing_found)
         }
