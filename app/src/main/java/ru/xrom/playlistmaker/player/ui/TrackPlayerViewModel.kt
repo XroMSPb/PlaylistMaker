@@ -39,24 +39,24 @@ class TrackPlayerViewModel(
 
     private fun onPrepare() {
         trackPlayerInteractor.prepare()
-        playingState.postValue(PlayingState.Prepared)
-        positionState.postValue(0)
+        playingState.value = PlayingState.Prepared
+        positionState.value = 0
     }
 
     private fun onPlay() {
         trackPlayerInteractor.start()
-        playingState.postValue(PlayingState.Playing)
+        playingState.value = PlayingState.Playing
         startTimer()
     }
 
     private fun onPause() {
         trackPlayerInteractor.pause()
-        playingState.postValue(PlayingState.Paused)
+        playingState.value = PlayingState.Paused
         pauseTimer()
     }
 
     fun stateControl() {
-        playingState.postValue(trackPlayerInteractor.state)
+        playingState.value = trackPlayerInteractor.state
     }
 
     fun playingControl() {
