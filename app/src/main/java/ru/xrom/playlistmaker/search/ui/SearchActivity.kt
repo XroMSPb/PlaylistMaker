@@ -162,6 +162,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private fun openPlayer(track: Track) {
+        binding.searchBar.text.clear()
         if (clickDebounce()) {
             binding.searchBar.text.clear()
             viewModel.addToHistory(track)
