@@ -11,23 +11,23 @@ import ru.xrom.playlistmaker.sharing.domain.model.TermsData
 class SharingRepositoryImpl(private val context: Context) : SharingRepository {
     override fun getShareData(): ShareData {
         return ShareData(
-            getString(context, R.string.practikumLink),
-            getString(context, R.string.practikumHeader)
+            url = getString(context, R.string.practikumLink),
+            title = getString(context, R.string.practikumHeader)
         )
     }
 
     override fun getMailData(): MailData {
         return MailData(
-            "mailto:",
-            getString(context, R.string.supportMail),
-            getString(context, R.string.suportSubject),
-            getString(context, R.string.supportText),
+            mail = getString(context, R.string.supportMail),
+            subject = getString(context, R.string.suportSubject),
+            text = getString(context, R.string.supportText),
+            title = getString(context, R.string.practikumHeader)
         )
     }
 
     override fun getTermsData(): TermsData {
         return TermsData(
-            getString(context, R.string.practikumLink),
+            link = getString(context, R.string.practikumLink),
         )
     }
 }
