@@ -9,11 +9,11 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.databinding.ActivityPlayerBinding
-import ru.xrom.playlistmaker.media.dpToPx
-import ru.xrom.playlistmaker.media.getReleaseYear
 import ru.xrom.playlistmaker.player.domain.model.PlayingState
 import ru.xrom.playlistmaker.search.domain.model.Track
 import ru.xrom.playlistmaker.search.ui.SearchActivity
+import ru.xrom.playlistmaker.utils.dpToPx
+import ru.xrom.playlistmaker.utils.getReleaseYear
 import java.util.Locale
 
 class TrackPlayerActivity : AppCompatActivity() {

@@ -14,7 +14,6 @@ import ru.xrom.playlistmaker.sharing.domain.model.TermsData
 import ru.xrom.playlistmaker.utils.Creator
 import ru.xrom.playlistmaker.utils.SingleLiveEvent
 
-
 class SettingsViewModel(
     sharingRepository: SharingRepository,
     private val themeInteractor: MainThemeInteractor,
@@ -29,7 +28,6 @@ class SettingsViewModel(
             }
         }
     }
-
 
     private val termsState = SingleLiveEvent<TermsData>()
     private val shareState = SingleLiveEvent<ShareData>()
