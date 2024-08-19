@@ -56,11 +56,11 @@ class TrackPlayerViewModel(
     }
 
     fun stateControl() {
-        playingState.postValue(trackPlayerInteractor.state)
+        playingState.postValue(trackPlayerInteractor.getState())
     }
 
     fun playingControl() {
-        if (playingState.value is PlayingState.Playing) onPause()
+        if (playingState.value == PlayingState.Playing) onPause()
         else onPlay()
     }
 
@@ -68,7 +68,7 @@ class TrackPlayerViewModel(
     private val timerRunnable by lazy {
         object : Runnable {
             override fun run() {
-                if (playingState.value is PlayingState.Playing) {
+                if (playingState.value == PlayingState.Playing) {
                     positionState.postValue(trackPlayerInteractor.getCurrentPosition())
                     handler.postDelayed(this, TIMER_UPDATE_DELAY)
                 }

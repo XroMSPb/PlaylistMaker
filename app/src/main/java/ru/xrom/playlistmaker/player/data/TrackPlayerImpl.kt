@@ -9,7 +9,9 @@ class TrackPlayerImpl(
     private val trackUrl: String,
 ) : TrackPlayerInteractor {
 
-    override var state: PlayingState = PlayingState.Default
+    private var state: PlayingState = PlayingState.Default
+
+
     override fun prepare() {
         mediaPlayer.setDataSource(trackUrl)
         mediaPlayer.prepareAsync()
@@ -37,6 +39,10 @@ class TrackPlayerImpl(
 
     override fun getCurrentPosition(): Int {
         return mediaPlayer.currentPosition
+    }
+
+    override fun getState(): PlayingState {
+        return state
     }
 
 }

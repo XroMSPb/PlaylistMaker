@@ -82,13 +82,13 @@ class TrackPlayerActivity : AppCompatActivity() {
         binding.playButton.setImageDrawable(
             AppCompatResources.getDrawable(
                 this, when (state) {
-                    is PlayingState.Default,
+                    PlayingState.Default,
                     PlayingState.Prepared,
                     PlayingState.Paused,
                     PlayingState.Complete,
                     -> R.drawable.ic_play
 
-                    is PlayingState.Playing -> R.drawable.ic_pause
+                    PlayingState.Playing -> R.drawable.ic_pause
                 }
             )
         )

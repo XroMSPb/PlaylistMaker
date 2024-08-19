@@ -19,7 +19,8 @@ import ru.xrom.playlistmaker.search.domain.model.Track
 import ru.xrom.playlistmaker.utils.Creator
 import ru.xrom.playlistmaker.utils.Creator.provideSearchHistoryGetHistoryInteractor
 
-class SearchViewModel(application: Application) : AndroidViewModel(application) {
+class SearchViewModel(application: Application, val trackInteractor: TrackInteractor) :
+    AndroidViewModel(application) {
     private var latestSearchText: String? = null
 
     companion object {
@@ -27,7 +28,10 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         private val SEARCH_REQUEST_TOKEN = Any()
         fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                SearchViewModel(this[APPLICATION_KEY] as Application)
+                SearchViewModel(
+                    this[APPLICATION_KEY] as Application,
+                    Creator.provideTrackInteractor()
+                )
             }
         }
     }
@@ -58,6 +62,38 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
         searchState.postValue(state)
     }
 
+    private val consumer = object : TrackInteractor.TrackConsumer {
+        override fun consume(foundTracks: Resource<List<Track>>) {
+            when (foundTracks) {
+                is Resource.Error -> renderState(
+                    SearchState.Error(
+                        errorMessage = application.getString(
+                            R.string.something_went_wrong
+                        )
+                    )
+                )
+
+                is Resource.Success -> {
+                    if (foundTracks.data?.isNotEmpty() == true) {
+                        renderState(SearchState.ContentSearch(foundTracks.data))
+                    } else {
+                        renderState(SearchState.NothingFound)
+                    }
+                }
+            }
+        }
+
+        override fun onFailure(t: Throwable) {
+            renderState(
+                SearchState.Error(
+                    errorMessage = application.getString(
+                        R.string.something_went_wrong
+                    )
+                )
+            )
+        }
+    }
+
     init {
         val searchHistory = searchHistorySaver.getHistory()
         if (searchHistory.isEmpty())
@@ -68,39 +104,8 @@ class SearchViewModel(application: Application) : AndroidViewModel(application) 
 
     fun searchRequest(newSearchText: String) {
         renderState(SearchState.Loading)
-        Creator.provideTrackInteractor()
-            .search(newSearchText, object : TrackInteractor.TrackConsumer {
-                override fun consume(foundTracks: Resource<List<Track>>) {
-                    when (foundTracks) {
-                        is Resource.Error -> renderState(
-                            SearchState.Error(
-                                errorMessage = getApplication<Application>().getString(
-                                    R.string.something_went_wrong
-                                )
-                            )
-                        )
-
-                        is Resource.Success -> {
-                            if (foundTracks.data?.isNotEmpty() == true) {
-                                renderState(SearchState.ContentSearch(foundTracks.data))
-                            } else {
-                                renderState(SearchState.NothingFound)
-                            }
-                        }
-                    }
-                }
-
-                override fun onFailure(t: Throwable) {
-                    renderState(
-                        SearchState.Error(
-                            errorMessage = getApplication<Application>().getString(
-                                R.string.something_went_wrong
-                            )
-                        )
-                    )
-                }
-
-            })
+        trackInteractor
+            .search(newSearchText, consumer)
     }
 
     fun searchDebounce(changedText: String) {
