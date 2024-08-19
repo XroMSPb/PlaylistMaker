@@ -16,7 +16,7 @@ class TrackPlayerViewModel(
     private val trackPlayerInteractor: TrackPlayerInteractor,
 ) : ViewModel() {
 
-    private val playingState = MutableLiveData<PlayingState>(PlayingState.Default)
+    private val playingState = MutableLiveData(PlayingState.Default)
     private val positionState = MutableLiveData(0)
     fun observePlayingState(): LiveData<PlayingState> = playingState
     fun observePositionState(): LiveData<Int> = positionState
