@@ -6,7 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.databinding.ActivitySettingsBinding
 import ru.xrom.playlistmaker.sharing.domain.model.MailData
@@ -19,7 +19,7 @@ class SettingsActivity : AppCompatActivity() {
         ActivitySettingsBinding.inflate(layoutInflater)
     }
 
-    private lateinit var viewModel: SettingsViewModel
+    private val viewModel by viewModel<SettingsViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,11 +30,6 @@ class SettingsActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-
-        viewModel = ViewModelProvider(
-            this,
-            SettingsViewModel.getViewModelFactory()
-        )[SettingsViewModel::class.java]
 
         binding.darkTheme.isChecked = viewModel.observeThemeState().value!!
         binding.darkTheme.setOnCheckedChangeListener { _, checked ->

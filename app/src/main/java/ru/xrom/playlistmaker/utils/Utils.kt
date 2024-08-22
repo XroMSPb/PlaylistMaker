@@ -3,6 +3,8 @@ package ru.xrom.playlistmaker.utils
 import android.content.Context
 import android.util.TypedValue
 
+const val PLAYLISTMAKER_PREFERENCES = "_preferences"
+
 fun dpToPx(dp: Float, context: Context): Int {
     return TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP,
