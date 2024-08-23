@@ -44,7 +44,7 @@ class TrackPlayerActivity : AppCompatActivity() {
 
             viewModel.observePlayingState().observe(this) { state ->
                 binding.playButton.isEnabled = state != PlayingState.Default
-                setButtonImage(state)
+                updateState(state)
                 viewModel.stateControl()
             }
 
@@ -78,20 +78,32 @@ class TrackPlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun setButtonImage(state: PlayingState) {
-        binding.playButton.setImageDrawable(
-            AppCompatResources.getDrawable(
-                this, when (state) {
-                    PlayingState.Default,
-                    PlayingState.Prepared,
-                    PlayingState.Paused,
-                    PlayingState.Complete,
-                    -> R.drawable.ic_play
-
-                    PlayingState.Playing -> R.drawable.ic_pause
-                }
+    private fun updateState(state: PlayingState) {
+        when (state) {
+            PlayingState.Default,
+            PlayingState.Prepared,
+            PlayingState.Paused,
+            -> binding.playButton.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    this, R.drawable.ic_play
+                )
             )
-        )
+
+            PlayingState.Playing -> binding.playButton.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    this, R.drawable.ic_pause
+                )
+            )
+
+            PlayingState.Complete -> {
+                binding.playButton.setImageDrawable(
+                    AppCompatResources.getDrawable(
+                        this, R.drawable.ic_play
+                    )
+                )
+                binding.playingTime.text = getString(R.string.time_zero)
+            }
+        }
     }
 
 }
