@@ -22,21 +22,26 @@ import ru.xrom.playlistmaker.search.ui.SearchViewModel
 import ru.xrom.playlistmaker.utils.PLAYLISTMAKER_PREFERENCES
 
 val searchModule = module {
+
     single {
         androidContext().getSharedPreferences(PLAYLISTMAKER_PREFERENCES, Context.MODE_PRIVATE)
     }
+
     factory { Gson() }
     single<ItunesApi> {
         Retrofit.Builder().baseUrl("https://itunes.apple.com/")
             .addConverterFactory(GsonConverterFactory.create()).build()
             .create(ItunesApi::class.java)
     }
+
     single<NetworkClient> {
         RetrofitNetworkClient()
     }
+
     single<SearchHistoryRepository> {
         SearchHistoryRepositoryImpl(get())
     }
+
     single<SearchHistoryInteractor> {
         SearchHistoryInteractorImpl(get())
     }
