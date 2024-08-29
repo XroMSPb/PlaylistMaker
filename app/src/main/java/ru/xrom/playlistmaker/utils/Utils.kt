@@ -5,7 +5,7 @@ import android.util.TypedValue
 
 const val PLAYLISTMAKER_PREFERENCES = "_preferences"
 
-fun dpToPx(dp: Float, context: Context): Int {
+fun convertDpToPx(dp: Float, context: Context): Int {
     return TypedValue.applyDimension(
         TypedValue.COMPLEX_UNIT_DIP,
         dp,

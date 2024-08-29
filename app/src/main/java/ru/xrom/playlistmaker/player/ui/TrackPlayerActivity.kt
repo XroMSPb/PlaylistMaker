@@ -13,7 +13,7 @@ import ru.xrom.playlistmaker.databinding.ActivityPlayerBinding
 import ru.xrom.playlistmaker.player.domain.model.PlayingState
 import ru.xrom.playlistmaker.search.domain.model.Track
 import ru.xrom.playlistmaker.search.ui.SearchActivity
-import ru.xrom.playlistmaker.utils.dpToPx
+import ru.xrom.playlistmaker.utils.convertDpToPx
 import ru.xrom.playlistmaker.utils.getReleaseYear
 import java.util.Locale
 
@@ -24,7 +24,7 @@ class TrackPlayerActivity : AppCompatActivity() {
     }
 
 
-    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+    private val dateFormat by lazy { SimpleDateFormat(TIME_PATTERN, Locale.getDefault()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,7 +63,7 @@ class TrackPlayerActivity : AppCompatActivity() {
             .load(track.getCoverArtwork())
             .placeholder(R.drawable.ic_cover_placeholder)
             .centerCrop()
-            .transform(RoundedCorners(dpToPx(8f, this)))
+            .transform(RoundedCorners(convertDpToPx(8f, this)))
             .into(binding.albumCover)
         binding.title.text = track.trackName
         binding.artistName.text = track.artistName
@@ -106,4 +106,7 @@ class TrackPlayerActivity : AppCompatActivity() {
         }
     }
 
+    companion object {
+        private const val TIME_PATTERN = "mm:ss"
+    }
 }

@@ -17,10 +17,6 @@ class TrackPlayerViewModel(
     fun observePlayingState(): LiveData<PlayingState> = playingState
     fun observePositionState(): LiveData<Int> = positionState
 
-    companion object {
-        private const val TIMER_UPDATE_DELAY = 250L
-    }
-
     init {
         onPrepare()
     }
@@ -78,5 +74,8 @@ class TrackPlayerViewModel(
         trackPlayerInteractor.release()
     }
 
+    companion object {
+        private const val TIMER_UPDATE_DELAY = 250L
+    }
 }
 
