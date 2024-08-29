@@ -7,42 +7,24 @@ import android.os.SystemClock
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.search.domain.api.SearchHistoryInteractor
 import ru.xrom.playlistmaker.search.domain.api.TrackInteractor
 import ru.xrom.playlistmaker.search.domain.model.Resource
 import ru.xrom.playlistmaker.search.domain.model.Track
-import ru.xrom.playlistmaker.utils.Creator
-import ru.xrom.playlistmaker.utils.Creator.provideSearchHistoryGetHistoryInteractor
 
-class SearchViewModel(application: Application, val trackInteractor: TrackInteractor) :
+class SearchViewModel(
+    application: Application,
+    private val trackInteractor: TrackInteractor,
+    private val searchHistorySaver: SearchHistoryInteractor,
+) :
     AndroidViewModel(application) {
     private var latestSearchText: String? = null
-
-    companion object {
-        private const val SEARCH_DEBOUNCE_DELAY = 1000L
-        private val SEARCH_REQUEST_TOKEN = Any()
-        fun getViewModelFactory(): ViewModelProvider.Factory = viewModelFactory {
-            initializer {
-                SearchViewModel(
-                    this[APPLICATION_KEY] as Application,
-                    Creator.provideTrackInteractor()
-                )
-            }
-        }
-    }
 
     override fun onCleared() {
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
     }
 
-    private val searchHistorySaver: SearchHistoryInteractor by lazy {
-        provideSearchHistoryGetHistoryInteractor()
-    }
     private val searchState = MutableLiveData<SearchState>()
     fun observeSearchState(): LiveData<SearchState> = searchState
 
@@ -115,12 +97,17 @@ class SearchViewModel(application: Application, val trackInteractor: TrackIntera
         latestSearchText = changedText
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
         val searchRunnable = Runnable { searchRequest(changedText) }
-        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY
+        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY_MILLIS
         handler.postAtTime(
             searchRunnable,
             SEARCH_REQUEST_TOKEN,
             postTime,
         )
+    }
+
+    companion object {
+        private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 1000L
+        private val SEARCH_REQUEST_TOKEN = Any()
     }
 }
 

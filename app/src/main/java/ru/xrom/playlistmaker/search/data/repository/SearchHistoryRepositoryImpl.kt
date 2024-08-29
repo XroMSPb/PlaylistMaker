@@ -42,7 +42,6 @@ class SearchHistoryRepositoryImpl(private val preferences: SharedPreferences) :
         preferences.edit {
             remove(HISTORY_KEY)
         }
-
     }
 
     private fun createJsonFromTracks(tracks: ArrayList<Track>): String {

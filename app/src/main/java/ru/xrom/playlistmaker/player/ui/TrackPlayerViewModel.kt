@@ -5,12 +5,8 @@ import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewmodel.initializer
-import androidx.lifecycle.viewmodel.viewModelFactory
 import ru.xrom.playlistmaker.player.domain.api.TrackPlayerInteractor
 import ru.xrom.playlistmaker.player.domain.model.PlayingState
-import ru.xrom.playlistmaker.utils.Creator
 
 class TrackPlayerViewModel(
     private val trackPlayerInteractor: TrackPlayerInteractor,
@@ -20,18 +16,6 @@ class TrackPlayerViewModel(
     private val positionState = MutableLiveData(0)
     fun observePlayingState(): LiveData<PlayingState> = playingState
     fun observePositionState(): LiveData<Int> = positionState
-
-    companion object {
-        private const val TIMER_UPDATE_DELAY = 250L
-        fun getViewModelFactory(trackUrl: String): ViewModelProvider.Factory =
-            viewModelFactory {
-                initializer {
-                    TrackPlayerViewModel(
-                        trackPlayerInteractor = Creator.provideTrackPlayerInteractor(trackUrl),
-                    )
-                }
-            }
-    }
 
     init {
         onPrepare()
@@ -90,5 +74,8 @@ class TrackPlayerViewModel(
         trackPlayerInteractor.release()
     }
 
+    companion object {
+        private const val TIMER_UPDATE_DELAY = 250L
+    }
 }
 

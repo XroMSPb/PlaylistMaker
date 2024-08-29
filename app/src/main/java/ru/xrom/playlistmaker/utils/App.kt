@@ -1,25 +1,34 @@
 package ru.xrom.playlistmaker.utils
 
 import android.app.Application
-import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatDelegate
-import ru.xrom.playlistmaker.utils.Creator.initApplication
-import ru.xrom.playlistmaker.utils.Creator.provideSharedPreferences
+import com.example.playlistmaker.media_player.di.playerModule
+import com.example.playlistmaker.settings.di.settingsModule
+import org.koin.android.ext.android.inject
+import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
+import org.koin.core.context.startKoin
+import ru.xrom.playlistmaker.di.searchModule
+import ru.xrom.playlistmaker.settings.domain.MainThemeInteractor
 
-
-const val DARKTHEME_ENABLED = "darktheme_enabled"
 
 class App : Application() {
     var darkTheme = false
         private set
 
-    private lateinit var sharedPrefs: SharedPreferences
-
     override fun onCreate() {
         super.onCreate()
-        initApplication(this)
-        sharedPrefs = provideSharedPreferences()
-        switchTheme(sharedPrefs.getBoolean(DARKTHEME_ENABLED, darkTheme))
+        startKoin {
+            androidLogger()
+            androidContext(this@App)
+            modules(
+                searchModule,
+                playerModule,
+                settingsModule,
+            )
+        }
+        val mainThemeInt: MainThemeInteractor by inject()
+        switchTheme(mainThemeInt.isNightTheme())
     }
 
     fun switchTheme(darkThemeEnabled: Boolean) {

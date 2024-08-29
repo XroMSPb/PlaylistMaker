@@ -13,8 +13,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.databinding.ActivitySearchBinding
 import ru.xrom.playlistmaker.player.ui.TrackPlayerActivity
@@ -28,14 +28,9 @@ class SearchActivity : AppCompatActivity() {
         ActivitySearchBinding.inflate(layoutInflater)
     }
 
-    private val viewModel: SearchViewModel by lazy {
-        ViewModelProvider(
-            this,
-            SearchViewModel.getViewModelFactory()
-        )[SearchViewModel::class.java]
-    }
+    private val viewModel by viewModel<SearchViewModel>()
 
-    private lateinit var searchAdapter: TrackAdapter
+    private var searchAdapter: TrackAdapter? = null
     private lateinit var historyAdapter: TrackAdapter
 
 
@@ -65,7 +60,7 @@ class SearchActivity : AppCompatActivity() {
         binding.searchBar.setText(searchValue)
         binding.cancelButton.setOnClickListener {
             binding.searchBar.text.clear()
-            searchAdapter.notifyItemRangeChanged(0, searchAdapter.itemCount)
+            searchAdapter?.itemCount?.let { it1 -> searchAdapter?.notifyItemRangeChanged(0, it1) }
             showHistory()
         }
         binding.searchBar.setOnFocusChangeListener { _, hasFocus ->
@@ -140,9 +135,9 @@ class SearchActivity : AppCompatActivity() {
 
     private fun updateContentSearch(tracks: List<Track>) {
         showLoading(false)
-        searchAdapter.items.clear()
-        searchAdapter.items.addAll(tracks)
-        searchAdapter.notifyItemRangeChanged(0, searchAdapter.itemCount)
+        searchAdapter?.items?.clear()
+        searchAdapter?.items?.addAll(tracks)
+        searchAdapter?.itemCount?.let { searchAdapter?.notifyItemRangeChanged(0, it) }
         showContentSearch()
     }
 
@@ -200,7 +195,7 @@ class SearchActivity : AppCompatActivity() {
         binding.placeholderLayout.isVisible = true
         binding.updateResponse.isVisible = false
         binding.placeholderMessage.text = getString(R.string.nothing_found)
-        searchAdapter.notifyItemRangeChanged(0, searchAdapter.itemCount)
+        searchAdapter?.let { searchAdapter?.notifyItemRangeChanged(0, it.itemCount) }
         binding.placeholderImage.setImageResource(R.drawable.ic_nothing_found)
     }
 
@@ -210,7 +205,7 @@ class SearchActivity : AppCompatActivity() {
         binding.historyLayout.isVisible = false
         binding.placeholderLayout.isVisible = true
         binding.updateResponse.isVisible = true
-        searchAdapter.notifyItemRangeChanged(0, searchAdapter.itemCount)
+        searchAdapter?.let { searchAdapter?.notifyItemRangeChanged(0, it.itemCount) }
         binding.placeholderImage.setImageResource(R.drawable.ic_something_went_wrong)
         binding.placeholderMessage.text = getString(R.string.something_went_wrong)
         if (additionalMessage.isNotEmpty()) {

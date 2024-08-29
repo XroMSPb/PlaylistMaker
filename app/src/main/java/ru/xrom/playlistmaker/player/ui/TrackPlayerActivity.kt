@@ -4,15 +4,16 @@ import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.databinding.ActivityPlayerBinding
 import ru.xrom.playlistmaker.player.domain.model.PlayingState
 import ru.xrom.playlistmaker.search.domain.model.Track
 import ru.xrom.playlistmaker.search.ui.SearchActivity
-import ru.xrom.playlistmaker.utils.dpToPx
+import ru.xrom.playlistmaker.utils.convertDpToPx
 import ru.xrom.playlistmaker.utils.getReleaseYear
 import java.util.Locale
 
@@ -21,9 +22,9 @@ class TrackPlayerActivity : AppCompatActivity() {
     private val binding: ActivityPlayerBinding by lazy {
         ActivityPlayerBinding.inflate(layoutInflater)
     }
-    private lateinit var viewModel: TrackPlayerViewModel
 
-    private val dateFormat by lazy { SimpleDateFormat("mm:ss", Locale.getDefault()) }
+
+    private val dateFormat by lazy { SimpleDateFormat(TIME_PATTERN, Locale.getDefault()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,15 +37,14 @@ class TrackPlayerActivity : AppCompatActivity() {
         val track = intent.getParcelableExtra(SearchActivity.TRACK_DATA) as? Track
 
         if (track != null) {
-            viewModel = ViewModelProvider(
-                this,
-                TrackPlayerViewModel.getViewModelFactory(track.previewUrl)
-            )[TrackPlayerViewModel::class.java]
-            render(track)
+            val viewModel: TrackPlayerViewModel by viewModel {
+                parametersOf(track.previewUrl)
+            }
+            render(track, viewModel)
 
             viewModel.observePlayingState().observe(this) { state ->
                 binding.playButton.isEnabled = state != PlayingState.Default
-                setButtonImage(state)
+                updateState(state)
                 viewModel.stateControl()
             }
 
@@ -57,13 +57,13 @@ class TrackPlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun render(track: Track) {
+    private fun render(track: Track, viewModel: TrackPlayerViewModel) {
         binding.playButton.isEnabled = false
         Glide.with(this)
             .load(track.getCoverArtwork())
             .placeholder(R.drawable.ic_cover_placeholder)
             .centerCrop()
-            .transform(RoundedCorners(dpToPx(8f, this)))
+            .transform(RoundedCorners(convertDpToPx(8f, this)))
             .into(binding.albumCover)
         binding.title.text = track.trackName
         binding.artistName.text = track.artistName
@@ -78,20 +78,35 @@ class TrackPlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun setButtonImage(state: PlayingState) {
-        binding.playButton.setImageDrawable(
-            AppCompatResources.getDrawable(
-                this, when (state) {
-                    PlayingState.Default,
-                    PlayingState.Prepared,
-                    PlayingState.Paused,
-                    PlayingState.Complete,
-                    -> R.drawable.ic_play
-
-                    PlayingState.Playing -> R.drawable.ic_pause
-                }
+    private fun updateState(state: PlayingState) {
+        when (state) {
+            PlayingState.Default,
+            PlayingState.Prepared,
+            PlayingState.Paused,
+            -> binding.playButton.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    this, R.drawable.ic_play
+                )
             )
-        )
+
+            PlayingState.Playing -> binding.playButton.setImageDrawable(
+                AppCompatResources.getDrawable(
+                    this, R.drawable.ic_pause
+                )
+            )
+
+            PlayingState.Complete -> {
+                binding.playButton.setImageDrawable(
+                    AppCompatResources.getDrawable(
+                        this, R.drawable.ic_play
+                    )
+                )
+                binding.playingTime.text = getString(R.string.time_zero)
+            }
+        }
     }
 
+    companion object {
+        private const val TIME_PATTERN = "mm:ss"
+    }
 }
