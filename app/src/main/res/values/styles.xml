@@ -80,4 +80,13 @@
         <item name="android:textSize">@dimen/text_size_13sp</item>
     </style>
 
+    <style name="PlaceholderText" parent="Widget.MaterialComponents.TextView">
+        <item name="fontFamily">@font/ys_display_regular</item>
+        <item name="android:textColor">?attr/colorOnSecondary</item>
+        <item name="android:textFontWeight">400</item>
+        <item name="android:textSize">@dimen/text_size_19sp</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+
 </resources>

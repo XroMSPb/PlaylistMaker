@@ -18,7 +18,7 @@
         <activity
             android:name=".player.ui.TrackPlayerActivity"
             android:exported="false"
-            android:theme="@style/Theme.PlaylistMakerSearch"></activity>
+            android:theme="@style/Theme.PlaylistMakerSearch" />
         <activity
             android:name=".search.ui.SearchActivity"
             android:exported="false"
@@ -26,7 +26,8 @@
             android:windowSoftInputMode="stateVisible" />
         <activity
             android:name=".media.ui.media.MediaActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.PlaylistMakerMedia" />
         <activity
             android:name=".settings.ui.SettingsActivity"
             android:exported="false" />

@@ -17,4 +17,19 @@
         app:titleTextAppearance="@style/Toolbar.TitleText"
         app:titleTextColor="?attr/colorOnPrimary" />
 
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp48"
+        android:background="?attr/colorPrimary"
+        android:fontFamily="@font/ys_display_medium"
+        android:textAllCaps="false"
+        android:textSize="@dimen/text_size_14sp"
+        app:tabIndicatorColor="?attr/colorOnPrimary"
+        app:tabTextColor="?attr/colorOnPrimary" />
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>
