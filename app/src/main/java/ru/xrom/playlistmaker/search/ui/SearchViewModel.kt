@@ -3,7 +3,6 @@ package ru.xrom.playlistmaker.search.ui
 import android.app.Application
 import android.os.Handler
 import android.os.Looper
-import android.os.SystemClock
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -97,11 +96,10 @@ class SearchViewModel(
         latestSearchText = changedText
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
         val searchRunnable = Runnable { searchRequest(changedText) }
-        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY_MILLIS
-        handler.postAtTime(
+        handler.postDelayed(
             searchRunnable,
             SEARCH_REQUEST_TOKEN,
-            postTime,
+            SEARCH_DEBOUNCE_DELAY_MILLIS,
         )
     }
 
