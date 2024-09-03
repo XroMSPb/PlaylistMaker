@@ -83,7 +83,7 @@ class SearchViewModel(
             renderState(SearchState.ContentHistory(searchHistory))
     }
 
-    fun searchRequest(newSearchText: String) {
+    private fun searchRequest(newSearchText: String) {
         renderState(SearchState.Loading)
         trackInteractor
             .search(newSearchText, consumer)

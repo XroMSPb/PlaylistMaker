@@ -87,7 +87,7 @@ class SearchActivity : AppCompatActivity() {
 
         binding.searchBar.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                viewModel.searchRequest(searchValue)
+                viewModel.searchDebounce(searchValue)
             }
             false
         }
