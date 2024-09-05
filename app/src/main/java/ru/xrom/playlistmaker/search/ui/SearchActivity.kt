@@ -79,8 +79,16 @@ class SearchActivity : AppCompatActivity() {
         binding.searchBar.doOnTextChanged { s, _, _, _ ->
             clearButtonVisibility(s, binding.cancelButton)
             searchValue = s.toString()
-            if (binding.searchBar.hasFocus() && s?.isEmpty() == true)
+            if (binding.searchBar.hasFocus() && s?.isEmpty() == true) {
+                viewModel.stopSearch()
+                searchAdapter?.itemCount?.let { it1 ->
+                    searchAdapter?.notifyItemRangeChanged(
+                        0,
+                        it1
+                    )
+                }
                 showHistory()
+            }
             else
                 viewModel.searchDebounce(searchValue)
         }
@@ -108,7 +116,7 @@ class SearchActivity : AppCompatActivity() {
         binding.recycleView.adapter = searchAdapter
 
         binding.updateResponse.setOnClickListener {
-            viewModel.searchDebounce(searchValue)
+            viewModel.searchRequest(searchValue)
         }
     }
 

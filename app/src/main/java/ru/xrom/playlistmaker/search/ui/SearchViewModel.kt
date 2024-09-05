@@ -21,9 +21,12 @@ class SearchViewModel(
     private var latestSearchText: String? = null
 
     override fun onCleared() {
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+        stopSearch()
     }
 
+    fun stopSearch() {
+        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+    }
     private val searchState = MutableLiveData<SearchState>()
     fun observeSearchState(): LiveData<SearchState> = searchState
 
@@ -44,7 +47,7 @@ class SearchViewModel(
     }
 
     private val consumer = object : TrackInteractor.TrackConsumer {
-        override fun consume(foundTracks: Resource<List<Track>>) {
+        override fun consume(foundTracks: Resource<List<Track>>, request: String) {
             when (foundTracks) {
                 is Resource.Error -> renderState(
                     SearchState.Error(
@@ -56,7 +59,9 @@ class SearchViewModel(
 
                 is Resource.Success -> {
                     if (foundTracks.data?.isNotEmpty() == true) {
-                        renderState(SearchState.ContentSearch(foundTracks.data))
+                        if (request == latestSearchText) {
+                            renderState(SearchState.ContentSearch(foundTracks.data))
+                        }
                     } else {
                         renderState(SearchState.NothingFound)
                     }
@@ -83,7 +88,8 @@ class SearchViewModel(
             renderState(SearchState.ContentHistory(searchHistory))
     }
 
-    private fun searchRequest(newSearchText: String) {
+    fun searchRequest(newSearchText: String) {
+        latestSearchText = newSearchText
         renderState(SearchState.Loading)
         trackInteractor
             .search(newSearchText, consumer)
@@ -93,7 +99,10 @@ class SearchViewModel(
         if (latestSearchText == changedText) {
             return
         }
-        latestSearchText = changedText
+//        if (changedText.isEmpty()) {
+//            handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+//            return
+//        }
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
         val searchRunnable = Runnable { searchRequest(changedText) }
         handler.postDelayed(
