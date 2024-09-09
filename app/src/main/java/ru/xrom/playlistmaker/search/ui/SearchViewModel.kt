@@ -3,7 +3,6 @@ package ru.xrom.playlistmaker.search.ui
 import android.app.Application
 import android.os.Handler
 import android.os.Looper
-import android.os.SystemClock
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -22,9 +21,12 @@ class SearchViewModel(
     private var latestSearchText: String? = null
 
     override fun onCleared() {
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+        stopSearch()
     }
 
+    fun stopSearch() {
+        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+    }
     private val searchState = MutableLiveData<SearchState>()
     fun observeSearchState(): LiveData<SearchState> = searchState
 
@@ -45,7 +47,7 @@ class SearchViewModel(
     }
 
     private val consumer = object : TrackInteractor.TrackConsumer {
-        override fun consume(foundTracks: Resource<List<Track>>) {
+        override fun consume(foundTracks: Resource<List<Track>>, request: String) {
             when (foundTracks) {
                 is Resource.Error -> renderState(
                     SearchState.Error(
@@ -57,7 +59,9 @@ class SearchViewModel(
 
                 is Resource.Success -> {
                     if (foundTracks.data?.isNotEmpty() == true) {
-                        renderState(SearchState.ContentSearch(foundTracks.data))
+                        if (request == latestSearchText) {
+                            renderState(SearchState.ContentSearch(foundTracks.data))
+                        }
                     } else {
                         renderState(SearchState.NothingFound)
                     }
@@ -85,6 +89,7 @@ class SearchViewModel(
     }
 
     fun searchRequest(newSearchText: String) {
+        latestSearchText = newSearchText
         renderState(SearchState.Loading)
         trackInteractor
             .search(newSearchText, consumer)
@@ -94,14 +99,16 @@ class SearchViewModel(
         if (latestSearchText == changedText) {
             return
         }
-        latestSearchText = changedText
+//        if (changedText.isEmpty()) {
+//            handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
+//            return
+//        }
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
         val searchRunnable = Runnable { searchRequest(changedText) }
-        val postTime = SystemClock.uptimeMillis() + SEARCH_DEBOUNCE_DELAY_MILLIS
-        handler.postAtTime(
+        handler.postDelayed(
             searchRunnable,
             SEARCH_REQUEST_TOKEN,
-            postTime,
+            SEARCH_DEBOUNCE_DELAY_MILLIS,
         )
     }
 

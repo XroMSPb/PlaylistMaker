@@ -17,6 +17,16 @@
         <item name="toolbarNavigationButtonStyle">@style/TintedNavigation</item>
     </style>
 
+    <style name="Theme.PlaylistMakerMedia" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/graphite_black</item>
+        <item name="colorControlActivated">@color/light_silver</item>
+        <item name="colorSecondary">@color/white</item>
+        <item name="colorSecondaryVariant">@color/light_silver</item>
+        <item name="colorOnSecondary">@color/graphite_black</item>
+        <item name="toolbarNavigationButtonStyle">@style/TintedNavigation</item>
+    </style>
+
     <style name="Theme.PlaylistMakerSearch" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/white</item>
         <item name="colorOnPrimary">@color/black</item>
