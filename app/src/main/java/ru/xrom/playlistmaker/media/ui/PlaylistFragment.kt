@@ -1,4 +1,4 @@
-package ru.xrom.playlistmaker.media.ui.media
+package ru.xrom.playlistmaker.media.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater

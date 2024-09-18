@@ -13,7 +13,7 @@ class TrackAdapter(
     var items = mutableListOf<Track>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.activity_search_item, parent, false)
+            .inflate(R.layout.item_search, parent, false)
         return TrackViewHolder(view)
     }
 
