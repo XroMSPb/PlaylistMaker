@@ -5,6 +5,7 @@
     android:id="@+id/media_fragment_playlists"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/Theme.PlaylistMakerMedia"
     tools:context=".media.ui.PlaylistFragment">
 
     <com.google.android.material.button.MaterialButton

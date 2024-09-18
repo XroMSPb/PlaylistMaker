@@ -1,8 +1,8 @@
 [versions]
-agp = "8.5.2"
+agp = "8.6.1"
 glide = "4.16.0"
 gson = "2.10.1"
-kotlin = "1.9.0"
+kotlin = "1.9.23"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -11,13 +11,12 @@ appcompat = "1.7.0"
 material = "1.12.0"
 activity = "1.9.2"
 constraintlayout = "2.1.4"
-retrofit = "2.9.0"
+retrofit = "2.11.0"
 roomKtx = "2.6.1"
 koin = "3.5.4"
-navigationFragment = "2.8.0"
-navigationFragmentKtx = "2.8.0"
-navigationUi = "2.8.0"
-navigationUiKtx = "2.8.0"
+navigationFragment = "2.8.1"
+navigationUi = "2.8.1"
+navigationFragmentKtxVersion = "2.8.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -38,6 +37,7 @@ koin = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationFragment" }
 androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment", version.ref = "navigationFragment" }
 androidx-navigation-ui = { module = "androidx.navigation:navigation-ui", version.ref = "navigationUi" }
+androidx-navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fragment-ktx", version.ref = "navigationFragmentKtxVersion" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

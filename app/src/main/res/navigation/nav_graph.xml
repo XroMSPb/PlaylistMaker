@@ -3,36 +3,21 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/searchFragment">
-
+    app:startDestination="@id/mediaFragment">
     <fragment
         android:id="@+id/searchFragment"
         android:name="ru.xrom.playlistmaker.search.ui.SearchFragment"
-        android:label="SearchFragment">
-        <action
-            android:id="@+id/action_searchFragment_to_trackPlayerFragment"
-            app:destination="@id/trackPlayerFragment" />
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search">
     </fragment>
-    <fragment
-        android:id="@+id/trackPlayerFragment"
-        android:name="ru.xrom.playlistmaker.player.ui.TrackPlayerFragment"
-        android:label="fragment_player"
-        tools:layout="@layout/fragment_player" />
-    <fragment
-        android:id="@+id/playlistFragment"
-        android:name="ru.xrom.playlistmaker.media.ui.PlaylistFragment"
-        android:label="PlaylistFragment" />
-    <fragment
-        android:id="@+id/favoritesFragment"
-        android:name="ru.xrom.playlistmaker.media.ui.FavoritesFragment"
-        android:label="FavoritesFragment" />
-    <fragment
-        android:id="@+id/mediaFragment"
-        android:name="ru.xrom.playlistmaker.media.ui.MediaFragment"
-        android:label="MediaFragment" />
     <fragment
         android:id="@+id/settingsFragment"
         android:name="ru.xrom.playlistmaker.settings.ui.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
+    <fragment
+        android:id="@+id/mediaFragment"
+        android:name="ru.xrom.playlistmaker.media.ui.MediaFragment"
+        android:label="fragment_media"
+        tools:layout="@layout/fragment_media" />
 </navigation>

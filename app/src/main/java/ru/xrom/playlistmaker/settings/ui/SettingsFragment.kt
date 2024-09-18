@@ -33,12 +33,17 @@ class SettingsFragment : Fragment() {
         return binding.root
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding.darkTheme.isChecked = viewModel.observeThemeState().value!!
         binding.darkTheme.setOnCheckedChangeListener { _, checked ->
-            (context as App).switchTheme(checked)
+            (requireActivity().application as App).switchTheme(checked)
             viewModel.updateThemeState(checked)
         }
 

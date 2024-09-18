@@ -57,7 +57,7 @@ class SettingsViewModel(
 
     override fun getTermsData(): TermsData {
         return TermsData(
-            link = application.getString(R.string.practikumLink),
+            link = application.getString(R.string.termsLink),
         )
     }
 }

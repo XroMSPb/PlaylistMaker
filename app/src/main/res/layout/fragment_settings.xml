@@ -6,6 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="?attr/colorPrimary"
     android:orientation="vertical"
+    android:theme="@style/Theme.PlaylistMaker"
     tools:context=".settings.ui.SettingsFragment">
 
     <androidx.appcompat.widget.Toolbar
@@ -14,7 +15,6 @@
         android:layout_height="56dp"
         android:foreground="?attr/selectableItemBackground"
         app:contentInsetStartWithNavigation="0dp"
-        app:navigationIcon="@drawable/ic_back_arrow"
         app:tint="?attr/colorOnPrimary"
         app:title="@string/settings"
         app:titleTextAppearance="@style/Toolbar.TitleText"

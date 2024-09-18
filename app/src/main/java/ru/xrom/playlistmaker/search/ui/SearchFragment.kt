@@ -16,12 +16,11 @@ import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.databinding.FragmentSearchBinding
-import ru.xrom.playlistmaker.player.ui.TrackPlayerFragment
+import ru.xrom.playlistmaker.player.ui.TrackPlayerActivity
 import ru.xrom.playlistmaker.search.domain.model.Track
 
 
@@ -39,7 +38,6 @@ class SearchFragment : Fragment() {
     companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
         const val TEXT_DEF = ""
-        const val TRACK_DATA = "track_data"
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
@@ -177,22 +175,21 @@ class SearchFragment : Fragment() {
         if (clickDebounce()) {
             binding.searchBar.text.clear()
             viewModel.addToHistory(track)
-            findNavController().navigate(
-                R.id.action_searchFragment_to_trackPlayerFragment,
-                TrackPlayerFragment.createArgs(track)
-            )
+            startActivity(TrackPlayerActivity.newInstance(requireContext(), track))
         }
     }
 
-//    override fun onSaveInstanceState(outState: Bundle) {
-//        super.onSaveInstanceState(outState)
-//        outState.putString(SEARCH_TEXT, searchValue)
-//    }
-//TODO
-//    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-//        super.onRestoreInstanceState(savedInstanceState)
-//        searchValue = savedInstanceState.getString(SEARCH_TEXT, TEXT_DEF)
-//    }
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(SEARCH_TEXT, searchValue)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        if (savedInstanceState != null) {
+            searchValue = savedInstanceState.getString(SEARCH_TEXT, TEXT_DEF)
+        }
+    }
 
     private fun clearButtonVisibility(s: CharSequence?, v: ImageView) {
         if (s.isNullOrEmpty()) {

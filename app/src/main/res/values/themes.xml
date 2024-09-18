@@ -2,7 +2,7 @@
     <style name="Theme.PlaylistMakerMain" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/blue</item>
         <item name="colorPrimaryVariant">@color/white</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorOnPrimary">@color/graphite_black</item>
         <item name="colorSecondary">@color/white</item>
         <item name="colorOnSecondary">@color/graphite_black</item>
     </style>
