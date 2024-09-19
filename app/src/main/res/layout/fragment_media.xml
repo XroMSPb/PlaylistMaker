@@ -3,8 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="?attr/colorPrimary"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/Theme.PlaylistMakerMedia"
+    tools:context=".media.ui.MediaFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -12,7 +15,6 @@
         android:layout_height="56dp"
         android:foreground="?attr/selectableItemBackground"
         app:contentInsetStartWithNavigation="0dp"
-        app:navigationIcon="@drawable/ic_back_arrow"
         app:title="@string/library_text"
         app:titleTextAppearance="@style/Toolbar.TitleText"
         app:titleTextColor="?attr/colorOnPrimary" />

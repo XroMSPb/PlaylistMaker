@@ -4,53 +4,63 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.xrom.playlistmaker.R
-import ru.xrom.playlistmaker.databinding.ActivitySettingsBinding
+import ru.xrom.playlistmaker.databinding.FragmentSettingsBinding
 import ru.xrom.playlistmaker.sharing.domain.model.MailData
 import ru.xrom.playlistmaker.sharing.domain.model.ShareData
 import ru.xrom.playlistmaker.sharing.domain.model.TermsData
 import ru.xrom.playlistmaker.utils.App
 
-class SettingsActivity : AppCompatActivity() {
-    private val binding: ActivitySettingsBinding by lazy {
-        ActivitySettingsBinding.inflate(layoutInflater)
-    }
+class SettingsFragment : Fragment() {
+
+    private var _binding: FragmentSettingsBinding? = null
+    private val binding get() = _binding!!
 
     private val viewModel by viewModel<SettingsViewModel>()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-        window.statusBarColor = resources.getColor(R.color.status_bar, theme)
-        window.navigationBarColor = resources.getColor(R.color.navigation_bar, theme)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
+        _binding = FragmentSettingsBinding.inflate(layoutInflater)
+        return binding.root
+    }
 
-        binding.toolbar.setNavigationOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         binding.darkTheme.isChecked = viewModel.observeThemeState().value!!
         binding.darkTheme.setOnCheckedChangeListener { _, checked ->
-            (applicationContext as App).switchTheme(checked)
+            (requireActivity().application as App).switchTheme(checked)
             viewModel.updateThemeState(checked)
         }
 
         binding.share.setOnClickListener {
-            viewModel.observeShareState().observe(this) { sData ->
+            viewModel.observeShareState().observe(viewLifecycleOwner) { sData ->
                 shareTo(sData)
             }
         }
 
         binding.support.setOnClickListener {
-            viewModel.observeSupportState().observe(this) { mData ->
+            viewModel.observeSupportState().observe(viewLifecycleOwner) { mData ->
                 supportTo(mData)
             }
         }
 
         binding.terms.setOnClickListener {
-            viewModel.observeTermsState().observe(this) { tData ->
+            viewModel.observeTermsState().observe(viewLifecycleOwner) { tData ->
                 termsTo(tData)
             }
         }
@@ -75,7 +85,7 @@ class SettingsActivity : AppCompatActivity() {
         try {
             startActivity(share)
         } catch (ex: ActivityNotFoundException) {
-            Toast.makeText(this, R.string.application_not_found, Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, R.string.application_not_found, Toast.LENGTH_SHORT).show()
         }
     }
 

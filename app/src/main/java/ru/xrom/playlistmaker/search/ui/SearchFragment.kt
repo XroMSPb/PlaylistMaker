@@ -1,59 +1,66 @@
 package ru.xrom.playlistmaker.search.ui
 
 
+import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.xrom.playlistmaker.R
-import ru.xrom.playlistmaker.databinding.ActivitySearchBinding
+import ru.xrom.playlistmaker.databinding.FragmentSearchBinding
 import ru.xrom.playlistmaker.player.ui.TrackPlayerActivity
 import ru.xrom.playlistmaker.search.domain.model.Track
 
 
-class SearchActivity : AppCompatActivity() {
+class SearchFragment : Fragment() {
     private var searchValue = TEXT_DEF
-
-    private val binding: ActivitySearchBinding by lazy {
-        ActivitySearchBinding.inflate(layoutInflater)
-    }
 
     private val viewModel by viewModel<SearchViewModel>()
 
     private var searchAdapter: TrackAdapter? = null
     private lateinit var historyAdapter: TrackAdapter
 
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
 
     companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
         const val TEXT_DEF = ""
-        const val TRACK_DATA = "track_data"
         private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
     private var isClickAllowed = true
     private val handler = Handler(Looper.getMainLooper())
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(binding.root)
-        window.statusBarColor = resources.getColor(R.color.status_bar, theme)
-        window.navigationBarColor = resources.getColor(R.color.navigation_bar, theme)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
+    ): View {
+        _binding = FragmentSearchBinding.inflate(layoutInflater)
+        return binding.root
+    }
 
-        binding.toolbar.setNavigationOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
-        viewModel.observeSearchState().observe(this) { state ->
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        viewModel.observeSearchState().observe(viewLifecycleOwner) { state ->
             renderState(state)
         }
         binding.searchBar.requestFocus()
@@ -88,8 +95,7 @@ class SearchActivity : AppCompatActivity() {
                     )
                 }
                 showHistory()
-            }
-            else
+            } else
                 viewModel.searchDebounce(searchValue)
         }
 
@@ -104,14 +110,14 @@ class SearchActivity : AppCompatActivity() {
             openPlayer(item)
         }
         historyAdapter = TrackAdapter(onHistoryItemClickListener)
-        binding.recycleHistoryView.layoutManager = LinearLayoutManager(this)
+        binding.recycleHistoryView.layoutManager = LinearLayoutManager(context)
         binding.recycleHistoryView.adapter = historyAdapter
 
         val onItemClickListener = OnItemClickListener { item ->
             openPlayer(item)
         }
 
-        binding.recycleView.layoutManager = LinearLayoutManager(this)
+        binding.recycleView.layoutManager = LinearLayoutManager(context)
         searchAdapter = TrackAdapter(onItemClickListener)
         binding.recycleView.adapter = searchAdapter
 
@@ -169,9 +175,7 @@ class SearchActivity : AppCompatActivity() {
         if (clickDebounce()) {
             binding.searchBar.text.clear()
             viewModel.addToHistory(track)
-            val intent = Intent(this, TrackPlayerActivity::class.java)
-            intent.putExtra(TRACK_DATA, track)
-            startActivity(intent)
+            startActivity(TrackPlayerActivity.newInstance(requireContext(), track))
         }
     }
 
@@ -180,19 +184,27 @@ class SearchActivity : AppCompatActivity() {
         outState.putString(SEARCH_TEXT, searchValue)
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
-        super.onRestoreInstanceState(savedInstanceState)
-        searchValue = savedInstanceState.getString(SEARCH_TEXT, TEXT_DEF)
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        if (savedInstanceState != null) {
+            searchValue = savedInstanceState.getString(SEARCH_TEXT, TEXT_DEF)
+        }
     }
 
     private fun clearButtonVisibility(s: CharSequence?, v: ImageView) {
         if (s.isNullOrEmpty()) {
             v.isVisible = false
-            val inputMethodManager =
-                getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
-            inputMethodManager?.hideSoftInputFromWindow(v.windowToken, 0)
+            view?.let { activity?.hideKeyboard() }
         } else {
             v.isVisible = true
+        }
+    }
+
+    private fun Activity.hideKeyboard() {
+        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val view = currentFocus
+        if (view != null) {
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }
 
@@ -217,7 +229,7 @@ class SearchActivity : AppCompatActivity() {
         binding.placeholderImage.setImageResource(R.drawable.ic_something_went_wrong)
         binding.placeholderMessage.text = getString(R.string.something_went_wrong)
         if (additionalMessage.isNotEmpty()) {
-            Toast.makeText(applicationContext, additionalMessage, Toast.LENGTH_LONG)
+            Toast.makeText(context, additionalMessage, Toast.LENGTH_LONG)
                 .show()
         }
     }

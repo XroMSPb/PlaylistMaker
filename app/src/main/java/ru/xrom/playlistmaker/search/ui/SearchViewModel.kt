@@ -99,10 +99,6 @@ class SearchViewModel(
         if (latestSearchText == changedText) {
             return
         }
-//        if (changedText.isEmpty()) {
-//            handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-//            return
-//        }
         handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
         val searchRunnable = Runnable { searchRequest(changedText) }
         handler.postDelayed(

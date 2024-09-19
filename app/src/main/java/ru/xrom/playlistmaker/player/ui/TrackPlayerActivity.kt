@@ -1,5 +1,7 @@
 package ru.xrom.playlistmaker.player.ui
 
+import android.content.Context
+import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -12,7 +14,6 @@ import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.databinding.ActivityPlayerBinding
 import ru.xrom.playlistmaker.player.domain.model.PlayingState
 import ru.xrom.playlistmaker.search.domain.model.Track
-import ru.xrom.playlistmaker.search.ui.SearchActivity
 import ru.xrom.playlistmaker.utils.convertDpToPx
 import ru.xrom.playlistmaker.utils.getReleaseYear
 import java.util.Locale
@@ -34,7 +35,7 @@ class TrackPlayerActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-        val track = intent.getParcelableExtra(SearchActivity.TRACK_DATA) as? Track
+        val track = intent.getParcelableExtra(TRACK_KEY) as? Track
 
         if (track != null) {
             val viewModel: TrackPlayerViewModel by viewModel {
@@ -108,5 +109,13 @@ class TrackPlayerActivity : AppCompatActivity() {
 
     companion object {
         private const val TIME_PATTERN = "mm:ss"
+        const val TRACK_KEY = "TRACK_KEY"
+
+        fun newInstance(context: Context, track: Track): Intent {
+            return Intent(context, TrackPlayerActivity::class.java).apply {
+                putExtra(TRACK_KEY, track)
+            }
+        }
+
     }
 }

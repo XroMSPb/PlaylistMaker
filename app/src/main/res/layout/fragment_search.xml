@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorPrimary"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:theme="@style/Theme.PlaylistMakerSearch"
+    tools:context=".search.ui.SearchFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -13,7 +15,6 @@
         android:layout_height="56dp"
         android:foreground="?attr/selectableItemBackground"
         app:contentInsetStartWithNavigation="0dp"
-        app:navigationIcon="@drawable/ic_back_arrow"
         app:title="@string/search_text"
         app:titleTextAppearance="@style/Toolbar.TitleText"
         app:titleTextColor="?attr/colorOnPrimary" />
@@ -60,9 +61,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/dp16"
-        tools:listitem="@layout/activity_search_item"
-        android:visibility="gone">
-    </androidx.recyclerview.widget.RecyclerView>
+        android:visibility="gone"
+        tools:listitem="@layout/item_search"></androidx.recyclerview.widget.RecyclerView>
 
     <LinearLayout
         android:id="@+id/placeholder_layout"
@@ -122,7 +122,7 @@
             android:layout_height="0dp"
             android:layout_marginTop="@dimen/dp8"
             android:layout_weight="1"
-            tools:listitem="@layout/activity_search_item">
+            tools:listitem="@layout/item_search">
 
         </androidx.recyclerview.widget.RecyclerView>
 

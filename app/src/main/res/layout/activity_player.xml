@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?attr/colorPrimary"
+    android:theme="@style/Theme.PlaylistMakerSearch"
     tools:context=".player.ui.TrackPlayerActivity">
 
     <androidx.appcompat.widget.Toolbar
