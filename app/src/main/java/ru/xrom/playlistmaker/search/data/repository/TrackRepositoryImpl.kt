@@ -1,5 +1,7 @@
 package ru.xrom.playlistmaker.search.data.repository
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import ru.xrom.playlistmaker.search.data.NetworkClient
 import ru.xrom.playlistmaker.search.data.dto.ItunesResponse
 import ru.xrom.playlistmaker.search.data.dto.TrackRequest
@@ -8,11 +10,11 @@ import ru.xrom.playlistmaker.search.domain.model.Resource
 import ru.xrom.playlistmaker.search.domain.model.Track
 
 class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepository {
-    override fun searchTracks(expression: String): Resource<List<Track>> {
+    override fun searchTracks(expression: String): Flow<Resource<List<Track>>> = flow {
         val response = networkClient.doRequest(TrackRequest(expression))
-        return when (response.resultCode) {
+        when (response.resultCode) {
             200 -> {
-                Resource.Success((response as ItunesResponse).results.map {
+                emit(Resource.Success((response as ItunesResponse).results.map {
                     Track(
                         trackId = it.trackId,
                         trackName = it.trackName,
@@ -25,15 +27,15 @@ class TrackRepositoryImpl(private val networkClient: NetworkClient) : TrackRepos
                         country = it.country,
                         previewUrl = it.previewUrl
                     )
-                })
+                }))
             }
 
             -1 -> {
-                Resource.Error("Проверьте подключение к интернету")
+                emit(Resource.Error("Проверьте подключение к интернету"))
             }
 
             else -> {
-                Resource.Error("Ошибка сервера")
+                emit(Resource.Error("Ошибка сервера"))
             }
         }
     }
