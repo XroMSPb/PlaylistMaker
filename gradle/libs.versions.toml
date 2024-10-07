@@ -1,5 +1,5 @@
 [versions]
-agp = "8.5.2"
+agp = "8.7.0"
 glide = "4.16.0"
 gson = "2.10.1"
 kotlin = "1.9.23"
@@ -15,8 +15,9 @@ retrofit = "2.11.0"
 roomKtx = "2.6.1"
 koin = "3.5.4"
 navigationFragment = "2.8.1"
-navigationUi = "2.8.1"
-navigationFragmentKtxVersion = "2.8.1"
+navigationUi = "2.8.2"
+navigationFragmentKtxVersion = "2.8.2"
+kotlinxCoroutinesAndroid = "1.6.4"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -34,6 +35,7 @@ androidx-constraintlayout = { group = "androidx.constraintlayout", name = "const
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 koin = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
+kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationFragment" }
 androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment", version.ref = "navigationFragment" }
 androidx-navigation-ui = { module = "androidx.navigation:navigation-ui", version.ref = "navigationUi" }
