@@ -2,35 +2,34 @@ package ru.xrom.playlistmaker.player.data
 
 import android.media.MediaPlayer
 import ru.xrom.playlistmaker.player.domain.api.TrackPlayerInteractor
-import ru.xrom.playlistmaker.player.domain.model.PlayingState
+import ru.xrom.playlistmaker.player.domain.model.PlayerState
 
 class TrackPlayerImpl(
     private val mediaPlayer: MediaPlayer,
     private val trackUrl: String,
 ) : TrackPlayerInteractor {
 
-    private var state: PlayingState = PlayingState.Default
-
+    private var state: PlayerState = PlayerState.Default()
 
     override fun prepare() {
         mediaPlayer.setDataSource(trackUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
-            state = PlayingState.Prepared
+            state = PlayerState.Prepared()
         }
         mediaPlayer.setOnCompletionListener {
-            state = PlayingState.Complete
+            state = PlayerState.Prepared()
         }
     }
 
     override fun start() {
         mediaPlayer.start()
-        state = PlayingState.Playing
+        state = PlayerState.Playing(mediaPlayer.currentPosition.toString())
     }
 
     override fun pause() {
         mediaPlayer.pause()
-        state = PlayingState.Paused
+        state = PlayerState.Paused(mediaPlayer.currentPosition.toString())
     }
 
     override fun release() {
@@ -41,8 +40,8 @@ class TrackPlayerImpl(
         return mediaPlayer.currentPosition
     }
 
-    override fun getState(): PlayingState {
-        return state
+    override fun isPlaying(): Boolean {
+        return mediaPlayer.isPlaying
     }
 
 }

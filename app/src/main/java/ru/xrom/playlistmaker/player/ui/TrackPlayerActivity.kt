@@ -12,7 +12,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.databinding.ActivityPlayerBinding
-import ru.xrom.playlistmaker.player.domain.model.PlayingState
+import ru.xrom.playlistmaker.player.domain.model.PlayerState
 import ru.xrom.playlistmaker.search.domain.model.Track
 import ru.xrom.playlistmaker.utils.convertDpToPx
 import ru.xrom.playlistmaker.utils.getReleaseYear
@@ -23,7 +23,6 @@ class TrackPlayerActivity : AppCompatActivity() {
     private val binding: ActivityPlayerBinding by lazy {
         ActivityPlayerBinding.inflate(layoutInflater)
     }
-
 
     private val dateFormat by lazy { SimpleDateFormat(TIME_PATTERN, Locale.getDefault()) }
 
@@ -44,13 +43,7 @@ class TrackPlayerActivity : AppCompatActivity() {
             render(track, viewModel)
 
             viewModel.observePlayingState().observe(this) { state ->
-                binding.playButton.isEnabled = state != PlayingState.Default
                 updateState(state)
-                viewModel.stateControl()
-            }
-
-            viewModel.observePositionState().observe(this) {
-                binding.playingTime.text = dateFormat.format(it)
             }
 
         } else {
@@ -60,11 +53,8 @@ class TrackPlayerActivity : AppCompatActivity() {
 
     private fun render(track: Track, viewModel: TrackPlayerViewModel) {
         binding.playButton.isEnabled = false
-        Glide.with(this)
-            .load(track.getCoverArtwork())
-            .placeholder(R.drawable.ic_cover_placeholder)
-            .centerCrop()
-            .transform(RoundedCorners(convertDpToPx(8f, this)))
+        Glide.with(this).load(track.getCoverArtwork()).placeholder(R.drawable.ic_cover_placeholder)
+            .centerCrop().transform(RoundedCorners(convertDpToPx(8f, this)))
             .into(binding.albumCover)
         binding.title.text = track.trackName
         binding.artistName.text = track.artistName
@@ -79,32 +69,10 @@ class TrackPlayerActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateState(state: PlayingState) {
-        when (state) {
-            PlayingState.Default,
-            PlayingState.Prepared,
-            PlayingState.Paused,
-            -> binding.playButton.setImageDrawable(
-                AppCompatResources.getDrawable(
-                    this, R.drawable.ic_play
-                )
-            )
-
-            PlayingState.Playing -> binding.playButton.setImageDrawable(
-                AppCompatResources.getDrawable(
-                    this, R.drawable.ic_pause
-                )
-            )
-
-            PlayingState.Complete -> {
-                binding.playButton.setImageDrawable(
-                    AppCompatResources.getDrawable(
-                        this, R.drawable.ic_play
-                    )
-                )
-                binding.playingTime.text = getString(R.string.time_zero)
-            }
-        }
+    private fun updateState(state: PlayerState) {
+        binding.playButton.isEnabled = state.isPlayButtonEnabled
+        binding.playingTime.text = state.progress
+        binding.playButton.setImageDrawable(AppCompatResources.getDrawable(this, state.buttonIcon))
     }
 
     companion object {
