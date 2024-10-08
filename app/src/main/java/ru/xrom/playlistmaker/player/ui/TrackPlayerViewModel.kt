@@ -1,6 +1,5 @@
 package ru.xrom.playlistmaker.player.ui
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -26,7 +25,10 @@ class TrackPlayerViewModel(
     }
 
     private fun onPrepare() {
-        trackPlayerInteractor.prepare()
+        trackPlayerInteractor.prepare(onCompletionListener = {
+            timerJob?.cancel()
+            playerState.postValue(PlayerState.Prepared())
+        })
         playerState.postValue(PlayerState.Prepared())
     }
 
@@ -54,7 +56,6 @@ class TrackPlayerViewModel(
             while (trackPlayerInteractor.isPlaying()) {
                 delay(TIMER_UPDATE_DELAY)
                 playerState.postValue(PlayerState.Playing(getCurrentPlayerPosition()))
-                Log.d("Timer", getCurrentPlayerPosition())
             }
         }
     }
@@ -72,7 +73,7 @@ class TrackPlayerViewModel(
     }
 
     companion object {
-        private const val TIMER_UPDATE_DELAY = 250L
+        private const val TIMER_UPDATE_DELAY = 300L
     }
 }
 

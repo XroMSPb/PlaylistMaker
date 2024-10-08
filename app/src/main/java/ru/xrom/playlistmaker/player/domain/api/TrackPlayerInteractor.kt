@@ -2,7 +2,7 @@ package ru.xrom.playlistmaker.player.domain.api
 
 interface TrackPlayerInteractor {
 
-    fun prepare()
+    fun prepare(onCompletionListener: () -> Unit)
     fun start()
     fun pause()
     fun release()

@@ -11,7 +11,7 @@ class TrackPlayerImpl(
 
     private var state: PlayerState = PlayerState.Default()
 
-    override fun prepare() {
+    override fun prepare(onCompletionListener: () -> Unit) {
         mediaPlayer.setDataSource(trackUrl)
         mediaPlayer.prepareAsync()
         mediaPlayer.setOnPreparedListener {
@@ -19,6 +19,7 @@ class TrackPlayerImpl(
         }
         mediaPlayer.setOnCompletionListener {
             state = PlayerState.Prepared()
+            onCompletionListener()
         }
     }
 
