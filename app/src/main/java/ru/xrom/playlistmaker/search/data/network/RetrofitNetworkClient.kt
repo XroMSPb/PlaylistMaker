@@ -28,10 +28,10 @@ class RetrofitNetworkClient : NetworkClient {
                     val response = api.search(dto.expression)
                     return@withContext response.apply { resultCode = 200 }
                 } else {
-                    return@withContext Response().apply { resultCode = 400 }
+                    return@withContext Response(400)
                 }
             } catch (error: Throwable) {
-                return@withContext Response().apply { resultCode = 500 }
+                return@withContext Response(500)
             }
         }
     }
