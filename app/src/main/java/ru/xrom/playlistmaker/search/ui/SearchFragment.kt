@@ -74,7 +74,7 @@ class SearchFragment : Fragment() {
         binding.searchBar.setText(searchValue)
         binding.searchBar.setOnFocusChangeListener { _, hasFocus ->
             if (hasFocus && binding.searchBar.text.isEmpty()) {
-                showHistory()
+                viewModel.updateHistory()
             } else {
                 showContentSearch()
             }
@@ -115,7 +115,7 @@ class SearchFragment : Fragment() {
         binding.recycleSearchView.adapter = searchAdapter
 
         binding.updateResponse.setOnClickListener {
-            viewModel.searchRequest(searchValue)
+            viewModel.updateSearch()
         }
         viewModel.observeSearchState().observe(viewLifecycleOwner) { state ->
             renderState(state)

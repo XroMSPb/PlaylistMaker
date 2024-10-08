@@ -1,4 +1,4 @@
-package ru.xrom.playlistmaker.player.domain.model
+package ru.xrom.playlistmaker.player.ui.model
 
 import androidx.annotation.DrawableRes
 import ru.xrom.playlistmaker.R

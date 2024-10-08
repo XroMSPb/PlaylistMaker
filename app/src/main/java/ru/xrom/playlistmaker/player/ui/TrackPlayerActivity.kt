@@ -12,7 +12,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.databinding.ActivityPlayerBinding
-import ru.xrom.playlistmaker.player.domain.model.PlayerState
+import ru.xrom.playlistmaker.player.ui.model.PlayerState
 import ru.xrom.playlistmaker.search.domain.model.Track
 import ru.xrom.playlistmaker.utils.convertDpToPx
 import ru.xrom.playlistmaker.utils.getReleaseYear

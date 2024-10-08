@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.search.domain.api.SearchHistoryInteractor
 import ru.xrom.playlistmaker.search.domain.api.TrackInteractor
+import ru.xrom.playlistmaker.search.domain.model.SearchResult
 import ru.xrom.playlistmaker.search.domain.model.Track
 import ru.xrom.playlistmaker.utils.debounce
 
@@ -32,7 +33,7 @@ class SearchViewModel(
 
     fun clearHistory() {
         searchHistorySaver.clearHistory()
-        renderState(SearchState.ContentHistory(searchHistorySaver.getHistory()))
+        updateHistory()
     }
 
     fun updateHistory() {
@@ -48,43 +49,38 @@ class SearchViewModel(
     }
 
     fun stopSearch() {
-        if (searchJob != null)
-            searchJob?.cancel()
+        searchJob?.cancel()
+        searchJob = null
     }
 
     fun searchRequest(newSearchText: String) {
-        latestSearchText = newSearchText
         renderState(SearchState.Loading)
         searchJob = viewModelScope.launch {
             trackInteractor.search(newSearchText)
-                .collect { (foundTracks, error) ->
+                .collect { result ->
                     processResult(
-                        foundTracks,
-                        error,
-                        newSearchText
+                        result
                     )
                 }
         }
     }
 
-    private fun processResult(foundTracks: List<Track>?, error: String?, request: String) {
-        if (foundTracks == null) {
-            if (!error.isNullOrEmpty())
-                renderState(SearchState.Error(error))
-            else
-                renderState(
-                    SearchState.Error(
-                        errorMessage = getString(
-                            getApplication(), R.string.something_went_wrong
-                        )
-                    )
+    private fun processResult(searchResult: SearchResult) {
+        when (searchResult) {
+            is SearchResult.Success -> {
+                val tracks = searchResult.tracks
+                if (tracks.isNullOrEmpty()) {
+                    renderState(SearchState.NothingFound)
+                } else if (latestSearchText == searchResult.expression) {
+                    renderState(SearchState.ContentSearch(tracks))
+                }
+            }
+
+            is SearchResult.Error -> {
+                val errorMessage = searchResult.message ?: getString(
+                    getApplication(), R.string.something_went_wrong
                 )
-        } else {
-            if (foundTracks.isNotEmpty()) {
-                if (request == latestSearchText)
-                    renderState(SearchState.ContentSearch(foundTracks))
-            } else {
-                renderState(SearchState.NothingFound)
+                renderState(SearchState.Error(errorMessage))
             }
 
         }
@@ -97,10 +93,15 @@ class SearchViewModel(
 
     fun searchDebounce(changedText: String) {
         stopSearch()
-        if (latestSearchText == changedText || changedText.isEmpty()) {
+        if (latestSearchText == changedText || changedText.isEmpty() || changedText.length < 2) {
             return
         }
+        latestSearchText = changedText
         trackSearchDebounce(changedText)
+    }
+
+    fun updateSearch() {
+        searchRequest(latestSearchText ?: "")
     }
 
     companion object {

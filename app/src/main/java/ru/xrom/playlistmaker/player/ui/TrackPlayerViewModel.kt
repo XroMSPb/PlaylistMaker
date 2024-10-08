@@ -8,7 +8,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.xrom.playlistmaker.player.domain.api.TrackPlayerInteractor
-import ru.xrom.playlistmaker.player.domain.model.PlayerState
+import ru.xrom.playlistmaker.player.ui.model.PlayerState
 import java.text.SimpleDateFormat
 import java.util.Locale
 
