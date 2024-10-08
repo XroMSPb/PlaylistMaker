@@ -6,6 +6,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.search.domain.api.SearchHistoryInteractor
@@ -19,18 +20,23 @@ class SearchViewModel(
     private val searchHistorySaver: SearchHistoryInteractor,
 ) : AndroidViewModel(application) {
     private var latestSearchText: String? = null
+    private var searchJob: Job? = null
 
     private val searchState = MutableLiveData<SearchState>()
     fun observeSearchState(): LiveData<SearchState> = searchState
 
     fun addToHistory(track: Track) {
         searchHistorySaver.addToHistory(track)
-        renderState(SearchState.ContentHistory(searchHistorySaver.getHistory()))
+        updateHistory()
     }
 
     fun clearHistory() {
         searchHistorySaver.clearHistory()
-        renderState(SearchState.EmptyHistory)
+        renderState(SearchState.ContentHistory(searchHistorySaver.getHistory()))
+    }
+
+    fun updateHistory() {
+        renderState(SearchState.ContentHistory(searchHistorySaver.getHistory()))
     }
 
     private fun renderState(state: SearchState) {
@@ -38,32 +44,45 @@ class SearchViewModel(
     }
 
     init {
-        val searchHistory = searchHistorySaver.getHistory()
-        if (searchHistory.isEmpty()) renderState(SearchState.EmptyHistory)
-        else renderState(SearchState.ContentHistory(searchHistory))
+        updateHistory()
+    }
+
+    fun stopSearch() {
+        if (searchJob != null)
+            searchJob?.cancel()
     }
 
     fun searchRequest(newSearchText: String) {
         latestSearchText = newSearchText
         renderState(SearchState.Loading)
-        viewModelScope.launch {
+        searchJob = viewModelScope.launch {
             trackInteractor.search(newSearchText)
-                .collect { pair -> processResult(pair.first, pair.second) }
+                .collect { (foundTracks, error) ->
+                    processResult(
+                        foundTracks,
+                        error,
+                        newSearchText
+                    )
+                }
         }
     }
 
-    private fun processResult(foundTracks: List<Track>?, error: String?) {
+    private fun processResult(foundTracks: List<Track>?, error: String?, request: String) {
         if (foundTracks == null) {
-            renderState(
-                SearchState.Error(
-                    errorMessage = getString(
-                        getApplication(), R.string.something_went_wrong
+            if (!error.isNullOrEmpty())
+                renderState(SearchState.Error(error))
+            else
+                renderState(
+                    SearchState.Error(
+                        errorMessage = getString(
+                            getApplication(), R.string.something_went_wrong
+                        )
                     )
                 )
-            )
         } else {
             if (foundTracks.isNotEmpty()) {
-                renderState(SearchState.ContentSearch(foundTracks))
+                if (request == latestSearchText)
+                    renderState(SearchState.ContentSearch(foundTracks))
             } else {
                 renderState(SearchState.NothingFound)
             }
@@ -77,7 +96,8 @@ class SearchViewModel(
         }
 
     fun searchDebounce(changedText: String) {
-        if (latestSearchText == changedText) {
+        stopSearch()
+        if (latestSearchText == changedText || changedText.isEmpty()) {
             return
         }
         trackSearchDebounce(changedText)

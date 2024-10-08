@@ -7,7 +7,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import ru.xrom.playlistmaker.search.data.NetworkClient
 import ru.xrom.playlistmaker.search.data.dto.Response
 import ru.xrom.playlistmaker.search.data.dto.TrackRequest
-import java.io.IOException
 
 class RetrofitNetworkClient : NetworkClient {
 
@@ -31,7 +30,7 @@ class RetrofitNetworkClient : NetworkClient {
                 } else {
                     return@withContext Response().apply { resultCode = 400 }
                 }
-            } catch (error: IOException) {
+            } catch (error: Throwable) {
                 return@withContext Response().apply { resultCode = 500 }
             }
         }
