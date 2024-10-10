@@ -46,23 +46,16 @@ class SettingsFragment : Fragment() {
             (requireActivity().application as App).switchTheme(checked)
             viewModel.updateThemeState(checked)
         }
-
         binding.share.setOnClickListener {
-            viewModel.observeShareState().observe(viewLifecycleOwner) { sData ->
-                shareTo(sData)
-            }
+            shareTo(viewModel.getShareData())
         }
 
         binding.support.setOnClickListener {
-            viewModel.observeSupportState().observe(viewLifecycleOwner) { mData ->
-                supportTo(mData)
-            }
+            supportTo(viewModel.getMailData())
         }
 
         binding.terms.setOnClickListener {
-            viewModel.observeTermsState().observe(viewLifecycleOwner) { tData ->
-                termsTo(tData)
-            }
+            termsTo(viewModel.getTermsData())
         }
     }
 

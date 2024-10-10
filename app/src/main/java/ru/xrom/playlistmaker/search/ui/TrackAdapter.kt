@@ -26,4 +26,10 @@ class TrackAdapter(
         holder.itemView.setOnClickListener { onItemClickListener.onItemClick(items[position]) }
     }
 
+    fun clearItems() {
+        val oldSize = itemCount
+        items.clear()
+        notifyItemRangeRemoved(0, oldSize)
+    }
+
 }

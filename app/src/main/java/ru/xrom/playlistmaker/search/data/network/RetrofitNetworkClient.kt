@@ -1,11 +1,12 @@
 package ru.xrom.playlistmaker.search.data.network
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ru.xrom.playlistmaker.search.data.NetworkClient
 import ru.xrom.playlistmaker.search.data.dto.Response
 import ru.xrom.playlistmaker.search.data.dto.TrackRequest
-import java.io.IOException
 
 class RetrofitNetworkClient : NetworkClient {
 
@@ -20,17 +21,18 @@ class RetrofitNetworkClient : NetworkClient {
     private val api = client.create(ItunesApi::class.java)
 
 
-    override fun doRequest(dto: Any): Response {
-        return try {
-            if (dto is TrackRequest) {
-                val response = api.search(dto.expression).execute()
-                val body = response.body() ?: Response()
-                return body.apply { resultCode = response.code() }
-            } else {
-                return Response().apply { resultCode = 400 }
+    override suspend fun doRequest(dto: Any): Response {
+        return withContext(Dispatchers.IO) {
+            try {
+                if (dto is TrackRequest) {
+                    val response = api.search(dto.expression)
+                    return@withContext response.apply { resultCode = 200 }
+                } else {
+                    return@withContext Response(400)
+                }
+            } catch (error: Throwable) {
+                return@withContext Response(500)
             }
-        } catch (error: IOException) {
-            Response().apply { resultCode = 500 }
         }
     }
 }

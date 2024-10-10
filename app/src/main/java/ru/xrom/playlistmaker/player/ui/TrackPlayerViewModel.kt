@@ -1,81 +1,79 @@
 package ru.xrom.playlistmaker.player.ui
 
-import android.os.Handler
-import android.os.Looper
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ru.xrom.playlistmaker.player.domain.api.TrackPlayerInteractor
-import ru.xrom.playlistmaker.player.domain.model.PlayingState
+import ru.xrom.playlistmaker.player.ui.model.PlayerState
+import java.text.SimpleDateFormat
+import java.util.Locale
 
 class TrackPlayerViewModel(
     private val trackPlayerInteractor: TrackPlayerInteractor,
 ) : ViewModel() {
 
-    private val playingState = MutableLiveData(PlayingState.Default)
-    private val positionState = MutableLiveData(0)
-    fun observePlayingState(): LiveData<PlayingState> = playingState
-    fun observePositionState(): LiveData<Int> = positionState
+    private val playerState = MutableLiveData<PlayerState>(PlayerState.Default())
+    fun observePlayingState(): LiveData<PlayerState> = playerState
+    private var timerJob: Job? = null
 
     init {
         onPrepare()
     }
 
     private fun onPrepare() {
-        trackPlayerInteractor.prepare()
-        playingState.postValue(PlayingState.Prepared)
-        positionState.postValue(0)
+        trackPlayerInteractor.prepare(onCompletionListener = {
+            timerJob?.cancel()
+            playerState.postValue(PlayerState.Prepared())
+        })
+        playerState.postValue(PlayerState.Prepared())
     }
 
     private fun onPlay() {
         trackPlayerInteractor.start()
-        playingState.postValue(PlayingState.Playing)
+        playerState.postValue(PlayerState.Playing(getCurrentPlayerPosition()))
         startTimer()
     }
 
     private fun onPause() {
         trackPlayerInteractor.pause()
-        playingState.postValue(PlayingState.Paused)
-        pauseTimer()
-    }
-
-    fun stateControl() {
-        playingState.postValue(trackPlayerInteractor.getState())
+        timerJob?.cancel()
+        playerState.postValue(PlayerState.Paused(getCurrentPlayerPosition()))
     }
 
     fun playingControl() {
-        if (playingState.value == PlayingState.Playing) onPause()
-        else onPlay()
-    }
-
-    private val handler = Handler(Looper.getMainLooper())
-    private val timerRunnable by lazy {
-        object : Runnable {
-            override fun run() {
-                if (playingState.value == PlayingState.Playing) {
-                    positionState.postValue(trackPlayerInteractor.getCurrentPosition())
-                    handler.postDelayed(this, TIMER_UPDATE_DELAY)
-                }
-            }
+        when (playerState.value) {
+            is PlayerState.Playing -> onPause()
+            else -> onPlay()
         }
     }
 
     private fun startTimer() {
-        handler.post(timerRunnable)
+        timerJob = viewModelScope.launch {
+            while (trackPlayerInteractor.isPlaying()) {
+                delay(TIMER_UPDATE_DELAY)
+                playerState.postValue(PlayerState.Playing(getCurrentPlayerPosition()))
+            }
+        }
     }
 
-    private fun pauseTimer() {
-        handler.removeCallbacks(timerRunnable)
+    private fun getCurrentPlayerPosition(): String {
+        return SimpleDateFormat(
+            "mm:ss", Locale.getDefault()
+        ).format(trackPlayerInteractor.getCurrentPosition()) ?: "00:00"
     }
 
     override fun onCleared() {
         super.onCleared()
-        pauseTimer()
+        playerState.value = PlayerState.Default()
         trackPlayerInteractor.release()
     }
 
     companion object {
-        private const val TIMER_UPDATE_DELAY = 250L
+        private const val TIMER_UPDATE_DELAY = 300L
     }
 }
 

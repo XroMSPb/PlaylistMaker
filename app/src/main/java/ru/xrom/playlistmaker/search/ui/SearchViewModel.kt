@@ -1,116 +1,111 @@
 package ru.xrom.playlistmaker.search.ui
 
 import android.app.Application
-import android.os.Handler
-import android.os.Looper
+import androidx.core.content.ContextCompat.getString
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.search.domain.api.SearchHistoryInteractor
 import ru.xrom.playlistmaker.search.domain.api.TrackInteractor
-import ru.xrom.playlistmaker.search.domain.model.Resource
+import ru.xrom.playlistmaker.search.domain.model.SearchResult
 import ru.xrom.playlistmaker.search.domain.model.Track
+import ru.xrom.playlistmaker.utils.debounce
 
 class SearchViewModel(
     application: Application,
     private val trackInteractor: TrackInteractor,
     private val searchHistorySaver: SearchHistoryInteractor,
-) :
-    AndroidViewModel(application) {
+) : AndroidViewModel(application) {
     private var latestSearchText: String? = null
+    private var searchJob: Job? = null
 
-    override fun onCleared() {
-        stopSearch()
-    }
-
-    fun stopSearch() {
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-    }
     private val searchState = MutableLiveData<SearchState>()
     fun observeSearchState(): LiveData<SearchState> = searchState
 
     fun addToHistory(track: Track) {
         searchHistorySaver.addToHistory(track)
-        renderState(SearchState.ContentHistory(searchHistorySaver.getHistory()))
+        updateHistory()
     }
 
     fun clearHistory() {
         searchHistorySaver.clearHistory()
-        renderState(SearchState.EmptyHistory)
+        updateHistory()
     }
 
-    private val handler = Handler(Looper.getMainLooper())
+    fun updateHistory() {
+        renderState(SearchState.ContentHistory(searchHistorySaver.getHistory()))
+    }
 
     private fun renderState(state: SearchState) {
         searchState.postValue(state)
     }
 
-    private val consumer = object : TrackInteractor.TrackConsumer {
-        override fun consume(foundTracks: Resource<List<Track>>, request: String) {
-            when (foundTracks) {
-                is Resource.Error -> renderState(
-                    SearchState.Error(
-                        errorMessage = application.getString(
-                            R.string.something_went_wrong
-                        )
-                    )
-                )
-
-                is Resource.Success -> {
-                    if (foundTracks.data?.isNotEmpty() == true) {
-                        if (request == latestSearchText) {
-                            renderState(SearchState.ContentSearch(foundTracks.data))
-                        }
-                    } else {
-                        renderState(SearchState.NothingFound)
-                    }
-                }
-            }
-        }
-
-        override fun onFailure(t: Throwable) {
-            renderState(
-                SearchState.Error(
-                    errorMessage = application.getString(
-                        R.string.something_went_wrong
-                    )
-                )
-            )
-        }
+    init {
+        updateHistory()
     }
 
-    init {
-        val searchHistory = searchHistorySaver.getHistory()
-        if (searchHistory.isEmpty())
-            renderState(SearchState.EmptyHistory)
-        else
-            renderState(SearchState.ContentHistory(searchHistory))
+    fun stopSearch() {
+        searchJob?.cancel()
+        searchJob = null
     }
 
     fun searchRequest(newSearchText: String) {
-        latestSearchText = newSearchText
         renderState(SearchState.Loading)
-        trackInteractor
-            .search(newSearchText, consumer)
+        searchJob = viewModelScope.launch {
+            trackInteractor.search(newSearchText)
+                .collect { result ->
+                    processResult(
+                        result
+                    )
+                }
+        }
     }
 
+    private fun processResult(searchResult: SearchResult) {
+        when (searchResult) {
+            is SearchResult.Success -> {
+                val tracks = searchResult.tracks
+                if (tracks.isNullOrEmpty()) {
+                    renderState(SearchState.NothingFound)
+                } else if (latestSearchText == searchResult.expression) {
+                    renderState(SearchState.ContentSearch(tracks))
+                }
+            }
+
+            is SearchResult.Error -> {
+                val errorMessage = searchResult.message ?: getString(
+                    getApplication(), R.string.something_went_wrong
+                )
+                renderState(SearchState.Error(errorMessage))
+            }
+
+        }
+    }
+
+    private val trackSearchDebounce =
+        debounce<String>(SEARCH_DEBOUNCE_DELAY_MILLIS, viewModelScope, true) { changedText ->
+            searchRequest(changedText)
+        }
+
     fun searchDebounce(changedText: String) {
-        if (latestSearchText == changedText) {
+        stopSearch()
+        if (latestSearchText == changedText || changedText.isEmpty() || changedText.length < 2) {
             return
         }
-        handler.removeCallbacksAndMessages(SEARCH_REQUEST_TOKEN)
-        val searchRunnable = Runnable { searchRequest(changedText) }
-        handler.postDelayed(
-            searchRunnable,
-            SEARCH_REQUEST_TOKEN,
-            SEARCH_DEBOUNCE_DELAY_MILLIS,
-        )
+        latestSearchText = changedText
+        trackSearchDebounce(changedText)
+    }
+
+    fun updateSearch() {
+        searchRequest(latestSearchText ?: "")
     }
 
     companion object {
         private const val SEARCH_DEBOUNCE_DELAY_MILLIS = 1000L
-        private val SEARCH_REQUEST_TOKEN = Any()
     }
 }
 

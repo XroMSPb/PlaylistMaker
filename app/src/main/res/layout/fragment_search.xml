@@ -57,12 +57,12 @@
         android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycle_view"
+        android:id="@+id/recycle_search_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="@dimen/dp16"
         android:visibility="gone"
-        tools:listitem="@layout/item_search"></androidx.recyclerview.widget.RecyclerView>
+        tools:listitem="@layout/item_search" />
 
     <LinearLayout
         android:id="@+id/placeholder_layout"
