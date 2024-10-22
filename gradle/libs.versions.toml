@@ -1,23 +1,23 @@
 [versions]
-agp = "8.7.0"
+agp = "8.7.1"
 glide = "4.16.0"
 gson = "2.10.1"
-kotlin = "1.9.23"
+kotlin = "2.0.21"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
 appcompat = "1.7.0"
 material = "1.12.0"
-activity = "1.9.2"
+activity = "1.9.3"
 constraintlayout = "2.1.4"
 retrofit = "2.11.0"
-roomKtx = "2.6.1"
 koin = "3.5.4"
-navigationFragment = "2.8.1"
-navigationUi = "2.8.2"
-navigationFragmentKtxVersion = "2.8.2"
+navigationFragment = "2.8.3"
+navigationUi = "2.8.3"
+navigationFragmentKtxVersion = "2.8.3"
 kotlinxCoroutinesAndroid = "1.6.4"
+roomRuntime = "2.6.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -33,7 +33,9 @@ material = { group = "com.google.android.material", name = "material", version.r
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
+androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomRuntime" }
+androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomRuntime" }
+androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 koin = { group = "io.insert-koin", name = "koin-android", version.ref = "koin" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutinesAndroid" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationFragment" }
