@@ -7,13 +7,16 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import ru.xrom.playlistmaker.media.domain.db.FavoritesInteractor
 import ru.xrom.playlistmaker.player.domain.api.TrackPlayerInteractor
 import ru.xrom.playlistmaker.player.ui.model.PlayerState
+import ru.xrom.playlistmaker.search.domain.model.Track
 import java.text.SimpleDateFormat
 import java.util.Locale
 
 class TrackPlayerViewModel(
     private val trackPlayerInteractor: TrackPlayerInteractor,
+    private val favoritesInteractor: FavoritesInteractor,
 ) : ViewModel() {
 
     private val playerState = MutableLiveData<PlayerState>(PlayerState.Default())
@@ -30,6 +33,7 @@ class TrackPlayerViewModel(
             playerState.postValue(PlayerState.Prepared())
         })
         playerState.postValue(PlayerState.Prepared())
+
     }
 
     private fun onPlay() {
@@ -64,6 +68,22 @@ class TrackPlayerViewModel(
         return SimpleDateFormat(
             "mm:ss", Locale.getDefault()
         ).format(trackPlayerInteractor.getCurrentPosition()) ?: "00:00"
+    }
+
+    fun onFavoriteClick(track: Track) {
+        viewModelScope.launch {
+            val isFavorite = favoritesInteractor.isFavorite(track.trackId)
+            when (isFavorite) {
+                true -> favoritesInteractor.removeFromFavorite(track.trackId)
+                else -> favoritesInteractor.addToFavorite(track)
+            }
+
+            // TODO: refactor
+            playerState.postValue(
+                playerState.value?.copy(isFavorite = !isFavorite)
+            )
+        }
+
     }
 
     override fun onCleared() {
