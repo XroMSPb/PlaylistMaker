@@ -21,8 +21,8 @@ interface TrackDao {
     @Insert(entity = TrackEntity::class, onConflict = OnConflictStrategy.REPLACE)
     fun insertTrack(track: TrackEntity)
 
-    // @Insert(onConflict = OnConflictStrategy.REPLACE)
-    // fun insertTracks(tracks: List<TrackEntity>)
+    @Query("SELECT COUNT(*) > 0 FROM favorite_table WHERE trackId = :trackId")
+    suspend fun isFavorite(trackId: String): Boolean
 
     @Query("DELETE FROM favorite_table WHERE trackId = :trackId")
     fun deleteTrack(trackId: String)

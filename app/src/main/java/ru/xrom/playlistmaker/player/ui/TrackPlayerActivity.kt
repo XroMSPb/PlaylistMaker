@@ -17,13 +17,13 @@ import ru.xrom.playlistmaker.search.domain.model.Track
 import ru.xrom.playlistmaker.utils.convertDpToPx
 import ru.xrom.playlistmaker.utils.getReleaseYear
 import java.util.Locale
+import kotlin.getValue
 
 class TrackPlayerActivity : AppCompatActivity() {
 
     private val binding: ActivityPlayerBinding by lazy {
         ActivityPlayerBinding.inflate(layoutInflater)
     }
-
     private val dateFormat by lazy { SimpleDateFormat(TIME_PATTERN, Locale.getDefault()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,11 +36,20 @@ class TrackPlayerActivity : AppCompatActivity() {
         }
         val track = intent.getParcelableExtra(TRACK_KEY) as? Track
 
+
         if (track != null) {
             val viewModel: TrackPlayerViewModel by viewModel {
                 parametersOf(track.previewUrl)
             }
             render(track, viewModel)
+
+            binding.favoriteBtn.setOnClickListener {
+                viewModel.onFavoriteClick(track)
+            }
+
+            viewModel.observeFavoriteState().observe(this) { state ->
+                updateFavoriteState(state)
+            }
 
             viewModel.observePlayingState().observe(this) { state ->
                 updateState(state)
@@ -67,12 +76,22 @@ class TrackPlayerActivity : AppCompatActivity() {
         binding.playButton.setOnClickListener {
             viewModel.playingControl()
         }
+        updateFavoriteState(track.isFavorite)
+    }
+
+    private fun updateFavoriteState(isFavorite: Boolean) {
+        if (isFavorite) {
+            binding.favoriteBtn.setImageResource(R.drawable.ic_favorite_liked)
+        } else {
+            binding.favoriteBtn.setImageResource(R.drawable.ic_favorite_unliked)
+        }
     }
 
     private fun updateState(state: PlayerState) {
         binding.playButton.isEnabled = state.isPlayButtonEnabled
         binding.playingTime.text = state.progress
         binding.playButton.setImageDrawable(AppCompatResources.getDrawable(this, state.buttonIcon))
+
     }
 
     companion object {

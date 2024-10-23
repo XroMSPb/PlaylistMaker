@@ -40,7 +40,7 @@ class SearchFragment : Fragment() {
     companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
         const val TEXT_DEF = ""
-        private const val CLICK_DEBOUNCE_DELAY = 1000L
+        private const val CLICK_DEBOUNCE_DELAY = 500L
     }
 
     override fun onCreateView(
@@ -60,10 +60,7 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val onHistoryItemClickListener = OnItemClickListener { item ->
-            openPlayer(item)
-        }
-        historyAdapter = TrackAdapter(onHistoryItemClickListener)
+
 
         binding.cancelButton.setOnClickListener {
             binding.searchBar.text.clear()
@@ -101,14 +98,20 @@ class SearchFragment : Fragment() {
             false
         }
 
-        binding.recycleHistoryView.layoutManager = LinearLayoutManager(context)
-        binding.recycleHistoryView.adapter = historyAdapter
+
         onTrackClickDebounce = debounce<Track>(
             CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
         ) { track -> openPlayer(track) }
         val onItemClickListener = OnItemClickListener { item ->
             onTrackClickDebounce(item)
         }
+
+        val onHistoryItemClickListener = OnItemClickListener { item ->
+            onTrackClickDebounce(item)
+        }
+        historyAdapter = TrackAdapter(onHistoryItemClickListener)
+        binding.recycleHistoryView.layoutManager = LinearLayoutManager(context)
+        binding.recycleHistoryView.adapter = historyAdapter
 
         binding.recycleSearchView.layoutManager = LinearLayoutManager(context)
         searchAdapter = TrackAdapter(onItemClickListener)

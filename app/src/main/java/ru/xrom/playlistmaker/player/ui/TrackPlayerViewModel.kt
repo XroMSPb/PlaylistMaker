@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -21,6 +22,10 @@ class TrackPlayerViewModel(
 
     private val playerState = MutableLiveData<PlayerState>(PlayerState.Default())
     fun observePlayingState(): LiveData<PlayerState> = playerState
+
+    private val favoriteState = MutableLiveData<Boolean>()
+    fun observeFavoriteState(): LiveData<Boolean> = favoriteState
+
     private var timerJob: Job? = null
 
     init {
@@ -33,7 +38,6 @@ class TrackPlayerViewModel(
             playerState.postValue(PlayerState.Prepared())
         })
         playerState.postValue(PlayerState.Prepared())
-
     }
 
     private fun onPlay() {
@@ -71,19 +75,20 @@ class TrackPlayerViewModel(
     }
 
     fun onFavoriteClick(track: Track) {
-        viewModelScope.launch {
-            val isFavorite = favoritesInteractor.isFavorite(track.trackId)
-            when (isFavorite) {
-                true -> favoritesInteractor.removeFromFavorite(track.trackId)
-                else -> favoritesInteractor.addToFavorite(track)
+        when (track.isFavorite) {
+            true -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    favoritesInteractor.removeFromFavorite(track.trackId)
+                }
             }
 
-            // TODO: refactor
-            playerState.postValue(
-                playerState.value?.copy(isFavorite = !isFavorite)
-            )
+            else -> {
+                viewModelScope.launch(Dispatchers.IO) {
+                    favoritesInteractor.addToFavorite(track)
+                }
+            }
         }
-
+        favoriteState.postValue(!track.isFavorite)
     }
 
     override fun onCleared() {

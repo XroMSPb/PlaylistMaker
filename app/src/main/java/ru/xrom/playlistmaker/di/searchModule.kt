@@ -51,7 +51,7 @@ val searchModule = module {
     }
 
     single<TrackRepository> {
-        TrackRepositoryImpl(get())
+        TrackRepositoryImpl(get(), get())
     }
 
     viewModel {

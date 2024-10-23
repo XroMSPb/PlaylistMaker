@@ -8,17 +8,7 @@ sealed class PlayerState(
     val isPlayButtonEnabled: Boolean,
     @DrawableRes val buttonIcon: Int,
     val progress: String,
-    val isFavorite: Boolean = false,
 ) {
-    fun copy(isFavorite: Boolean): PlayerState? {
-        return when (this) {
-            is Default -> Default()
-            is Prepared -> Prepared()
-            is Playing -> Playing(progress)
-            is Paused -> Paused(progress)
-        }.copy(isFavorite = isFavorite)
-    }
-
     class Default : PlayerState(false, R.drawable.ic_play, "00:00")
 
     class Prepared : PlayerState(true, R.drawable.ic_play, "00:00")
@@ -27,3 +17,4 @@ sealed class PlayerState(
 
     class Paused(progress: String) : PlayerState(true, R.drawable.ic_play, progress)
 }
+
