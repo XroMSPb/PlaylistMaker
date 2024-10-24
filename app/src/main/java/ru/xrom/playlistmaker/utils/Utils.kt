@@ -11,9 +11,7 @@ const val PLAYLISTMAKER_PREFERENCES = "_preferences"
 
 fun convertDpToPx(dp: Float, context: Context): Int {
     return TypedValue.applyDimension(
-        TypedValue.COMPLEX_UNIT_DIP,
-        dp,
-        context.resources.displayMetrics
+        TypedValue.COMPLEX_UNIT_DIP, dp, context.resources.displayMetrics
     ).toInt()
 }
 
@@ -36,10 +34,15 @@ fun <T> debounce(
         if (useLastParam) {
             debounceJob?.cancel()
         }
-        if (debounceJob?.isCompleted != false || useLastParam) {
+        if (debounceJob?.isCompleted != false) {
             debounceJob = coroutineScope.launch {
-                delay(delayMillis)
-                action(param)
+                if (useLastParam) {
+                    delay(delayMillis)
+                    action(param)
+                } else {
+                    action(param)
+                    delay(delayMillis)
+                }
             }
         }
     }

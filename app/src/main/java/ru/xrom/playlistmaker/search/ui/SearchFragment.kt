@@ -40,7 +40,7 @@ class SearchFragment : Fragment() {
     companion object {
         const val SEARCH_TEXT = "SEARCH_TEXT"
         const val TEXT_DEF = ""
-        private const val CLICK_DEBOUNCE_DELAY = 500L
+        private const val CLICK_DEBOUNCE_DELAY = 1000L
     }
 
     override fun onCreateView(
