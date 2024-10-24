@@ -103,7 +103,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/round_button"
-        android:src="@drawable/ic_favorite"
+        android:src="@drawable/ic_favorite_unliked"
         app:layout_constraintBottom_toBottomOf="@id/play_button"
         app:layout_constraintEnd_toStartOf="@id/rightBorder"
         app:layout_constraintStart_toEndOf="@id/play_button"

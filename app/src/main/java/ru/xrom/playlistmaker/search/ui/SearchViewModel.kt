@@ -37,7 +37,11 @@ class SearchViewModel(
     }
 
     fun updateHistory() {
-        renderState(SearchState.ContentHistory(searchHistorySaver.getHistory()))
+        viewModelScope.launch {
+            searchHistorySaver.getHistory().collect { tracks ->
+                renderState(SearchState.ContentHistory(tracks))
+            }
+        }
     }
 
     private fun renderState(state: SearchState) {
