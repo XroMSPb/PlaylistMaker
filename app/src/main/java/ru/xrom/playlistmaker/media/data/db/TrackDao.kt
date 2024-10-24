@@ -9,7 +9,7 @@ import ru.xrom.playlistmaker.media.data.db.entity.TrackEntity
 @Dao
 interface TrackDao {
 
-    @Query("SELECT * FROM favorite_table ORDER BY trackId DESC")
+    @Query("SELECT * FROM favorite_table ORDER BY addedAt DESC")
     suspend fun getAllTracks(): List<TrackEntity>
 
     @Query("SELECT * FROM favorite_table WHERE trackId = :id")

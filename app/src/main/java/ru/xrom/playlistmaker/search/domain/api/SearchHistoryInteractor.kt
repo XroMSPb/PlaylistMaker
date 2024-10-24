@@ -1,9 +1,10 @@
 package ru.xrom.playlistmaker.search.domain.api
 
+import kotlinx.coroutines.flow.Flow
 import ru.xrom.playlistmaker.search.domain.model.Track
 
 interface SearchHistoryInteractor {
-    fun getHistory(): List<Track>
+    fun getHistory(): Flow<List<Track>>
 
     fun clearHistory()
 

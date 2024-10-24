@@ -8,5 +8,5 @@ interface FavoritesInteractor {
     fun getTrackById(trackId: String): Flow<Track?>
     fun getFavoriteTracks(): Flow<List<Track>>
     fun addToFavorite(track: Track)
-    fun removeFromFavorite(trackId: String)
+    fun removeFromFavorite(track: Track)
 }

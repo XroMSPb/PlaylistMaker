@@ -15,7 +15,8 @@ class TrackDBConverter {
             collectionName = track.collectionName,
             primaryGenreName = track.primaryGenreName,
             releaseDate = track.releaseDate.orEmpty(),
-            country = track.country
+            country = track.country,
+            addedAt = System.currentTimeMillis().toString()
         )
     }
 
@@ -30,7 +31,8 @@ class TrackDBConverter {
             collectionName = trackEntity.collectionName,
             primaryGenreName = trackEntity.primaryGenreName,
             releaseDate = trackEntity.releaseDate,
-            country = trackEntity.country
+            country = trackEntity.country,
+            isFavorite = true
         )
     }
 }

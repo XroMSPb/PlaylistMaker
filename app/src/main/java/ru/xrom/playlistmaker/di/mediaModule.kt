@@ -15,7 +15,7 @@ import ru.xrom.playlistmaker.media.ui.PlaylistViewModel
 
 val mediaModule = module {
     viewModel {
-        FavoritesViewModel()
+        FavoritesViewModel(get())
     }
 
     viewModel {

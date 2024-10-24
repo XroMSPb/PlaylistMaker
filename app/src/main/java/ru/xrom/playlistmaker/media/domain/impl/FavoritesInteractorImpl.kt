@@ -18,9 +18,11 @@ class FavoritesInteractorImpl(
 
     override fun addToFavorite(track: Track) {
         repository.addToFavorite(track)
+        track.isFavorite = true
     }
 
-    override fun removeFromFavorite(trackId: String) {
-        repository.removeFromFavorite(trackId)
+    override fun removeFromFavorite(track: Track) {
+        repository.removeFromFavorite(track.trackId)
+        track.isFavorite = false
     }
 }

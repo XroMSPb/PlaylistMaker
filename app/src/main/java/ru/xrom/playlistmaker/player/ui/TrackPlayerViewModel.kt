@@ -78,7 +78,7 @@ class TrackPlayerViewModel(
         when (track.isFavorite) {
             true -> {
                 viewModelScope.launch(Dispatchers.IO) {
-                    favoritesInteractor.removeFromFavorite(track.trackId)
+                    favoritesInteractor.removeFromFavorite(track)
                 }
             }
 

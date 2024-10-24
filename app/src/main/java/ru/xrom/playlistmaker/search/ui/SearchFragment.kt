@@ -60,8 +60,6 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
-
         binding.cancelButton.setOnClickListener {
             binding.searchBar.text.clear()
             clearSearchAdapter()
@@ -97,7 +95,6 @@ class SearchFragment : Fragment() {
             }
             false
         }
-
 
         onTrackClickDebounce = debounce<Track>(
             CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
