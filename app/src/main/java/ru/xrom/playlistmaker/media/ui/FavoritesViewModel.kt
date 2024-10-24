@@ -20,4 +20,10 @@ class FavoritesViewModel(private val favoritesInteractor: FavoritesInteractor) :
             }
         }
     }
+
+    init {
+        refreshFavoriteTracks()
+    }
+
+
 }
