@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.flow
 import ru.xrom.playlistmaker.media.data.converter.TrackDBConverter
 import ru.xrom.playlistmaker.media.data.db.AppDatabase
 import ru.xrom.playlistmaker.media.data.db.entity.TrackEntity
-import ru.xrom.playlistmaker.media.domain.db.FavoritesRepository
+import ru.xrom.playlistmaker.media.domain.api.FavoritesRepository
 import ru.xrom.playlistmaker.search.domain.model.Track
 
 class FavoritesRepositoryImpl(

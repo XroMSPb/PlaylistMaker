@@ -28,7 +28,6 @@ class SearchViewModel(
 
     fun addToHistory(track: Track) {
         searchHistorySaver.addToHistory(track)
-        updateHistory()
     }
 
     fun clearHistory() {

@@ -1,8 +1,8 @@
 package ru.xrom.playlistmaker.media.domain.impl
 
 import kotlinx.coroutines.flow.Flow
-import ru.xrom.playlistmaker.media.domain.db.FavoritesInteractor
-import ru.xrom.playlistmaker.media.domain.db.FavoritesRepository
+import ru.xrom.playlistmaker.media.domain.api.FavoritesInteractor
+import ru.xrom.playlistmaker.media.domain.api.FavoritesRepository
 import ru.xrom.playlistmaker.search.domain.model.Track
 
 class FavoritesInteractorImpl(

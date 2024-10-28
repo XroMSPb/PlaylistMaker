@@ -15,6 +15,7 @@ import ru.xrom.playlistmaker.databinding.ActivityPlayerBinding
 import ru.xrom.playlistmaker.player.ui.model.PlayerState
 import ru.xrom.playlistmaker.search.domain.model.Track
 import ru.xrom.playlistmaker.utils.convertDpToPx
+import ru.xrom.playlistmaker.utils.getPreviewUrl
 import ru.xrom.playlistmaker.utils.getReleaseYear
 import java.util.Locale
 import kotlin.getValue
@@ -39,7 +40,7 @@ class TrackPlayerActivity : AppCompatActivity() {
 
         if (track != null) {
             val viewModel: TrackPlayerViewModel by viewModel {
-                parametersOf(track.previewUrl)
+                parametersOf(getPreviewUrl(track.previewUrl))
             }
             render(track, viewModel)
 

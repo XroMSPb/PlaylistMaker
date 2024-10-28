@@ -8,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import ru.xrom.playlistmaker.media.domain.db.FavoritesInteractor
+import ru.xrom.playlistmaker.media.domain.api.FavoritesInteractor
 import ru.xrom.playlistmaker.player.domain.api.TrackPlayerInteractor
 import ru.xrom.playlistmaker.player.ui.model.PlayerState
 import ru.xrom.playlistmaker.search.domain.model.Track

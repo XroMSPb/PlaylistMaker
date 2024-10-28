@@ -171,10 +171,8 @@ class SearchFragment : Fragment() {
     }
 
     private fun openPlayer(track: Track) {
-        binding.searchBar.text.clear()
         viewModel.addToHistory(track)
         startActivity(TrackPlayerActivity.newInstance(requireContext(), track))
-
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

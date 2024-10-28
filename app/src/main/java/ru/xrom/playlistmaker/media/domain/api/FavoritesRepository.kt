@@ -1,4 +1,4 @@
-package ru.xrom.playlistmaker.media.domain.db
+package ru.xrom.playlistmaker.media.domain.api
 
 import kotlinx.coroutines.flow.Flow
 import ru.xrom.playlistmaker.search.domain.model.Track
