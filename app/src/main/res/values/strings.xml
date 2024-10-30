@@ -1,10 +1,8 @@
 <resources>
     <string name="app_name">Playlist Maker</string>
     <string name="search_text">Поиск</string>
-    <string name="settingsBtn_text">Настройки</string>
     <string name="library_text">Медиатека</string>
     <string name="settings">Настройки</string>
-    <string name="back">Назад</string>
     <string name="darkTheme">Темная тема</string>
     <string name="share">Поделиться приложением</string>
     <string name="support">Написать в поддержку</string>
@@ -16,7 +14,6 @@
     <string name="supportText">Спасибо разработчикам и разработчицам за крутое приложение!</string>
     <string name="termsLink">https://yandex.ru/legal/practicum_offer/</string>
     <string name="application_not_found">Не удалось найти приложения для этого действия!</string>
-    <string name="text_separator">" • "</string>
     <string name="nothing_found">Ничего не нашлось</string>
     <string name="something_went_wrong">Проблемы со связью\n\nЗагрузка не удалась. Проверьте подключение к интернету</string>
     <string name="update_response">Обновить</string>

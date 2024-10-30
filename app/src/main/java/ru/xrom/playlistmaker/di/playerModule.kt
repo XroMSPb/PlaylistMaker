@@ -1,4 +1,4 @@
-package com.example.playlistmaker.media_player.di
+package ru.xrom.playlistmaker.di
 
 import android.media.MediaPlayer
 import org.koin.androidx.viewmodel.dsl.viewModel

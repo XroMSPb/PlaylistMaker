@@ -16,20 +16,6 @@ class SettingsViewModel(
     private val themeInteractor: MainThemeInteractor,
 ) : ViewModel(), SharingRepository {
 
-//    private val termsState = SingleLiveEvent<TermsData>()
-//    private val shareState = SingleLiveEvent<ShareData>()
-//    private val supportState = SingleLiveEvent<MailData>()
-//
-//    init {
-//        termsState.postValue(getTermsData())
-//        shareState.postValue(getShareData())
-//        supportState.postValue(getMailData())
-//    }
-//
-//    fun observeTermsState(): LiveData<TermsData> = termsState
-//    fun observeShareState(): LiveData<ShareData> = shareState
-//    fun observeSupportState(): LiveData<MailData> = supportState
-
     private val isNightThemeEnabled = MutableLiveData(themeInteractor.isNightTheme())
     fun updateThemeState(isNightTheme: Boolean) {
         themeInteractor.saveTheme(isNightTheme)

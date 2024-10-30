@@ -56,7 +56,7 @@ class SearchViewModel(
         searchJob = null
     }
 
-    fun searchRequest(newSearchText: String) {
+    private fun searchRequest(newSearchText: String) {
         renderState(SearchState.Loading)
         searchJob = viewModelScope.launch {
             trackInteractor.search(newSearchText)

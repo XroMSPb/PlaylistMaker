@@ -96,7 +96,7 @@ class SearchFragment : Fragment() {
             false
         }
 
-        onTrackClickDebounce = debounce<Track>(
+        onTrackClickDebounce = debounce(
             CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
         ) { track -> openPlayer(track) }
         val onItemClickListener = OnItemClickListener { item ->
