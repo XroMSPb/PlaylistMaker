@@ -1,4 +1,4 @@
-package com.example.playlistmaker.settings.di
+package ru.xrom.playlistmaker.di
 
 import android.content.Context
 import android.content.SharedPreferences

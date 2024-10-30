@@ -60,11 +60,6 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val onHistoryItemClickListener = OnItemClickListener { item ->
-            openPlayer(item)
-        }
-        historyAdapter = TrackAdapter(onHistoryItemClickListener)
-
         binding.cancelButton.setOnClickListener {
             binding.searchBar.text.clear()
             clearSearchAdapter()
@@ -101,14 +96,19 @@ class SearchFragment : Fragment() {
             false
         }
 
-        binding.recycleHistoryView.layoutManager = LinearLayoutManager(context)
-        binding.recycleHistoryView.adapter = historyAdapter
-        onTrackClickDebounce = debounce<Track>(
+        onTrackClickDebounce = debounce(
             CLICK_DEBOUNCE_DELAY, viewLifecycleOwner.lifecycleScope, false
         ) { track -> openPlayer(track) }
         val onItemClickListener = OnItemClickListener { item ->
             onTrackClickDebounce(item)
         }
+
+        val onHistoryItemClickListener = OnItemClickListener { item ->
+            onTrackClickDebounce(item)
+        }
+        historyAdapter = TrackAdapter(onHistoryItemClickListener)
+        binding.recycleHistoryView.layoutManager = LinearLayoutManager(context)
+        binding.recycleHistoryView.adapter = historyAdapter
 
         binding.recycleSearchView.layoutManager = LinearLayoutManager(context)
         searchAdapter = TrackAdapter(onItemClickListener)
@@ -171,10 +171,8 @@ class SearchFragment : Fragment() {
     }
 
     private fun openPlayer(track: Track) {
-        binding.searchBar.text.clear()
         viewModel.addToHistory(track)
         startActivity(TrackPlayerActivity.newInstance(requireContext(), track))
-
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

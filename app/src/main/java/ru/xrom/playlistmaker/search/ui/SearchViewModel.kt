@@ -28,7 +28,6 @@ class SearchViewModel(
 
     fun addToHistory(track: Track) {
         searchHistorySaver.addToHistory(track)
-        updateHistory()
     }
 
     fun clearHistory() {
@@ -37,7 +36,11 @@ class SearchViewModel(
     }
 
     fun updateHistory() {
-        renderState(SearchState.ContentHistory(searchHistorySaver.getHistory()))
+        viewModelScope.launch {
+            searchHistorySaver.getHistory().collect { tracks ->
+                renderState(SearchState.ContentHistory(tracks))
+            }
+        }
     }
 
     private fun renderState(state: SearchState) {
@@ -53,7 +56,7 @@ class SearchViewModel(
         searchJob = null
     }
 
-    fun searchRequest(newSearchText: String) {
+    private fun searchRequest(newSearchText: String) {
         renderState(SearchState.Loading)
         searchJob = viewModelScope.launch {
             trackInteractor.search(newSearchText)
