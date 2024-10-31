@@ -16,7 +16,7 @@ koin = "3.5.6"
 navigationFragment = "2.8.3"
 navigationUi = "2.8.3"
 navigationFragmentKtxVersion = "2.8.3"
-kotlinxCoroutinesAndroid = "1.7.3"
+kotlinxCoroutinesAndroid = "1.9.0"
 roomRuntime = "2.6.1"
 
 [libraries]
