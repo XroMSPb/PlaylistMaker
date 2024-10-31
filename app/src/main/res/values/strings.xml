@@ -32,4 +32,12 @@
     <string name="playlists">Плейлисты</string>
     <string name="favorite_tracks">Избранные треки</string>
     <string name="new_playlist">Новый плейлист</string>
+    <string name="playlist_name">Название*</string>
+    <string name="playlist_description">Описание</string>
+    <string name="create_new_playlist">Создать</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="exit_title">Завершить создание плейлиста?</string>
+    <string name="exit_message">Все несохраненные данные будут потеряны</string>
+    <string name="finish">Завершить</string>
 </resources>

@@ -9,9 +9,9 @@
     <solid android:color="#00000000" />
     <stroke
         android:width="1dp"
-        android:color="#AEAFB4"
-        android:dashWidth="@dimen/dp26"
-        android:dashGap="@dimen/dp26" />
+        android:color="@color/light_silver"
+        android:dashWidth="@dimen/dp30"
+        android:dashGap="@dimen/dp30" />
 
     <corners android:radius="@dimen/dp8" />
 </shape>
