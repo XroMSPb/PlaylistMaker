@@ -1,7 +1,5 @@
 package ru.xrom.playlistmaker.media.ui
 
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -9,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,10 +16,11 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.databinding.FragmentNewplaylistBinding
-import java.io.File
-import java.io.FileOutputStream
+import ru.xrom.playlistmaker.utils.getFileNameFromText
+import kotlin.getValue
 
 
 class NewPlaylistFragment : Fragment() {
@@ -28,6 +28,8 @@ class NewPlaylistFragment : Fragment() {
     private var _binding: FragmentNewplaylistBinding? = null
     private val binding get() = _binding!!
     private var imageUri: Uri = Uri.EMPTY
+    private var imageName = "image.png"
+    private val viewModel: NewPlaylistViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,10 +69,18 @@ class NewPlaylistFragment : Fragment() {
         }
 
         binding.btnCreate.setOnClickListener {
-            saveImageToPrivateStorage(
+            val playlistName = binding.playlistName.text.toString()
+            imageName = getFileNameFromText("$playlistName.png")
+            viewModel.saveImageToPrivateStorage(
                 imageUri,
-                binding.playlistName.text.toString().toLowerCase().replace(" ", "_") + ".png"
+                imageName
             )
+            viewModel.createPlaylist(
+                binding.playlistName.text.toString(),
+                binding.playlistDescription.text.toString(),
+                imageName
+            )
+            Toast.makeText(context, "Плейлист $playlistName создан", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -95,24 +105,6 @@ class NewPlaylistFragment : Fragment() {
             } else
                 findNavController().navigateUp()
         }
-    }
-
-    private fun saveImageToPrivateStorage(uri: Uri, name: String) {
-        //создаём экземпляр класса File, который указывает на нужный каталог
-        val filePath = File(requireContext().filesDir, "cache")
-        //создаем каталог, если он не создан
-        if (!filePath.exists()) {
-            filePath.mkdirs()
-        }
-        //создаём экземпляр класса File, который указывает на файл внутри каталога
-        val file = File(filePath, name)
-        // создаём входящий поток байтов из выбранной картинки
-        val inputStream = requireContext().contentResolver.openInputStream(uri)
-        // создаём исходящий поток байтов в созданный выше файл
-        val outputStream = FileOutputStream(file)
-        // записываем картинку с помощью BitmapFactory
-        BitmapFactory.decodeStream(inputStream)
-            .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
     }
 
 }
