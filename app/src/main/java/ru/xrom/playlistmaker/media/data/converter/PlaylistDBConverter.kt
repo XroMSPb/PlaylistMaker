@@ -23,7 +23,7 @@ class PlaylistDBConverter {
             name = playlist.name,
             description = playlist.description,
             imagePath = playlist.imagePath,
-            tracks = createTracksFromJson(playlist.tracks),
+            tracks = createTracksFromJson(playlist.tracks)
         )
     }
 
@@ -32,6 +32,7 @@ class PlaylistDBConverter {
     }
 
     fun createTracksFromJson(json: String): ArrayList<String> {
+        if (json == "") return ArrayList()
         val trackListType = object : TypeToken<List<String>>() {}.type
         return Gson().fromJson(json, trackListType)
     }

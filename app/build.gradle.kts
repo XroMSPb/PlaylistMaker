@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "ru.xrom.playlistmaker"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "ru.xrom.playlistmaker"
