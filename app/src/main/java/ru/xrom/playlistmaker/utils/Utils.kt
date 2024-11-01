@@ -57,5 +57,5 @@ fun <T> debounce(
 }
 
 fun getFileNameFromText(fileName: String): String {
-    return fileName.replace(Regex("[^a-zA-Z0-9 _.-]"), "").lowercase()
+    return fileName.replace(Regex("[^a-zA-Zа-яА-Я0-9 _.-]"), "").lowercase()
 }

@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
@@ -20,7 +21,6 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.databinding.FragmentNewplaylistBinding
 import ru.xrom.playlistmaker.utils.getFileNameFromText
-import kotlin.getValue
 
 
 class NewPlaylistFragment : Fragment() {
@@ -58,6 +58,7 @@ class NewPlaylistFragment : Fragment() {
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
+                    binding.image.scaleType = ImageView.ScaleType.CENTER_CROP
                     binding.image.setImageURI(uri)
                     imageUri = uri
                 } else {
@@ -70,17 +71,28 @@ class NewPlaylistFragment : Fragment() {
 
         binding.btnCreate.setOnClickListener {
             val playlistName = binding.playlistName.text.toString()
-            imageName = getFileNameFromText("$playlistName.png")
-            viewModel.saveImageToPrivateStorage(
-                imageUri,
-                imageName
-            )
+            if (imageUri != Uri.EMPTY) {
+                imageName = getFileNameFromText("$playlistName.png")
+                val result = viewModel.saveImageToPrivateStorage(
+                    imageUri,
+                    imageName
+                )
+                if (!result) {
+                    Toast.makeText(
+                        context,
+                        "Не удалось сохранить изображение\nПроверьте имя плейлиста или выберите другое.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
             viewModel.createPlaylist(
                 binding.playlistName.text.toString(),
                 binding.playlistDescription.text.toString(),
                 imageName
             )
             Toast.makeText(context, "Плейлист $playlistName создан", Toast.LENGTH_SHORT).show()
+            findNavController().navigateUp()
         }
     }
 
