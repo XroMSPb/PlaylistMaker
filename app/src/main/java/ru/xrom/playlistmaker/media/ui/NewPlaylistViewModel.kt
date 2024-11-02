@@ -12,19 +12,31 @@ import kotlinx.coroutines.launch
 import ru.xrom.playlistmaker.media.domain.api.PlaylistInteractor
 import java.io.File
 import java.io.FileOutputStream
+import java.util.UUID
 
 class NewPlaylistViewModel(
     private val interactor: PlaylistInteractor,
     private val application: Application,
 ) : ViewModel() {
 
-    fun createPlaylist(playlistName: String, playlistDescription: String, playlistImage: String) {
+    fun createPlaylist(playlistName: String, playlistDescription: String, imageUri: Uri): Long {
+        var result = 0L
+        var playlistImage: String? = null
+        if (imageUri != Uri.EMPTY)
+            playlistImage = "${UUID.randomUUID()}.png"
         viewModelScope.launch(Dispatchers.IO) {
-            interactor.createPlaylist(playlistName, playlistDescription, playlistImage)
+            result = interactor.createPlaylist(playlistName, playlistDescription, playlistImage)
+            if (result > 0 && imageUri != Uri.EMPTY) {
+                saveImageToPrivateStorage(
+                    imageUri,
+                    playlistImage!!
+                )
+            }
         }
+        return result
     }
 
-    fun saveImageToPrivateStorage(uri: Uri, name: String): Boolean {
+    private fun saveImageToPrivateStorage(uri: Uri, name: String): Boolean {
         if (uri == Uri.EMPTY || name.isEmpty()) return false
         val filePath =
             File(application.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "cache")

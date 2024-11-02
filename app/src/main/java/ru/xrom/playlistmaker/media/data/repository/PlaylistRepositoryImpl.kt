@@ -20,9 +20,9 @@ class PlaylistRepositoryImpl(
     override fun createPlaylist(
         playlistName: String,
         playlistDescription: String,
-        playlistImage: String,
-    ) {
-        database.playlistDao().insertPlaylist(
+        playlistImage: String?,
+    ): Long {
+        return database.playlistDao().insertPlaylist(
             PlaylistEntity(
                 name = playlistName,
                 description = playlistDescription,

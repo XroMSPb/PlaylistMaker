@@ -13,9 +13,9 @@ class PlaylistInteractorImpl(
     override fun createPlaylist(
         playlistName: String,
         playlistDescription: String,
-        playlistImage: String,
-    ) {
-        repository.createPlaylist(playlistName, playlistDescription, playlistImage)
+        playlistImage: String?,
+    ): Long {
+        return repository.createPlaylist(playlistName, playlistDescription, playlistImage)
     }
 
     override fun addToPlaylist(trackId: String, playlistName: Int) {

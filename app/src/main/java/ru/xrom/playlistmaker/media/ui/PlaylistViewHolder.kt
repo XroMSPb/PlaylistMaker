@@ -20,8 +20,7 @@ class PlaylistViewHolder(view: View) : RecyclerView.ViewHolder(view) {
     private val numTracks: TextView = itemView.findViewById(R.id.playlist_tracks)
 
     fun bind(playlist: Playlist) {
-        if (playlist.imagePath.isNotEmpty()) {
-
+        if (!playlist.imagePath.isNullOrEmpty()) {
             cover.scaleType = ImageView.ScaleType.CENTER_CROP
             val filePath =
                 File(itemView.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "cache")
@@ -35,6 +34,19 @@ class PlaylistViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                 .into(cover)
         }
         name.text = playlist.name
-        numTracks.text = "${playlist.tracks.size} треков"
+        playlist.tracks.size.let {
+            numTracks.text = getPluralForm(it).format(it)
+            //itemView.context.resources.getQuantityString(R.string.track, it, it)
+        }
+    }
+
+    fun getPluralForm(num: Int): String {
+        val n = num % 100
+        return when {
+            n in 11..14 -> itemView.context.getString(R.string.trackss)
+            n % 10 == 1 -> itemView.context.getString(R.string.track)
+            n % 10 in 2..4 -> itemView.context.getString(R.string.tracks)
+            else -> itemView.context.getString(R.string.trackss)
+        }
     }
 }

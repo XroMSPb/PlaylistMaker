@@ -61,8 +61,6 @@ class PlaylistFragment : Fragment() {
             binding.mediaPlaceholderTv.visibility = View.VISIBLE
             binding.recyclerView.visibility = View.GONE
         }
-
-        //binding.recyclerView.adapter?.notifyDataSetChanged()
     }
 
     companion object {
