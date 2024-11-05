@@ -4,14 +4,17 @@ import android.content.Context
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.databinding.ActivityPlayerBinding
+import ru.xrom.playlistmaker.media.ui.NewPlaylistFragment
 import ru.xrom.playlistmaker.player.ui.model.PlayerState
 import ru.xrom.playlistmaker.search.domain.model.Track
 import ru.xrom.playlistmaker.utils.convertDpToPx
@@ -37,15 +40,60 @@ class TrackPlayerActivity : AppCompatActivity() {
         }
         val track = intent.getParcelableExtra(TRACK_KEY) as? Track
 
-
         if (track != null) {
             val viewModel: TrackPlayerViewModel by viewModel {
                 parametersOf(getPreviewUrl(track.previewUrl))
             }
             render(track, viewModel)
 
+            val bottomSheetContainer = binding.playlistsBottomSheet
+            val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
+            bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            bottomSheetBehavior.addBottomSheetCallback(object :
+                BottomSheetBehavior.BottomSheetCallback() {
+                override fun onStateChanged(bottomSheet: View, newState: Int) {
+                    when (newState) {
+                        BottomSheetBehavior.STATE_EXPANDED -> {
+                            //bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+                        }
+
+                        BottomSheetBehavior.STATE_COLLAPSED -> {
+                            bottomSheetBehavior.peekHeight = binding.root.height / 3 * 2
+                        }
+
+                        BottomSheetBehavior.STATE_HIDDEN -> {
+                            binding.overlay.visibility = View.GONE
+                        }
+
+                        else -> {
+                            binding.overlay.visibility = View.VISIBLE
+                            viewModel.updatePlaylists()
+                        }
+                    }
+                }
+
+                override fun onSlide(bottomSheet: View, slideOffset: Float) {
+                    binding.overlay.alpha = (slideOffset + 1f) / 2f
+                }
+            })
+
             binding.favoriteBtn.setOnClickListener {
                 viewModel.onFavoriteClick(track)
+            }
+
+            binding.queueBtn.setOnClickListener {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            }
+            binding.createPlaylistButton.setOnClickListener {
+                //TODO rework
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+                val fragment = NewPlaylistFragment()
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_view, fragment)
+                    .addToBackStack(null)
+                    .commit()
+                binding.playerContent.visibility = View.GONE
+                binding.fragmentView.visibility = View.VISIBLE
             }
 
             viewModel.observeFavoriteState().observe(this) { state ->
@@ -54,6 +102,10 @@ class TrackPlayerActivity : AppCompatActivity() {
 
             viewModel.observePlayingState().observe(this) { state ->
                 updateState(state)
+            }
+
+            viewModel.observePlaylists().observe(this) { state ->
+                binding.recyclePlaylistsView.adapter = PlaylistHorizontalAdapter(state)
             }
 
         } else {
