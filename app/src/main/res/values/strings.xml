@@ -34,7 +34,7 @@
     <string name="new_playlist">Новый плейлист</string>
     <string name="playlist_name">Название*</string>
     <string name="playlist_description">Описание</string>
-    <string name="create_new_playlist">Создать</string>
+    <string name="create">Создать</string>
     <string name="exit_title">Завершить создание плейлиста?</string>
     <string name="exit_message">Все несохраненные данные будут потеряны</string>
     <string name="finish">Завершить</string>

@@ -13,6 +13,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
@@ -120,9 +121,11 @@ class NewPlaylistFragment : Fragment() {
     }
 
     private fun closeFragment() {
-        parentFragmentManager.setFragmentResult(RESULT, Bundle())
+        val result = Bundle()
+        parentFragmentManager.setFragmentResult(RESULT, result)
+        findNavController().previousBackStackEntry?.savedStateHandle?.set(RESULT, result)
+
         parentFragmentManager.popBackStack()
-        //findNavController().navigateUp()
     }
 
     companion object {

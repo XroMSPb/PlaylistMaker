@@ -19,7 +19,7 @@ class PlaylistFragment : Fragment() {
     private val viewModel: PlaylistViewModel by viewModel()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentPlaylistsBinding.inflate(inflater, container, false)
         return binding.root
@@ -38,6 +38,12 @@ class PlaylistFragment : Fragment() {
 
         binding.createPlaylistButton.setOnClickListener {
             findNavController().navigate(R.id.action_mediaFragment_to_newPlaylist)
+        }
+
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Any>(
+            NewPlaylistFragment.RESULT
+        )?.observe(viewLifecycleOwner) { result ->
+            viewModel.updatePlaylists()
         }
     }
 

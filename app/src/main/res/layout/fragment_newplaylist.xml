@@ -29,6 +29,7 @@
         android:layout_marginTop="@dimen/dp26"
         android:adjustViewBounds="true"
         android:background="@drawable/playlist_cover"
+        android:contentDescription="@string/create_playlist"
         android:maxHeight="312dp"
         android:scaleType="centerInside"
         app:layout_constraintDimensionRatio="1:1"
@@ -64,7 +65,9 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/playlist_name"
-            style="@style/new_playlist_text_field" />
+            style="@style/new_playlist_text_field"
+            android:imeOptions="actionDone"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
@@ -81,8 +84,9 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/playlist_description"
-            android:maxLines="1"
-            style="@style/new_playlist_text_field" />
+            style="@style/new_playlist_text_field"
+            android:imeOptions="actionDone"
+            android:singleLine="true" />
     </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -94,7 +98,7 @@
         android:backgroundTint="@drawable/button_add_playlist"
         android:fontFamily="@font/ys_display_medium"
         android:paddingVertical="@dimen/dp14"
-        android:text="@string/create_new_playlist"
+        android:text="@string/create"
         android:textAllCaps="false"
         android:textColor="?attr/colorPrimary"
         android:textFontWeight="500"

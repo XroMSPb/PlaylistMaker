@@ -36,14 +36,14 @@ class NewPlaylistViewModel(
         return result
     }
 
-    private fun saveImageToPrivateStorage(uri: Uri, name: String): Boolean {
-        if (uri == Uri.EMPTY || name.isEmpty()) return false
+    private fun saveImageToPrivateStorage(uri: Uri, fileName: String): Boolean {
+        if (uri == Uri.EMPTY || fileName.isEmpty()) return false
         val filePath =
             File(application.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "cache")
         if (!filePath.exists()) {
             filePath.mkdirs()
         }
-        val file = File(filePath, name)
+        val file = File(filePath, fileName)
         val inputStream = application.contentResolver.openInputStream(uri)
         val outputStream = FileOutputStream(file)
         return BitmapFactory.decodeStream(inputStream)

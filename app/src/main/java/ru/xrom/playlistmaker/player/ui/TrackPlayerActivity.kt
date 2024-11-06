@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.IntentCompat
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
@@ -48,7 +49,7 @@ class TrackPlayerActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-        val track = intent.getParcelableExtra(TRACK_KEY) as? Track
+        val track = IntentCompat.getParcelableExtra(intent, TRACK_KEY, Track::class.java)
 
         if (track != null) {
             val viewModel: TrackPlayerViewModel by viewModel {
@@ -63,10 +64,6 @@ class TrackPlayerActivity : AppCompatActivity() {
                 BottomSheetBehavior.BottomSheetCallback() {
                 override fun onStateChanged(bottomSheet: View, newState: Int) {
                     when (newState) {
-                        BottomSheetBehavior.STATE_EXPANDED -> {
-                            //bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
-                        }
-
                         BottomSheetBehavior.STATE_COLLAPSED -> {
                             bottomSheetBehavior.peekHeight = binding.root.height / 3 * 2
                         }
@@ -149,7 +146,6 @@ class TrackPlayerActivity : AppCompatActivity() {
                         ).show()
                     }
                 }
-
             }
 
             viewModel.observePlaylists().observe(this) { state ->
@@ -161,11 +157,6 @@ class TrackPlayerActivity : AppCompatActivity() {
         } else {
             binding.albumCover.setImageResource(R.drawable.ic_nothing_found)
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-
     }
 
     private fun render(track: Track, viewModel: TrackPlayerViewModel) {
@@ -212,6 +203,5 @@ class TrackPlayerActivity : AppCompatActivity() {
                 putExtra(TRACK_KEY, track)
             }
         }
-
     }
 }

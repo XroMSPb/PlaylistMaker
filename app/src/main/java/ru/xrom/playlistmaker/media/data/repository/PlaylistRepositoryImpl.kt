@@ -45,6 +45,7 @@ class PlaylistRepositoryImpl(
         if (currentTrack.isEmpty()) {
             tracks.add(trackId)
             playlist.tracks = playlistDBConverter.createJsonFromTracks(tracks)
+            playlist.tracksCount = tracks.size
             database.playlistDao().updatePlaylist(
                 playlist
             )
