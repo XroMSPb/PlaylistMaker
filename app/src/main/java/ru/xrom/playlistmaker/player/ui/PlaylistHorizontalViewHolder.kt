@@ -7,7 +7,10 @@ import android.widget.TextView
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.media.ui.model.Playlist
 import ru.xrom.playlistmaker.utils.convertDpToPx
@@ -28,8 +31,19 @@ class PlaylistHorizontalViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             Glide.with(itemView)
                 .load(file.toUri())
                 .placeholder(R.drawable.ic_cover_placeholder)
-                .centerCrop()
-                .transform(RoundedCorners(convertDpToPx(8f, itemView.context)))
+                .apply(
+                    RequestOptions().transform(
+                        MultiTransformation(
+                            CenterCrop(),
+                            RoundedCorners(
+                                convertDpToPx(
+                                    2f,
+                                    itemView.context
+                                )
+                            )
+                        )
+                    )
+                )
                 .into(cover)
         }
         name.text = playlist.name

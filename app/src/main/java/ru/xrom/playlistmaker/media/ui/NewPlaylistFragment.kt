@@ -13,10 +13,16 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.MultiTransformation
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.databinding.FragmentNewplaylistBinding
+import ru.xrom.playlistmaker.utils.convertDpToPx
 
 
 class NewPlaylistFragment : Fragment() {
@@ -53,7 +59,22 @@ class NewPlaylistFragment : Fragment() {
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
                     binding.image.scaleType = ImageView.ScaleType.CENTER_CROP
-                    binding.image.setImageURI(uri)
+                    Glide.with(this)
+                        .load(uri)
+                        .apply(
+                            RequestOptions().transform(
+                                MultiTransformation(
+                                    CenterCrop(),
+                                    RoundedCorners(
+                                        convertDpToPx(
+                                            8f,
+                                            requireContext()
+                                        )
+                                    )
+                                )
+                            )
+                        )
+                        .into(binding.image)
                     imageUri = uri
                 } else {
                     Log.d("PhotoPicker", "No media selected")

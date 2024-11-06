@@ -29,7 +29,6 @@
         android:layout_marginTop="@dimen/dp26"
         android:adjustViewBounds="true"
         android:background="@drawable/playlist_cover"
-        android:clipToOutline="true"
         android:maxHeight="312dp"
         android:scaleType="centerInside"
         app:layout_constraintDimensionRatio="1:1"
