@@ -1,7 +1,10 @@
 package ru.xrom.playlistmaker.media.ui
 
+import android.Manifest
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +16,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.MultiTransformation
@@ -20,6 +24,9 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.markodevcic.peko.PermissionRequester
+import com.markodevcic.peko.PermissionResult
+import kotlinx.coroutines.launch
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.databinding.FragmentNewplaylistBinding
@@ -55,6 +62,8 @@ class NewPlaylistFragment : Fragment() {
         binding.playlistName.doOnTextChanged { s, _, _, _ ->
             binding.btnCreate.isEnabled = s?.isEmpty() != true
         }
+        val requester = PermissionRequester.instance()
+
 
         val pickMedia =
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -83,7 +92,36 @@ class NewPlaylistFragment : Fragment() {
             }
 
         binding.image.setOnClickListener {
-            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+            lifecycleScope.launch {
+                requester.request(Manifest.permission.READ_EXTERNAL_STORAGE).collect { result ->
+                    when (result) {
+                        is PermissionResult.Granted -> {
+                            pickMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                        }
+
+                        is PermissionResult.Denied.DeniedPermanently -> {
+                            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                            intent.data = Uri.fromParts("package", context?.packageName, null)
+                            context?.startActivity(intent)
+                        }
+
+                        is PermissionResult.Denied.NeedsRationale -> {
+                            Toast.makeText(
+                                requireContext(),
+                                R.string.storage_permission_denied,
+                                Toast.LENGTH_LONG
+                            ).show()
+
+                        }
+
+                        is PermissionResult.Cancelled -> {
+                            return@collect
+                        }
+
+                    }
+                }
+            }
         }
 
         binding.btnCreate.setOnClickListener {
