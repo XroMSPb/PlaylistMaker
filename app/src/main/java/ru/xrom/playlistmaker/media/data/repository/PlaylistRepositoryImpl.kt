@@ -33,20 +33,24 @@ class PlaylistRepositoryImpl(
         )
     }
 
-    override fun addToPlaylist(trackId: String, playlistId: Int) {
+    override fun addToPlaylist(trackId: String, playlistId: Int): Boolean {
         val playlist = database.playlistDao().getPlaylistById(playlistId)
         val jsonTracks = playlist.tracks
-        if (jsonTracks.isNotEmpty()) {
-            val tracks = playlistDBConverter.createTracksFromJson(jsonTracks)
-            val currentTrack = tracks.filter { track -> track == trackId }
-            if (currentTrack.isEmpty()) {
-                tracks.add(trackId)
-                playlist.tracks = playlistDBConverter.createJsonFromTracks(tracks)
-                database.playlistDao().updatePlaylist(
-                    playlist
-                )
-            }
+        var tracks = ArrayList<String>()
+        if (jsonTracks.isNotEmpty())
+            tracks = playlistDBConverter.createTracksFromJson(jsonTracks)
+
+
+        val currentTrack = tracks.filter { track -> track == trackId }
+        if (currentTrack.isEmpty()) {
+            tracks.add(trackId)
+            playlist.tracks = playlistDBConverter.createJsonFromTracks(tracks)
+            database.playlistDao().updatePlaylist(
+                playlist
+            )
+            return true
         }
+        return false
     }
 
     override fun removeFromPlaylist(trackId: String, playlistId: Int) {

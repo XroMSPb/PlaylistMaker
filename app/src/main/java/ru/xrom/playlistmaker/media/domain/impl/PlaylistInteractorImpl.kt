@@ -18,8 +18,8 @@ class PlaylistInteractorImpl(
         return repository.createPlaylist(playlistName, playlistDescription, playlistImage)
     }
 
-    override fun addToPlaylist(trackId: String, playlistName: Int) {
-        repository.addToPlaylist(trackId, playlistName)
+    override fun addToPlaylist(trackId: String, playlistId: Int): Boolean {
+        return repository.addToPlaylist(trackId, playlistId)
     }
 
     override fun removeFromPlaylist(trackId: String, playlistName: Int) {

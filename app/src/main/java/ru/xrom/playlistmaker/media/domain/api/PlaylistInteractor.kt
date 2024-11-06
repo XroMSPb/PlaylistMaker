@@ -10,6 +10,6 @@ interface PlaylistInteractor {
         playlistDescription: String,
         playlistImage: String?,
     ): Long
-    fun addToPlaylist(trackId: String, playlistName: Int)
-    fun removeFromPlaylist(trackId: String, playlistName: Int)
+    fun addToPlaylist(trackId: String, playlistId: Int): Boolean
+    fun removeFromPlaylist(trackId: String, playlistId: Int)
 }

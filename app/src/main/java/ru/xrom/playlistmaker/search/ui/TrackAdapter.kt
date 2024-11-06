@@ -31,5 +31,4 @@ class TrackAdapter(
         items.clear()
         notifyItemRangeRemoved(0, oldSize)
     }
-
 }

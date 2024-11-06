@@ -12,6 +12,7 @@ import ru.xrom.playlistmaker.media.domain.api.FavoritesInteractor
 import ru.xrom.playlistmaker.media.domain.api.PlaylistInteractor
 import ru.xrom.playlistmaker.media.ui.model.Playlist
 import ru.xrom.playlistmaker.player.domain.api.TrackPlayerInteractor
+import ru.xrom.playlistmaker.player.ui.model.AddToPlaylistState
 import ru.xrom.playlistmaker.player.ui.model.PlayerState
 import ru.xrom.playlistmaker.search.domain.model.Track
 import java.text.SimpleDateFormat
@@ -28,6 +29,9 @@ class TrackPlayerViewModel(
 
     private val favoriteState = MutableLiveData<Boolean>()
     fun observeFavoriteState(): LiveData<Boolean> = favoriteState
+
+    private val addedToPlaylistState = MutableLiveData<AddToPlaylistState>()
+    fun observeAddingToPlaylistState(): LiveData<AddToPlaylistState> = addedToPlaylistState
 
     private val playlists = MutableLiveData<List<Playlist>>()
     fun observePlaylists(): LiveData<List<Playlist>> = playlists
@@ -97,9 +101,16 @@ class TrackPlayerViewModel(
         favoriteState.postValue(!track.isFavorite)
     }
 
-    fun onAddToPlaylistClick(track: Track, playlistId: Int) {
+    fun onAddToPlaylistClick(trackId: String, playlist: Playlist) {
         viewModelScope.launch(Dispatchers.IO) {
-            playlistInteractor.addToPlaylist(track.trackId, playlistId)
+            addedToPlaylistState.postValue(
+                AddToPlaylistState(
+                    playlistInteractor.addToPlaylist(
+                        trackId,
+                        playlist.id
+                    ), playlist
+                )
+            )
         }
     }
 

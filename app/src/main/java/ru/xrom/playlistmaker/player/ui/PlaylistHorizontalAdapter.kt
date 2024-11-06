@@ -6,7 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.media.ui.model.Playlist
 
-class PlaylistHorizontalAdapter(private val playlists: List<Playlist>) :
+class PlaylistHorizontalAdapter(
+    private val playlists: List<Playlist>,
+    private val onItemClickListener: OnItemClickListener,
+) :
     RecyclerView.Adapter<PlaylistHorizontalViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
@@ -24,5 +27,10 @@ class PlaylistHorizontalAdapter(private val playlists: List<Playlist>) :
 
     override fun onBindViewHolder(holder: PlaylistHorizontalViewHolder, position: Int) {
         holder.bind(playlists[position])
+        holder.itemView.setOnClickListener { onItemClickListener.onItemClick(playlists[position]) }
     }
+}
+
+fun interface OnItemClickListener {
+    fun onItemClick(item: Playlist)
 }

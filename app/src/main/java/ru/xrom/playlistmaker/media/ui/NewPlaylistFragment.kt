@@ -13,7 +13,6 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.xrom.playlistmaker.R
@@ -75,7 +74,8 @@ class NewPlaylistFragment : Fragment() {
                 context?.getString(R.string.playlist_created)?.format(playlistName),
                 Toast.LENGTH_SHORT
             ).show()
-            findNavController().navigateUp()
+
+            closeFragment()
         }
     }
 
@@ -92,10 +92,20 @@ class NewPlaylistFragment : Fragment() {
                     .setNeutralButton(android.R.string.cancel) { dialog, which ->
 
                     }.setPositiveButton(R.string.finish) { dialog, which ->
-                        findNavController().navigateUp()
+                        closeFragment()
                     }.show()
-            } else findNavController().navigateUp()
+            } else closeFragment()
         }
+    }
+
+    private fun closeFragment() {
+        parentFragmentManager.setFragmentResult(RESULT, Bundle())
+        parentFragmentManager.popBackStack()
+        //findNavController().navigateUp()
+    }
+
+    companion object {
+        const val RESULT = "RESULT_KEY"
     }
 
 }
