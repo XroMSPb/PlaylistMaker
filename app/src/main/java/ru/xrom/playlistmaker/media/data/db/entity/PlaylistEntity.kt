@@ -9,7 +9,7 @@ data class PlaylistEntity(
     val id: Int = 0,
     val name: String,
     val description: String,
-    var imagePath: String?,
-    var tracks: String,
-    var tracksCount: Int,
+    val imagePath: String?,
+    val tracks: String,
+    val tracksCount: Int,
 )

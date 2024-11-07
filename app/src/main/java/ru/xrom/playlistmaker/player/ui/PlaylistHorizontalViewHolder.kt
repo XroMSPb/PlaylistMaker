@@ -4,6 +4,7 @@ import android.os.Environment
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.getDrawable
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -45,6 +46,8 @@ class PlaylistHorizontalViewHolder(view: View) : RecyclerView.ViewHolder(view) {
                     )
                 )
                 .into(cover)
+        } else {
+            cover.setImageDrawable(getDrawable(itemView.context, R.drawable.ic_cover_placeholder))
         }
         name.text = playlist.name
         playlist.tracks.size.let {

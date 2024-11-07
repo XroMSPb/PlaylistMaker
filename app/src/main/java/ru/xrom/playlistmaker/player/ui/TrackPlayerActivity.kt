@@ -66,6 +66,7 @@ class TrackPlayerActivity : AppCompatActivity() {
                     when (newState) {
                         BottomSheetBehavior.STATE_COLLAPSED -> {
                             bottomSheetBehavior.peekHeight = binding.root.height / 3 * 2
+                            viewModel.updatePlaylists()
                         }
 
                         BottomSheetBehavior.STATE_HIDDEN -> {
@@ -96,9 +97,11 @@ class TrackPlayerActivity : AppCompatActivity() {
                 bottomSheetState = bottomSheetBehavior.state
                 bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
 
-                val fragment = NewPlaylistFragment()
-                supportFragmentManager.beginTransaction().replace(R.id.fragment_view, fragment)
-                    .addToBackStack(null).commit()
+                val fragment = NewPlaylistFragment.newInstance(false)
+                supportFragmentManager.beginTransaction()
+                    .replace(R.id.fragment_view, fragment)
+                    .addToBackStack(null)
+                    .commit()
                 binding.playerContent.visibility = View.GONE
                 binding.fragmentView.visibility = View.VISIBLE
             }
@@ -109,6 +112,11 @@ class TrackPlayerActivity : AppCompatActivity() {
                 bottomSheetBehavior.state = bottomSheetState
                 binding.playerContent.visibility = View.VISIBLE
                 binding.fragmentView.visibility = View.GONE
+
+            }
+
+            binding.overlay.setOnClickListener {
+                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
             }
 
             viewModel.observeFavoriteState().observe(this) { state ->

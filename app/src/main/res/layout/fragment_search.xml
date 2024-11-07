@@ -33,7 +33,7 @@
             android:autofillHints=""
             android:imeOptions="actionDone"
             android:singleLine="true"
-            tools:text="WWwwwWWWWWWWwWWWwwwWWWwwwWWW" />
+            tools:text="[WWwwwWWWWWWWwWWWwwwWWWwwwWWW]" />
 
         <ImageView
             android:id="@+id/cancel_button"
@@ -89,7 +89,7 @@
             android:textColor="?attr/colorOnPrimary"
             android:textFontWeight="400"
             android:textSize="@dimen/text_size_19sp"
-            tools:text="@string/something_went_wrong" />
+            android:text="@string/something_went_wrong" />
 
         <Button
             android:id="@+id/update_response"

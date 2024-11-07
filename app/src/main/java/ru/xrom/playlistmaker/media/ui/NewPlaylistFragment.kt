@@ -26,7 +26,7 @@ import ru.xrom.playlistmaker.databinding.FragmentNewplaylistBinding
 import ru.xrom.playlistmaker.utils.convertDpToPx
 
 
-class NewPlaylistFragment : Fragment() {
+class NewPlaylistFragment(val fromNavController: Boolean = true) : Fragment() {
 
     private var _binding: FragmentNewplaylistBinding? = null
     private val binding get() = _binding!!
@@ -122,16 +122,20 @@ class NewPlaylistFragment : Fragment() {
 
     private fun closeFragment() {
         val result = Bundle()
-        parentFragmentManager.setFragmentResult(RESULT, result)
-        findNavController().previousBackStackEntry?.savedStateHandle?.set(RESULT, result)
+        if (fromNavController)
+            findNavController().previousBackStackEntry?.savedStateHandle?.set(RESULT, result)
+        else
+            parentFragmentManager.setFragmentResult(RESULT, result)
 
         parentFragmentManager.popBackStack()
     }
 
     companion object {
         const val RESULT = "RESULT_KEY"
+        fun newInstance(fromNavController: Boolean) = NewPlaylistFragment(fromNavController)
     }
-
 }
+
+
 
 

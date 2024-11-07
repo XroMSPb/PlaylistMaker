@@ -35,7 +35,7 @@
             android:maxLines="1"
             android:textColor="?attr/colorOnPrimary"
             android:textSize="@dimen/text_size_16sp"
-            tools:text="Yesterday (Remastered 2009) terday terday terday" />
+            tools:text="[Yesterday (Remastered 2009) terday terday terday]" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -54,7 +54,7 @@
                 android:maxLines="1"
                 android:textColor="?attr/colorSecondaryContainer"
                 android:textSize="@dimen/text_size_11sp"
-                tools:text="Guns N' Roses" />
+                tools:text="[Guns N' Roses]" />
 
             <TextView
                 android:id="@+id/track_time"
@@ -66,7 +66,7 @@
                 android:textColor="?attr/colorSecondaryContainer"
                 android:textSize="@dimen/text_size_11sp"
                 app:drawableStartCompat="@drawable/ic_point"
-                tools:text="5:45" />
+                tools:text="[5:45]" />
         </LinearLayout>
 
     </LinearLayout>

@@ -44,10 +44,11 @@ class PlaylistRepositoryImpl(
         val currentTrack = tracks.filter { track -> track == trackId }
         if (currentTrack.isEmpty()) {
             tracks.add(trackId)
-            playlist.tracks = playlistDBConverter.createJsonFromTracks(tracks)
-            playlist.tracksCount = tracks.size
             database.playlistDao().updatePlaylist(
-                playlist
+                playlist.copy(
+                    tracks = playlistDBConverter.createJsonFromTracks(tracks),
+                    tracksCount = tracks.size
+                )
             )
             return true
         }
@@ -62,9 +63,11 @@ class PlaylistRepositoryImpl(
             val currentTrack = tracks.filter { track -> track == trackId }
             if (currentTrack.isNotEmpty()) {
                 tracks.remove(trackId)
-                playlist.tracks = playlistDBConverter.createJsonFromTracks(tracks)
                 database.playlistDao().updatePlaylist(
-                    playlist
+                    playlist.copy(
+                        tracks = playlistDBConverter.createJsonFromTracks(tracks),
+                        tracksCount = tracks.size
+                    )
                 )
             }
         }

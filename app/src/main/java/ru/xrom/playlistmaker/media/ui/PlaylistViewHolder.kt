@@ -28,7 +28,6 @@ class PlaylistViewHolder(view: View) : RecyclerView.ViewHolder(view) {
             val filePath =
                 File(itemView.context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "cache")
             val file = File(filePath, playlist.imagePath)
-            //cover.setImageURI(file.toUri())
             Glide.with(itemView)
                 .load(file.toUri())
                 .placeholder(R.drawable.ic_cover_placeholder)
@@ -50,7 +49,6 @@ class PlaylistViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         name.text = playlist.name
         playlist.tracks.size.let {
             numTracks.text = getPluralForm(it).format(it)
-            //itemView.context.resources.getQuantityString(R.string.track, it, it)
         }
     }
 

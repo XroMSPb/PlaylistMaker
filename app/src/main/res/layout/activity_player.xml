@@ -75,7 +75,7 @@
             android:textSize="@dimen/text_size_22sp"
             app:layout_constraintStart_toStartOf="@id/leftBorder"
             app:layout_constraintTop_toBottomOf="@id/album_cover"
-            tools:text="Yesterday (Remastered 2009)" />
+            tools:text="[Yesterday (Remastered 2009)]" />
 
         <TextView
             android:id="@+id/artist_name"
@@ -88,7 +88,7 @@
             android:textSize="@dimen/text_size_14sp"
             app:layout_constraintStart_toStartOf="@id/title"
             app:layout_constraintTop_toBottomOf="@id/title"
-            tools:text="The Beatles" />
+            tools:text="[The Beatles]" />
 
         <ImageButton
             android:id="@+id/queue_btn"
@@ -137,7 +137,7 @@
             app:layout_constraintEnd_toStartOf="@id/rightBorder"
             app:layout_constraintStart_toEndOf="@id/leftBorder"
             app:layout_constraintTop_toBottomOf="@id/play_button"
-            tools:text="00:30" />
+            tools:text="[00:30]" />
 
         <TextView
             android:id="@+id/duration_label"
@@ -201,7 +201,7 @@
             app:layout_constraintBottom_toTopOf="@id/album"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/playing_time"
-            tools:text="5:35" />
+            tools:text="[5:35]" />
 
         <TextView
             android:id="@+id/album"
@@ -216,7 +216,7 @@
             app:layout_constraintEnd_toEndOf="@id/duration"
             app:layout_constraintStart_toEndOf="@id/album_label"
             app:layout_constraintTop_toBottomOf="@id/duration"
-            tools:text="Yesterday (Remastered 2009)" />
+            tools:text="[Yesterday (Remastered 2009)]" />
 
         <TextView
             android:id="@+id/year"
@@ -226,7 +226,7 @@
             app:layout_constraintBottom_toTopOf="@id/genre"
             app:layout_constraintEnd_toEndOf="@id/duration"
             app:layout_constraintTop_toBottomOf="@id/album"
-            tools:text="1965" />
+            tools:text="[1965]" />
 
         <TextView
             android:id="@+id/genre"
@@ -236,7 +236,7 @@
             app:layout_constraintBottom_toTopOf="@id/country"
             app:layout_constraintEnd_toEndOf="@id/duration"
             app:layout_constraintTop_toBottomOf="@id/year"
-            tools:text="Rock" />
+            tools:text="[Rock]" />
 
         <TextView
             android:id="@+id/country"
@@ -246,7 +246,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/duration"
             app:layout_constraintTop_toBottomOf="@id/genre"
-            tools:text="Великобритания" />
+            tools:text="[Великобритания]" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <View
@@ -254,6 +254,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#99000000"
+        android:clickable="true"
         android:visibility="gone" />
 
 
@@ -265,6 +266,7 @@
         android:gravity="center_horizontal"
         android:orientation="vertical"
         app:behavior_hideable="true"
+        app:behavior_peekHeight="600dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <ImageView

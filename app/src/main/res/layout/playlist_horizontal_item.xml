@@ -34,7 +34,7 @@
             android:maxLines="1"
             android:textColor="?attr/colorOnPrimary"
             android:textSize="@dimen/text_size_16sp"
-            tools:text="Best of the best" />
+            tools:text="[Best of the best]" />
 
         <TextView
             android:id="@+id/playlist_tracks"
@@ -44,7 +44,7 @@
             android:maxLines="1"
             android:textColor="?attr/colorSecondaryContainer"
             android:textSize="@dimen/text_size_11sp"
-            tools:text="157 треков" />
+            tools:text="[157 треков]" />
 
     </LinearLayout>
 

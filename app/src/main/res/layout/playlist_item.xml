@@ -30,7 +30,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="?attr/colorOnPrimary"
-            tools:text="Playlist name namang gada" />
+            tools:text="[Playlist name]" />
 
         <TextView
             android:id="@+id/playlist_tracks"
@@ -39,7 +39,7 @@
             android:ellipsize="end"
             android:maxLines="1"
             android:textColor="?attr/colorOnPrimary"
-            tools:text="157 треков" />
+            tools:text="[157 треков]" />
 
     </LinearLayout>
 
