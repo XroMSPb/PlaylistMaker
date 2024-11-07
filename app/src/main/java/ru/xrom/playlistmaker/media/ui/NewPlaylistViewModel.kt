@@ -2,7 +2,6 @@ package ru.xrom.playlistmaker.media.ui
 
 import android.app.Application
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Environment
 import androidx.lifecycle.ViewModel
@@ -19,7 +18,12 @@ class NewPlaylistViewModel(
     private val application: Application,
 ) : ViewModel() {
 
-    fun createPlaylist(playlistName: String, playlistDescription: String, imageUri: Uri): Long {
+    fun createPlaylist(
+        playlistName: String,
+        playlistDescription: String,
+        imageUri: Uri,
+        bitmap: Bitmap,
+    ): Long {
         var result = 0L
         var playlistImage: String? = null
         if (imageUri != Uri.EMPTY)
@@ -28,7 +32,7 @@ class NewPlaylistViewModel(
             result = interactor.createPlaylist(playlistName, playlistDescription, playlistImage)
             if (result > 0 && imageUri != Uri.EMPTY) {
                 saveImageToPrivateStorage(
-                    imageUri,
+                    bitmap,
                     playlistImage!!
                 )
             }
@@ -36,17 +40,16 @@ class NewPlaylistViewModel(
         return result
     }
 
-    private fun saveImageToPrivateStorage(uri: Uri, fileName: String): Boolean {
-        if (uri == Uri.EMPTY || fileName.isEmpty()) return false
+    private fun saveImageToPrivateStorage(bitmap: Bitmap, fileName: String): Boolean {
+        if (fileName.isEmpty()) return false
         val filePath =
             File(application.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "cache")
         if (!filePath.exists()) {
             filePath.mkdirs()
         }
         val file = File(filePath, fileName)
-        val inputStream = application.contentResolver.openInputStream(uri)
         val outputStream = FileOutputStream(file)
-        return BitmapFactory.decodeStream(inputStream)
-            .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
+        return bitmap
+            .compress(Bitmap.CompressFormat.PNG, 60, outputStream)
     }
 }

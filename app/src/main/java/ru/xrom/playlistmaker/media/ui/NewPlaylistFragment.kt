@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -89,7 +90,10 @@ class NewPlaylistFragment(val fromNavController: Boolean = true) : Fragment() {
         binding.btnCreate.setOnClickListener {
             val playlistName = binding.playlistName.text.toString()
             viewModel.createPlaylist(
-                playlistName, binding.playlistDescription.text.toString(), imageUri
+                playlistName,
+                binding.playlistDescription.text.toString(),
+                imageUri,
+                binding.image.drawable.toBitmap()
             )
             Toast.makeText(
                 context,
