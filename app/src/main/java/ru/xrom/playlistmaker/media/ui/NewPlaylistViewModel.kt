@@ -50,6 +50,6 @@ class NewPlaylistViewModel(
         val file = File(filePath, fileName)
         val outputStream = FileOutputStream(file)
         return bitmap
-            .compress(Bitmap.CompressFormat.PNG, 60, outputStream)
+            .compress(Bitmap.CompressFormat.JPEG, 30, outputStream)
     }
 }
