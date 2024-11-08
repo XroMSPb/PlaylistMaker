@@ -23,10 +23,18 @@
         <action
             android:id="@+id/action_mediaFragment_to_newPlaylist"
             app:destination="@id/newPlaylist" />
+        <action
+            android:id="@+id/action_mediaFragment_to_playlistViewer"
+            app:destination="@id/playlistViewer" />
     </fragment>
     <fragment
         android:id="@+id/newPlaylist"
         android:name="ru.xrom.playlistmaker.media.ui.NewPlaylistFragment"
         android:label="fragment_newplaylist"
         tools:layout="@layout/fragment_newplaylist" />
+    <fragment
+        android:id="@+id/playlistViewer"
+        android:name="ru.xrom.playlistmaker.media.ui.PlaylistViewer"
+        android:label="fragment_playlist_viewer"
+        tools:layout="@layout/fragment_playlist_viewer" />
 </navigation>
