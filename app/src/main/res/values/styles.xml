@@ -87,4 +87,16 @@
         <item name="android:textFontWeight">400</item>
     </style>
 
+    <style name="new_playlist_text" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="hintTextColor">@color/blue</item>
+        <item name="boxStrokeColor">@drawable/edittext_with_stroke</item>
+    </style>
+
+    <style name="new_playlist_text_field">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ys_display_regular</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
 </resources>

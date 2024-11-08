@@ -4,13 +4,19 @@ import androidx.room.Room
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
+import ru.xrom.playlistmaker.media.data.converter.PlaylistDBConverter
 import ru.xrom.playlistmaker.media.data.converter.TrackDBConverter
 import ru.xrom.playlistmaker.media.data.db.AppDatabase
 import ru.xrom.playlistmaker.media.data.repository.FavoritesRepositoryImpl
+import ru.xrom.playlistmaker.media.data.repository.PlaylistRepositoryImpl
 import ru.xrom.playlistmaker.media.domain.api.FavoritesInteractor
 import ru.xrom.playlistmaker.media.domain.api.FavoritesRepository
+import ru.xrom.playlistmaker.media.domain.api.PlaylistInteractor
+import ru.xrom.playlistmaker.media.domain.api.PlaylistRepository
 import ru.xrom.playlistmaker.media.domain.impl.FavoritesInteractorImpl
+import ru.xrom.playlistmaker.media.domain.impl.PlaylistInteractorImpl
 import ru.xrom.playlistmaker.media.ui.FavoritesViewModel
+import ru.xrom.playlistmaker.media.ui.NewPlaylistViewModel
 import ru.xrom.playlistmaker.media.ui.PlaylistViewModel
 
 val mediaModule = module {
@@ -19,7 +25,11 @@ val mediaModule = module {
     }
 
     viewModel {
-        PlaylistViewModel()
+        PlaylistViewModel(get())
+    }
+
+    viewModel {
+        NewPlaylistViewModel(get(), get())
     }
 
     single {
@@ -29,6 +39,9 @@ val mediaModule = module {
     single {
         TrackDBConverter()
     }
+    single {
+        PlaylistDBConverter()
+    }
 
     single<FavoritesRepository> {
         FavoritesRepositoryImpl(get(), get())
@@ -36,5 +49,13 @@ val mediaModule = module {
 
     single<FavoritesInteractor> {
         FavoritesInteractorImpl(get())
+    }
+
+    single<PlaylistRepository> {
+        PlaylistRepositoryImpl(get(), get())
+    }
+
+    single<PlaylistInteractor> {
+        PlaylistInteractorImpl(get())
     }
 }

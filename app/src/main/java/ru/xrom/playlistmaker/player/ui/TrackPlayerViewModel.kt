@@ -9,7 +9,10 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.xrom.playlistmaker.media.domain.api.FavoritesInteractor
+import ru.xrom.playlistmaker.media.domain.api.PlaylistInteractor
+import ru.xrom.playlistmaker.media.ui.model.Playlist
 import ru.xrom.playlistmaker.player.domain.api.TrackPlayerInteractor
+import ru.xrom.playlistmaker.player.ui.model.AddToPlaylistState
 import ru.xrom.playlistmaker.player.ui.model.PlayerState
 import ru.xrom.playlistmaker.search.domain.model.Track
 import java.text.SimpleDateFormat
@@ -18,6 +21,7 @@ import java.util.Locale
 class TrackPlayerViewModel(
     private val trackPlayerInteractor: TrackPlayerInteractor,
     private val favoritesInteractor: FavoritesInteractor,
+    private val playlistInteractor: PlaylistInteractor,
 ) : ViewModel() {
 
     private val playerState = MutableLiveData<PlayerState>(PlayerState.Default())
@@ -25,6 +29,12 @@ class TrackPlayerViewModel(
 
     private val favoriteState = MutableLiveData<Boolean>()
     fun observeFavoriteState(): LiveData<Boolean> = favoriteState
+
+    private val addedToPlaylistState = MutableLiveData<AddToPlaylistState>()
+    fun observeAddingToPlaylistState(): LiveData<AddToPlaylistState> = addedToPlaylistState
+
+    private val playlists = MutableLiveData<List<Playlist>>()
+    fun observePlaylists(): LiveData<List<Playlist>> = playlists
 
     private var timerJob: Job? = null
 
@@ -89,6 +99,27 @@ class TrackPlayerViewModel(
             }
         }
         favoriteState.postValue(!track.isFavorite)
+    }
+
+    fun onAddToPlaylistClick(trackId: String, playlist: Playlist) {
+        viewModelScope.launch(Dispatchers.IO) {
+            addedToPlaylistState.postValue(
+                AddToPlaylistState(
+                    playlistInteractor.addToPlaylist(
+                        trackId,
+                        playlist.id
+                    ), playlist
+                )
+            )
+        }
+    }
+
+    fun updatePlaylists() {
+        viewModelScope.launch(Dispatchers.IO) {
+            playlistInteractor.getPlaylists().collect {
+                playlists.postValue(it)
+            }
+        }
     }
 
     override fun onCleared() {

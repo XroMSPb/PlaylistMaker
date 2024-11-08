@@ -19,5 +19,14 @@
         android:id="@+id/mediaFragment"
         android:name="ru.xrom.playlistmaker.media.ui.MediaFragment"
         android:label="fragment_media"
-        tools:layout="@layout/fragment_media" />
+        tools:layout="@layout/fragment_media">
+        <action
+            android:id="@+id/action_mediaFragment_to_newPlaylist"
+            app:destination="@id/newPlaylist" />
+    </fragment>
+    <fragment
+        android:id="@+id/newPlaylist"
+        android:name="ru.xrom.playlistmaker.media.ui.NewPlaylistFragment"
+        android:label="fragment_newplaylist"
+        tools:layout="@layout/fragment_newplaylist" />
 </navigation>
