@@ -34,7 +34,7 @@
         tools:layout="@layout/fragment_newplaylist" />
     <fragment
         android:id="@+id/playlistViewer"
-        android:name="ru.xrom.playlistmaker.media.ui.PlaylistViewer"
+        android:name="ru.xrom.playlistmaker.media.ui.PlaylistViewerFragment"
         android:label="fragment_playlist_viewer"
         tools:layout="@layout/fragment_playlist_viewer" />
 </navigation>

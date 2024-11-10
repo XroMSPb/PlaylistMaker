@@ -8,7 +8,7 @@
     android:background="@color/light_grayish_silver"
     android:orientation="vertical"
     android:theme="@style/Theme.PlaylistMakerMedia"
-    tools:context=".media.ui.PlaylistViewer">
+    tools:context=".media.ui.PlaylistViewerFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/playlist_content"
@@ -19,6 +19,7 @@
             android:id="@+id/playlist_cover"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:clickable="false"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_cover_placeholder"
             app:layout_constraintDimensionRatio="1:1"
@@ -26,17 +27,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
+        <ImageButton
+            android:id="@+id/back_button"
+            android:layout_width="56dp"
             android:layout_height="56dp"
+            android:layout_marginStart="@dimen/dp12"
+            android:layout_marginTop="@dimen/dp12"
+            android:backgroundTint="#00000000"
             android:foreground="?attr/selectableItemBackground"
-            android:paddingTop="@dimen/dp12"
+            android:src="@drawable/ic_back_arrow"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:navigationIcon="@drawable/ic_back_arrow"
-            app:titleTextAppearance="@style/Toolbar.TitleText"
-            app:titleTextColor="?attr/colorOnPrimary" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/leftBorder"
@@ -125,8 +126,8 @@
         android:background="@drawable/bottom_sheet_bg"
         android:gravity="center_horizontal"
         android:orientation="vertical"
-        app:behavior_hideable="true"
-        app:behavior_peekHeight="160dp"
+        app:behavior_hideable="false"
+        app:behavior_peekHeight="280dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <ImageView
@@ -240,11 +241,12 @@
                 android:layout_marginHorizontal="@dimen/dp16"
                 android:layout_marginTop="@dimen/dp16"
                 android:layout_marginBottom="52dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:listitem="@layout/playlist_horizontal_item" />
+                tools:listitem="@layout/track_item" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

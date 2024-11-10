@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import ru.xrom.playlistmaker.media.data.db.entity.PlaylistEntity
+import ru.xrom.playlistmaker.media.data.db.entity.TrackAtPlaylistEntity
 
 @Dao
 interface PlaylistDao {
@@ -21,4 +22,19 @@ interface PlaylistDao {
 
     @Update(entity = PlaylistEntity::class, onConflict = OnConflictStrategy.REPLACE)
     fun updatePlaylist(playlist: PlaylistEntity)
+
+    @Query("SELECT tracks FROM playlist_table WHERE id = :playlistId")
+    fun getAllTracksFromPlaylist(playlistId: Int): String
+
+    @Query("SELECT * FROM all_tracks")
+    suspend fun getAllTracks(): List<TrackAtPlaylistEntity>
+
+    @Query("SELECT * FROM all_tracks WHERE trackId IN (:trackIds)")
+    suspend fun getTrackByIds(trackIds: List<String>): List<TrackAtPlaylistEntity>
+
+    @Insert(entity = TrackAtPlaylistEntity::class, onConflict = OnConflictStrategy.IGNORE)
+    fun insertTrack(track: TrackAtPlaylistEntity)
+
+    @Query("DELETE FROM all_tracks WHERE trackId = :trackId")
+    fun deleteTrack(trackId: String)
 }

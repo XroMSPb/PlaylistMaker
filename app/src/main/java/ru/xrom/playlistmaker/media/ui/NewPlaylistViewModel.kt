@@ -3,12 +3,12 @@ package ru.xrom.playlistmaker.media.ui
 import android.app.Application
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Environment
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ru.xrom.playlistmaker.media.domain.api.PlaylistInteractor
+import ru.xrom.playlistmaker.utils.getDefaultCacheImagePath
 import java.io.File
 import java.io.FileOutputStream
 import java.util.UUID
@@ -43,7 +43,7 @@ class NewPlaylistViewModel(
     private fun saveImageToPrivateStorage(bitmap: Bitmap, fileName: String): Boolean {
         if (fileName.isEmpty()) return false
         val filePath =
-            File(application.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "cache")
+            getDefaultCacheImagePath(application)
         if (!filePath.exists()) {
             filePath.mkdirs()
         }

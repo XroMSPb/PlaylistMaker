@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.bundle.bundleOf
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
@@ -27,12 +28,13 @@ import ru.xrom.playlistmaker.databinding.FragmentNewplaylistBinding
 import ru.xrom.playlistmaker.utils.convertDpToPx
 
 
-class NewPlaylistFragment(val fromNavController: Boolean = true) : Fragment() {
+class NewPlaylistFragment() : Fragment() {
 
     private var _binding: FragmentNewplaylistBinding? = null
     private val binding get() = _binding!!
     private var imageUri: Uri = Uri.EMPTY
     private val viewModel: NewPlaylistViewModel by viewModel()
+    private var fromNavController = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +50,8 @@ class NewPlaylistFragment(val fromNavController: Boolean = true) : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.onBackPressedDispatcher?.addCallback(this, callback)
+        activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
+        fromNavController = requireArguments().getBoolean(FROM_NAVCONTROLLER_KEY, true)
         binding.btnCreate.isEnabled = false
         binding.toolbar.setNavigationOnClickListener {
             activity?.onBackPressedDispatcher?.onBackPressed()
@@ -126,6 +129,7 @@ class NewPlaylistFragment(val fromNavController: Boolean = true) : Fragment() {
 
     private fun closeFragment() {
         val result = Bundle()
+
         if (fromNavController)
             findNavController().previousBackStackEntry?.savedStateHandle?.set(RESULT, result)
         else
@@ -136,7 +140,10 @@ class NewPlaylistFragment(val fromNavController: Boolean = true) : Fragment() {
 
     companion object {
         const val RESULT = "RESULT_KEY"
-        fun newInstance(fromNavController: Boolean) = NewPlaylistFragment(fromNavController)
+        const val FROM_NAVCONTROLLER_KEY = "FROM_NAVCONTROLLER_KEY"
+        fun newInstance(fromNavController: Boolean) = NewPlaylistFragment().apply {
+            arguments = bundleOf(FROM_NAVCONTROLLER_KEY to fromNavController)
+        }
     }
 }
 

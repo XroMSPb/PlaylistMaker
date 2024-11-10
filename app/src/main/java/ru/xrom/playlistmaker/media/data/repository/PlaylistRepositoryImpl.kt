@@ -3,19 +3,38 @@ package ru.xrom.playlistmaker.media.data.repository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import ru.xrom.playlistmaker.media.data.converter.PlaylistDBConverter
+import ru.xrom.playlistmaker.media.data.converter.TrackAtPlaylistDBConverter
 import ru.xrom.playlistmaker.media.data.db.AppDatabase
 import ru.xrom.playlistmaker.media.data.db.entity.PlaylistEntity
+import ru.xrom.playlistmaker.media.data.db.entity.TrackAtPlaylistEntity
 import ru.xrom.playlistmaker.media.domain.api.PlaylistRepository
 import ru.xrom.playlistmaker.media.ui.model.Playlist
+import ru.xrom.playlistmaker.search.domain.model.Track
 
 class PlaylistRepositoryImpl(
     private val database: AppDatabase,
     private val playlistDBConverter: PlaylistDBConverter,
+    private val trackDBConverter: TrackAtPlaylistDBConverter,
 ) : PlaylistRepository {
     override fun getPlaylists(): Flow<List<Playlist>> = flow {
         val playlists = database.playlistDao().getAllPlaylists()
         emit(convertFromPlaylistEntity(playlists))
     }
+
+    override fun getPlaylistById(playlistId: Int): Flow<Playlist?> = flow {
+        val playlist = database.playlistDao().getPlaylistById(playlistId)
+        emit(playlistDBConverter.map(playlist))
+    }
+
+    override fun getAllTracks(playlistId: Int): Flow<List<Track>?> = flow {
+        val jsonTracks = database.playlistDao().getAllTracksFromPlaylist(playlistId)
+        if (jsonTracks.isNotEmpty()) {
+            val tracksIDs = playlistDBConverter.createTracksFromJson(jsonTracks)
+            val tracksInPlaylist = database.playlistDao().getTrackByIds(tracksIDs)
+            emit(convertFromTrackEntity(tracksInPlaylist))
+        }
+    }
+
 
     override fun createPlaylist(
         playlistName: String,
@@ -33,23 +52,24 @@ class PlaylistRepositoryImpl(
         )
     }
 
-    override fun addToPlaylist(trackId: String, playlistId: Int): Boolean {
+    override fun addToPlaylist(track: Track, playlistId: Int): Boolean {
         val playlist = database.playlistDao().getPlaylistById(playlistId)
         val jsonTracks = playlist.tracks
-        var tracks = ArrayList<String>()
+        var tracksIds = ArrayList<String>()
         if (jsonTracks.isNotEmpty())
-            tracks = playlistDBConverter.createTracksFromJson(jsonTracks)
+            tracksIds = playlistDBConverter.createTracksFromJson(jsonTracks)
 
 
-        val currentTrack = tracks.filter { track -> track == trackId }
+        val currentTrack = tracksIds.filter { _trackId -> _trackId == track.trackId }
         if (currentTrack.isEmpty()) {
-            tracks.add(trackId)
+            tracksIds.add(track.trackId)
             database.playlistDao().updatePlaylist(
                 playlist.copy(
-                    tracks = playlistDBConverter.createJsonFromTracks(tracks),
-                    tracksCount = tracks.size
+                    tracks = playlistDBConverter.createJsonFromTracks(tracksIds),
+                    tracksCount = tracksIds.size
                 )
             )
+            database.playlistDao().insertTrack(trackDBConverter.map(track))
             return true
         }
         return false
@@ -73,7 +93,11 @@ class PlaylistRepositoryImpl(
         }
     }
 
-    fun convertFromPlaylistEntity(playlists: List<PlaylistEntity>): List<Playlist> {
+    private fun convertFromPlaylistEntity(playlists: List<PlaylistEntity>): List<Playlist> {
         return playlists.map { playlist -> playlistDBConverter.map(playlist) }
+    }
+
+    private fun convertFromTrackEntity(tracksEntity: List<TrackAtPlaylistEntity>): List<Track> {
+        return tracksEntity.map { track -> trackDBConverter.map(track) }
     }
 }
