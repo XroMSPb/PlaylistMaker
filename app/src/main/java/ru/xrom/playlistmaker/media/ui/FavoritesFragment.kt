@@ -45,9 +45,9 @@ class FavoritesFragment : Fragment() {
         ) { track -> openPlayer(track) }
 
         binding.recycleView.layoutManager = LinearLayoutManager(context)
-        adapter = TrackAdapter { item ->
+        adapter = TrackAdapter({ item ->
             onTrackClickDebounce(item)
-        }
+        })
         viewModel.refreshFavoriteTracks()
         viewModel.getFavoriteTracks().observe(viewLifecycleOwner) { data ->
             if (data.isEmpty()) {

@@ -14,5 +14,5 @@ interface PlaylistRepository {
         playlistImage: String?,
     ): Long
     fun addToPlaylist(track: Track, playlistId: Int): Boolean
-    fun removeFromPlaylist(trackId: String, playlistId: Int)
+    suspend fun removeFromPlaylist(trackId: String, playlistId: Int)
 }

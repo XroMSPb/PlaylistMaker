@@ -23,7 +23,7 @@ class PlaylistViewerViewModel(private val interactor: PlaylistInteractor) : View
         viewModelScope.launch(Dispatchers.IO) {
             interactor.getPlaylistById(playlistId).collect {
                 if (it != null) {
-                    interactor.getAllTracks(it.id).collect() { tracks ->
+                    interactor.getAllTracks(it.id).collect { tracks ->
                         allTracks.postValue(tracks)
                     }
                     playlist.postValue(it)
@@ -33,4 +33,13 @@ class PlaylistViewerViewModel(private val interactor: PlaylistInteractor) : View
         }
     }
 
+
+    fun removeTrackFromPlaylist(trackId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            interactor.removeFromPlaylist(trackId, playlist.value!!.id)
+            interactor.getAllTracks(playlist.value!!.id).collect { tracks ->
+                allTracks.postValue(tracks)
+            }
+        }
+    }
 }
