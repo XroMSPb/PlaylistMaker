@@ -137,6 +137,7 @@ class PlaylistViewerFragment : Fragment() {
         binding.editPlaylist.setOnClickListener {
             findNavController().navigate(R.id.action_playlistViewer_to_newPlaylist, Bundle().apply {
                 putBoolean(NewPlaylistFragment.FROM_NAVCONTROLLER_KEY, true)
+                putInt(NewPlaylistFragment.PLAYLIST_ID_KEY, playlistId)
             })
         }
 
