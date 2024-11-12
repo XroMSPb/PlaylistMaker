@@ -134,6 +134,12 @@ class PlaylistViewerFragment : Fragment() {
             deletePlaylist(binding.playlistName.text.toString())
         }
 
+        binding.editPlaylist.setOnClickListener {
+            findNavController().navigate(R.id.action_playlistViewer_to_newPlaylist, Bundle().apply {
+                putBoolean(NewPlaylistFragment.FROM_NAVCONTROLLER_KEY, true)
+            })
+        }
+
         viewModel.observeAllTracks().observe(viewLifecycleOwner) { tracks ->
             if (!tracks.isNullOrEmpty()) {
                 val duration = tracks.sumOf { it.trackTimeMillis }

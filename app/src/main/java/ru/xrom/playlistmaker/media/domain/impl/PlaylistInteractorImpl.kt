@@ -24,6 +24,10 @@ class PlaylistInteractorImpl(
         return repository.createPlaylist(playlistName, playlistDescription, playlistImage)
     }
 
+    override fun updatePlaylist(playlist: Playlist) {
+        repository.updatePlaylist(playlist)
+    }
+
     override fun addToPlaylist(track: Track, playlistId: Int): Boolean {
         return repository.addToPlaylist(track, playlistId)
     }

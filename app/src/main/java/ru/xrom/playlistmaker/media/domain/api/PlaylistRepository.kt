@@ -13,6 +13,7 @@ interface PlaylistRepository {
         playlistDescription: String,
         playlistImage: String?,
     ): Long
+    fun updatePlaylist(playlist: Playlist)
     fun addToPlaylist(track: Track, playlistId: Int): Boolean
     suspend fun removeFromPlaylist(trackId: String, playlistId: Int)
     suspend fun deletePlaylist(playlistId: Int)

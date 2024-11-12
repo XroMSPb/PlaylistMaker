@@ -52,6 +52,12 @@ class PlaylistRepositoryImpl(
         )
     }
 
+    override fun updatePlaylist(playlist: Playlist) {
+        database.playlistDao().updatePlaylist(
+            playlistDBConverter.map(playlist)
+        )
+    }
+
     override fun addToPlaylist(track: Track, playlistId: Int): Boolean {
         val playlist = database.playlistDao().getPlaylistById(playlistId)
         val jsonTracks = playlist.tracks

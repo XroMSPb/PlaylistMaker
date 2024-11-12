@@ -36,5 +36,9 @@
         android:id="@+id/playlistViewer"
         android:name="ru.xrom.playlistmaker.media.ui.PlaylistViewerFragment"
         android:label="fragment_playlist_viewer"
-        tools:layout="@layout/fragment_playlist_viewer" />
+        tools:layout="@layout/fragment_playlist_viewer">
+        <action
+            android:id="@+id/action_playlistViewer_to_newPlaylist"
+            app:destination="@id/newPlaylist" />
+    </fragment>
 </navigation>

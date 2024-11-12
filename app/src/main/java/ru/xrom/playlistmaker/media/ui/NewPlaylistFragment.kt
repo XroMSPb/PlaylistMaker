@@ -11,8 +11,10 @@ import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.content.res.AppCompatResources.getDrawable
 import androidx.core.bundle.bundleOf
 import androidx.core.graphics.drawable.toBitmap
+import androidx.core.net.toUri
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -26,6 +28,8 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.databinding.FragmentNewplaylistBinding
 import ru.xrom.playlistmaker.utils.convertDpToPx
+import ru.xrom.playlistmaker.utils.getDefaultCacheImagePath
+import java.io.File
 
 
 class NewPlaylistFragment() : Fragment() {
@@ -35,6 +39,7 @@ class NewPlaylistFragment() : Fragment() {
     private var imageUri: Uri = Uri.EMPTY
     private val viewModel: NewPlaylistViewModel by viewModel()
     private var fromNavController = true
+    private var playlistId: Int = -1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,12 +57,39 @@ class NewPlaylistFragment() : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
         fromNavController = requireArguments().getBoolean(FROM_NAVCONTROLLER_KEY, true)
+        playlistId = requireArguments().getInt(PLAYLIST_ID_KEY)
+
         binding.btnCreate.isEnabled = false
         binding.toolbar.setNavigationOnClickListener {
             activity?.onBackPressedDispatcher?.onBackPressed()
         }
         binding.playlistName.doOnTextChanged { s, _, _, _ ->
             binding.btnCreate.isEnabled = s?.isEmpty() != true
+        }
+
+        if (playlistId != -1) {
+            viewModel.getPlaylist(playlistId)
+        }
+
+        viewModel.observePlaylist().observe(viewLifecycleOwner) { playlist ->
+            binding.toolbar.title = "Редактировать"
+            binding.btnCreate.text = "Сохранить"
+            if (playlist != null) {
+                if (playlist.imagePath.isNullOrEmpty()) binding.image.setImageDrawable(
+                    getDrawable(
+                        requireContext(), R.drawable.ic_cover_placeholder
+                    )
+                )
+                else {
+                    binding.image.setImageURI(
+                        File(
+                            getDefaultCacheImagePath(requireContext()), playlist.imagePath
+                        ).toUri()
+                    )
+                }
+                binding.playlistName.setText(playlist.name)
+                binding.playlistDescription.setText((playlist.description))
+            }
         }
 
         val pickMedia =
@@ -92,17 +124,25 @@ class NewPlaylistFragment() : Fragment() {
 
         binding.btnCreate.setOnClickListener {
             val playlistName = binding.playlistName.text.toString()
-            viewModel.createPlaylist(
-                playlistName,
-                binding.playlistDescription.text.toString(),
-                imageUri,
-                binding.image.drawable.toBitmap()
-            )
-            Toast.makeText(
-                context,
-                context?.getString(R.string.playlist_created)?.format(playlistName),
-                Toast.LENGTH_SHORT
-            ).show()
+            if (playlistId == -1) {
+                viewModel.createPlaylist(
+                    playlistName,
+                    binding.playlistDescription.text.toString(),
+                    imageUri,
+                    binding.image.drawable.toBitmap()
+                )
+                Toast.makeText(
+                    context,
+                    context?.getString(R.string.playlist_created)?.format(playlistName),
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                viewModel.updatePlaylist(
+                    playlistName,
+                    binding.playlistDescription.text.toString(),
+                    binding.image.drawable.toBitmap()
+                )
+            }
 
             closeFragment()
         }
@@ -115,7 +155,7 @@ class NewPlaylistFragment() : Fragment() {
 
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            if (binding.playlistName.text.toString().isNotEmpty()) {
+            if (binding.playlistName.text.toString().isNotEmpty() || playlistId != -1) {
                 MaterialAlertDialogBuilder(context!!).setTitle(R.string.exit_title)
                     .setMessage(R.string.exit_message)
                     .setNeutralButton(android.R.string.cancel) { dialog, which ->
@@ -141,9 +181,14 @@ class NewPlaylistFragment() : Fragment() {
     companion object {
         const val RESULT = "RESULT_KEY"
         const val FROM_NAVCONTROLLER_KEY = "FROM_NAVCONTROLLER_KEY"
-        fun newInstance(fromNavController: Boolean) = NewPlaylistFragment().apply {
-            arguments = bundleOf(FROM_NAVCONTROLLER_KEY to fromNavController)
-        }
+        const val PLAYLIST_ID_KEY = "PLAYLIST_ID_KEY"
+        fun newInstance(fromNavController: Boolean, playlistId: Int = -1) =
+            NewPlaylistFragment().apply {
+                arguments = bundleOf(
+                    FROM_NAVCONTROLLER_KEY to fromNavController,
+                    PLAYLIST_ID_KEY to playlistId
+                )
+            }
     }
 }
 
