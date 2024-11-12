@@ -31,4 +31,8 @@ class PlaylistInteractorImpl(
     override suspend fun removeFromPlaylist(trackId: String, playlistId: Int) {
         repository.removeFromPlaylist(trackId, playlistId)
     }
+
+    override suspend fun deletePlaylist(playlistId: Int) {
+        repository.deletePlaylist(playlistId)
+    }
 }

@@ -248,7 +248,7 @@
             android:textSize="@dimen/text_size_16sp" />
 
         <TextView
-            android:id="@+id/delete"
+            android:id="@+id/delete_playlist"
             android:layout_width="match_parent"
             android:layout_height="62dp"
             android:layout_marginStart="@dimen/dp16"

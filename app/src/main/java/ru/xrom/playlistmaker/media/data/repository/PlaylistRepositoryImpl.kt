@@ -94,6 +94,17 @@ class PlaylistRepositoryImpl(
         }
     }
 
+    override suspend fun deletePlaylist(playlistId: Int) {
+        val playlist = database.playlistDao().getPlaylistById(playlistId)
+        val jsonTracks = playlist.tracks
+        database.playlistDao().deletePlaylist(playlistId)
+        if (jsonTracks.isNotEmpty()) {
+            playlistDBConverter.createTracksFromJson(jsonTracks).forEach { trackId ->
+                checkTrackInPlaylists(trackId)
+            }
+        }
+    }
+
     suspend fun checkTrackInPlaylists(trackID: String) {
         var inPlaylist = false
         getPlaylists().collect { playlist ->

@@ -83,25 +83,6 @@ class PlaylistViewerFragment : Fragment() {
         val bottomSheetContainer = binding.playlistsBottomSheet
         val bottomSheetBehavior = BottomSheetBehavior.from(bottomSheetContainer)
 
-        bottomSheetBehavior.addBottomSheetCallback(object :
-            BottomSheetBehavior.BottomSheetCallback() {
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                when (newState) {
-                    BottomSheetBehavior.STATE_COLLAPSED -> {
-                        binding.overlay.visibility = View.GONE
-                    }
-
-                    else -> {
-                        binding.overlay.visibility = View.VISIBLE
-                    }
-                }
-            }
-
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
-                binding.overlay.alpha = (slideOffset + 1f) / 2f
-            }
-        })
-
         val bottomMenuContainer = binding.playlistsBottomMenu
         val bottomMenuBehavior = BottomSheetBehavior.from(bottomMenuContainer)
         bottomMenuBehavior.state = BottomSheetBehavior.STATE_HIDDEN
@@ -149,6 +130,10 @@ class PlaylistViewerFragment : Fragment() {
             sharePlaylist()
         }
 
+        binding.deletePlaylist.setOnClickListener {
+            deletePlaylist(binding.playlistName.text.toString())
+        }
+
         viewModel.observeAllTracks().observe(viewLifecycleOwner) { tracks ->
             if (!tracks.isNullOrEmpty()) {
                 val duration = tracks.sumOf { it.trackTimeMillis }
@@ -171,6 +156,18 @@ class PlaylistViewerFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun deletePlaylist(playlistName: String) {
+        MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.delete_playlist))
+            .setMessage(getString(R.string.delete_playlist_message).format(playlistName))
+            .setNegativeButton(R.string.no) { _, _ ->
+            }.setPositiveButton(R.string.yes) { dialog, which ->
+                synchronized(this) {
+                    viewModel.deletePlaylist()
+                    findNavController().navigateUp()
+                }
+            }.show()
     }
 
     private fun renderUI(playlist: Playlist) {
@@ -207,7 +204,7 @@ class PlaylistViewerFragment : Fragment() {
 
     private fun onTrackLongClick(track: Track) {
         MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.delete_track))
-            .setNeutralButton(R.string.no) { _, _ ->
+            .setNegativeButton(R.string.no) { _, _ ->
             }.setPositiveButton(R.string.yes) { dialog, which ->
                 synchronized(this) {
                     viewModel.removeTrackFromPlaylist(track.trackId)

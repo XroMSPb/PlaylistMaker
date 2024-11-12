@@ -26,6 +26,9 @@ interface PlaylistDao {
     @Query("SELECT tracks FROM playlist_table WHERE id = :playlistId")
     suspend fun getAllTracksFromPlaylist(playlistId: Int): String
 
+    @Query("DELETE FROM playlist_table WHERE id = :playlistId")
+    suspend fun deletePlaylist(playlistId: Int)
+
     @Query("SELECT * FROM all_tracks")
     suspend fun getAllTracks(): List<TrackAtPlaylistEntity>
 
@@ -37,4 +40,5 @@ interface PlaylistDao {
 
     @Query("DELETE FROM all_tracks WHERE trackId = :trackId")
     suspend fun deleteTrack(trackId: String)
+
 }
