@@ -67,7 +67,7 @@ class NewPlaylistFragment() : Fragment() {
             binding.btnCreate.isEnabled = s?.isEmpty() != true
         }
 
-        if (playlistId != -1) {
+        if (playlistId > 0) {
             viewModel.getPlaylist(playlistId)
         }
 
@@ -124,7 +124,7 @@ class NewPlaylistFragment() : Fragment() {
 
         binding.btnCreate.setOnClickListener {
             val playlistName = binding.playlistName.text.toString()
-            if (playlistId == -1) {
+            if (playlistId < 1) {
                 viewModel.createPlaylist(
                     playlistName,
                     binding.playlistDescription.text.toString(),
