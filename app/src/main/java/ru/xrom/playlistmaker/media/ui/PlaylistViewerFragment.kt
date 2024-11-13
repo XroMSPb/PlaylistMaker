@@ -139,7 +139,6 @@ class PlaylistViewerFragment : Fragment() {
                 putBoolean(NewPlaylistFragment.FROM_NAVCONTROLLER_KEY, true)
                 putInt(NewPlaylistFragment.PLAYLIST_ID_KEY, playlistId)
             })
-            bottomMenuBehavior.state = BottomSheetBehavior.STATE_HIDDEN
         }
 
         viewModel.observeAllTracks().observe(viewLifecycleOwner) { tracks ->
