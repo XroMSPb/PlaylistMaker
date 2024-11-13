@@ -139,7 +139,8 @@
             android:id="@+id/list_items"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:visibility="gone">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView"
@@ -155,6 +156,17 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:listitem="@layout/track_item" />
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/nothing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp16"
+            android:gravity="center_horizontal"
+            android:maxLines="1"
+            android:text="@string/emplty_playlist"
+            android:textColor="?attr/colorOnPrimary"
+            android:textSize="@dimen/text_size_16sp" />
     </LinearLayout>
 
     <LinearLayout
@@ -164,6 +176,7 @@
         android:background="@drawable/bottom_sheet_bg"
         android:gravity="center_horizontal"
         android:orientation="vertical"
+        android:visibility="gone"
         app:behavior_hideable="true"
         app:behavior_peekHeight="450dp"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">

@@ -5,6 +5,8 @@ import android.icu.text.SimpleDateFormat
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.content.res.AppCompatResources.getDrawable
@@ -91,11 +93,11 @@ class PlaylistViewerFragment : Fragment() {
             override fun onStateChanged(bottomSheet: View, newState: Int) {
                 when (newState) {
                     BottomSheetBehavior.STATE_HIDDEN -> {
-                        binding.overlay.visibility = View.GONE
+                        binding.overlay.visibility = GONE
                     }
 
                     else -> {
-                        binding.overlay.visibility = View.VISIBLE
+                        binding.overlay.visibility = VISIBLE
                     }
                 }
             }
@@ -143,6 +145,8 @@ class PlaylistViewerFragment : Fragment() {
 
         viewModel.observeAllTracks().observe(viewLifecycleOwner) { tracks ->
             if (!tracks.isNullOrEmpty()) {
+                binding.listItems.visibility = VISIBLE
+                binding.nothing.visibility = GONE
                 val duration = tracks.sumOf { it.trackTimeMillis }
                 binding.playlistInfo.text = getString(
                     R.string.playlist_info,
@@ -153,6 +157,8 @@ class PlaylistViewerFragment : Fragment() {
                 binding.recyclerView.adapter = adapter
                 binding.playlistSmallTracks.text = getPluralForm(tracks.size).format(tracks.size)
             } else {
+                binding.listItems.visibility = GONE
+                binding.nothing.visibility = VISIBLE
                 binding.playlistInfo.text = getPluralForm(0).format(0)
                 binding.playlistSmallTracks.text = getPluralForm(0).format(0)
                 adapter.clearItems()
