@@ -85,12 +85,12 @@ class NewPlaylistFragment() : Fragment() {
             binding.btnCreate.text = "Сохранить"
             if (playlist != null) {
                 _playlist = playlist
-                if (playlist.imagePath.isNullOrEmpty()) binding.image.setImageDrawable(
-                    getDrawable(
-                        requireContext(), R.drawable.ic_cover_placeholder
+                if (playlist.imagePath.isNullOrEmpty()) {
+                    binding.image.setImageDrawable(
+                        getDrawable(requireContext(), R.drawable.ic_cover_placeholder)
                     )
-                )
-                else {
+                    binding.image.scaleType = ImageView.ScaleType.CENTER_CROP
+                } else {
                     binding.image.setImageURI(
                         File(
                             getDefaultCacheImagePath(requireContext()), playlist.imagePath
@@ -106,22 +106,17 @@ class NewPlaylistFragment() : Fragment() {
             registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
                 if (uri != null) {
                     binding.image.scaleType = ImageView.ScaleType.CENTER_CROP
-                    Glide.with(this)
-                        .load(uri)
-                        .apply(
-                            RequestOptions().transform(
-                                MultiTransformation(
-                                    CenterCrop(),
-                                    RoundedCorners(
-                                        convertDpToPx(
-                                            8f,
-                                            requireContext()
-                                        )
+                    Glide.with(this).load(uri).apply(
+                        RequestOptions().transform(
+                            MultiTransformation(
+                                CenterCrop(), RoundedCorners(
+                                    convertDpToPx(
+                                        8f, requireContext()
                                     )
                                 )
                             )
                         )
-                        .into(binding.image)
+                    ).into(binding.image)
                     imageUri = uri
                 } else {
                     Log.d("PhotoPicker", "No media selected")
@@ -180,10 +175,11 @@ class NewPlaylistFragment() : Fragment() {
     private fun closeFragment() {
         val result = Bundle()
 
-        if (fromNavController)
-            findNavController().previousBackStackEntry?.savedStateHandle?.set(RESULT, result)
-        else
-            parentFragmentManager.setFragmentResult(RESULT, result)
+        if (fromNavController) findNavController().previousBackStackEntry?.savedStateHandle?.set(
+            RESULT,
+            result
+        )
+        else parentFragmentManager.setFragmentResult(RESULT, result)
 
         parentFragmentManager.popBackStack()
     }
@@ -195,8 +191,7 @@ class NewPlaylistFragment() : Fragment() {
         fun newInstance(fromNavController: Boolean, playlistId: Int = -1) =
             NewPlaylistFragment().apply {
                 arguments = bundleOf(
-                    FROM_NAVCONTROLLER_KEY to fromNavController,
-                    PLAYLIST_ID_KEY to playlistId
+                    FROM_NAVCONTROLLER_KEY to fromNavController, PLAYLIST_ID_KEY to playlistId
                 )
             }
     }
