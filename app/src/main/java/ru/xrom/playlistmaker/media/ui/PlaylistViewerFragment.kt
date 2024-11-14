@@ -147,7 +147,9 @@ class PlaylistViewerFragment : Fragment() {
         findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Any>(
             NewPlaylistFragment.RESULT
         )?.observe(viewLifecycleOwner) { _ ->
-            viewModel.loadPlaylist(playlistId)
+            synchronized(this) {
+                viewModel.loadPlaylist(playlistId)
+            }
         }
 
         viewModel.observeAllTracks().observe(viewLifecycleOwner) { tracks ->
