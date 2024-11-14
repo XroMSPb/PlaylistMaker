@@ -51,7 +51,7 @@ class NewPlaylistViewModel(
         bitmap: Bitmap,
     ) {
         viewModelScope.launch(Dispatchers.IO) {
-            val playlistImage = playlist.value!!.imagePath ?: "${UUID.randomUUID()}.png"
+            val playlistImage = "${UUID.randomUUID()}.png"
             interactor.updatePlaylist(
                 playlist.value!!.copy(
                     name = playlistName,

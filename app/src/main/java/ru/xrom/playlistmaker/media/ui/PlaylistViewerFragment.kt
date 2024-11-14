@@ -45,6 +45,7 @@ class PlaylistViewerFragment : Fragment() {
     private val viewModel: PlaylistViewerViewModel by viewModel()
     private var _binding: FragmentPlaylistViewerBinding? = null
     private val binding get() = _binding!!
+    var playlistId = -1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,7 +57,7 @@ class PlaylistViewerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val playlistId = requireArguments().getInt(PLAYLIST_ID_KEY, -1)
+        playlistId = requireArguments().getInt(PLAYLIST_ID_KEY, -1)
         if (playlistId == -1) {
             Toast.makeText(requireContext(), "Playlist not found", Toast.LENGTH_SHORT).show()
             findNavController().navigateUp()
@@ -141,6 +142,12 @@ class PlaylistViewerFragment : Fragment() {
                 putBoolean(NewPlaylistFragment.FROM_NAVCONTROLLER_KEY, true)
                 putInt(NewPlaylistFragment.PLAYLIST_ID_KEY, playlistId)
             })
+        }
+
+        findNavController().currentBackStackEntry?.savedStateHandle?.getLiveData<Any>(
+            NewPlaylistFragment.RESULT
+        )?.observe(viewLifecycleOwner) { _ ->
+            viewModel.loadPlaylist(playlistId)
         }
 
         viewModel.observeAllTracks().observe(viewLifecycleOwner) { tracks ->
