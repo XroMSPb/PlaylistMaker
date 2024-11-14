@@ -27,6 +27,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.xrom.playlistmaker.R
 import ru.xrom.playlistmaker.databinding.FragmentNewplaylistBinding
+import ru.xrom.playlistmaker.media.ui.model.Playlist
 import ru.xrom.playlistmaker.utils.convertDpToPx
 import ru.xrom.playlistmaker.utils.getDefaultCacheImagePath
 import java.io.File
@@ -40,10 +41,7 @@ class NewPlaylistFragment() : Fragment() {
     private val viewModel: NewPlaylistViewModel by viewModel()
     private var fromNavController = true
     private var playlistId: Int = -1
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+    private var _playlist: Playlist? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -75,6 +73,7 @@ class NewPlaylistFragment() : Fragment() {
             binding.toolbar.title = "Редактировать"
             binding.btnCreate.text = "Сохранить"
             if (playlist != null) {
+                _playlist = playlist
                 if (playlist.imagePath.isNullOrEmpty()) binding.image.setImageDrawable(
                     getDrawable(
                         requireContext(), R.drawable.ic_cover_placeholder
@@ -155,7 +154,7 @@ class NewPlaylistFragment() : Fragment() {
 
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
-            if (binding.playlistName.text.toString().isNotEmpty() || playlistId != -1) {
+            if (binding.playlistName.text.toString().isNotEmpty() && playlistId < 1) {
                 MaterialAlertDialogBuilder(context!!).setTitle(R.string.exit_title)
                     .setMessage(R.string.exit_message)
                     .setNeutralButton(android.R.string.cancel) { dialog, which ->
