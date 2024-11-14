@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
@@ -23,6 +24,7 @@ import com.bumptech.glide.load.MultiTransformation
 import com.bumptech.glide.load.resource.bitmap.CenterCrop
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import ru.xrom.playlistmaker.R
@@ -43,6 +45,7 @@ class NewPlaylistFragment() : Fragment() {
     private var playlistId: Int = -1
     private var _playlist: Playlist? = null
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -56,6 +59,14 @@ class NewPlaylistFragment() : Fragment() {
         activity?.onBackPressedDispatcher?.addCallback(viewLifecycleOwner, callback)
         fromNavController = requireArguments().getBoolean(FROM_NAVCONTROLLER_KEY, true)
         playlistId = requireArguments().getInt(PLAYLIST_ID_KEY)
+
+        val bottomNavigationView =
+            requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        val divider = requireActivity().findViewById<View>(R.id.divider)
+        if (bottomNavigationView != null && divider != null) {
+            bottomNavigationView.visibility = GONE
+            divider.visibility = GONE
+        }
 
         binding.btnCreate.isEnabled = false
         binding.toolbar.setNavigationOnClickListener {
