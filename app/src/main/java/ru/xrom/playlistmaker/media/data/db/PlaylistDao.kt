@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 import ru.xrom.playlistmaker.media.data.db.entity.PlaylistEntity
 import ru.xrom.playlistmaker.media.data.db.entity.TrackAtPlaylistEntity
 
@@ -30,7 +31,7 @@ interface PlaylistDao {
     suspend fun deletePlaylist(playlistId: Int)
 
     @Query("SELECT * FROM all_tracks")
-    suspend fun getAllTracks(): List<TrackAtPlaylistEntity>
+    fun getAllTracks(): Flow<List<TrackAtPlaylistEntity>>
 
     @Query("SELECT * FROM all_tracks WHERE trackId IN (:trackIds)")
     suspend fun getTrackByIds(trackIds: List<String>): List<TrackAtPlaylistEntity>

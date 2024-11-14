@@ -99,4 +99,9 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+    <style name="CustomAlertDialog" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+        <item name="colorOnPrimary">@color/blue</item>
+        <item name="colorOnSecondary">@color/blue</item>
+    </style>
+
 </resources>

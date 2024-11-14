@@ -114,9 +114,11 @@ class PlaylistRepositoryImpl(
     suspend fun checkTrackInPlaylists(trackID: String) {
         var inPlaylist = false
         getPlaylists().collect { playlist ->
-            playlist.forEach { item ->
-                inPlaylist = item.tracks.contains(trackID)
-            }
+            for (item in playlist)
+                if (item.tracks.contains(trackID)) {
+                    inPlaylist = true
+                    break
+                }
         }
         if (!inPlaylist)
             database.playlistDao().deleteTrack(trackID)

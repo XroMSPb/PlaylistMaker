@@ -172,7 +172,10 @@ class PlaylistViewerFragment : Fragment() {
     }
 
     private fun deletePlaylist(playlistName: String) {
-        MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.delete_playlist))
+        MaterialAlertDialogBuilder(
+            requireContext(),
+            R.style.CustomAlertDialog
+        ).setTitle(getString(R.string.delete_playlist))
             .setMessage(getString(R.string.delete_playlist_message).format(playlistName))
             .setNegativeButton(R.string.no) { _, _ ->
             }.setPositiveButton(R.string.yes) { dialog, which ->
@@ -216,7 +219,10 @@ class PlaylistViewerFragment : Fragment() {
     }
 
     private fun onTrackLongClick(track: Track) {
-        MaterialAlertDialogBuilder(requireContext()).setTitle(getString(R.string.delete_track))
+        MaterialAlertDialogBuilder(
+            requireContext(),
+            R.style.CustomAlertDialog
+        ).setTitle(getString(R.string.delete_track))
             .setNegativeButton(R.string.no) { _, _ ->
             }.setPositiveButton(R.string.yes) { dialog, which ->
                 synchronized(this) {
@@ -233,7 +239,7 @@ class PlaylistViewerFragment : Fragment() {
             var message = "${binding.playlistName.text}\n${binding.playlistDescription.text}\n${
                 getPluralForm(adapter.items.size).format(adapter.items.size)
             }\n"
-            var i = 0
+            var i = 1
             adapter.items.forEach { track ->
                 message = message + "${i++}. ${track.artistName} - ${track.trackName} (${
                     SimpleDateFormat(
