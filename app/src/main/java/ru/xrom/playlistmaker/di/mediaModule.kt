@@ -5,6 +5,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import ru.xrom.playlistmaker.media.data.converter.PlaylistDBConverter
+import ru.xrom.playlistmaker.media.data.converter.TrackAtPlaylistDBConverter
 import ru.xrom.playlistmaker.media.data.converter.TrackDBConverter
 import ru.xrom.playlistmaker.media.data.db.AppDatabase
 import ru.xrom.playlistmaker.media.data.repository.FavoritesRepositoryImpl
@@ -18,6 +19,7 @@ import ru.xrom.playlistmaker.media.domain.impl.PlaylistInteractorImpl
 import ru.xrom.playlistmaker.media.ui.FavoritesViewModel
 import ru.xrom.playlistmaker.media.ui.NewPlaylistViewModel
 import ru.xrom.playlistmaker.media.ui.PlaylistViewModel
+import ru.xrom.playlistmaker.media.ui.PlaylistViewerViewModel
 
 val mediaModule = module {
     viewModel {
@@ -32,6 +34,10 @@ val mediaModule = module {
         NewPlaylistViewModel(get(), get())
     }
 
+    viewModel {
+        PlaylistViewerViewModel(get())
+    }
+
     single {
         Room.databaseBuilder(androidContext(), AppDatabase::class.java, "database.db").build()
     }
@@ -39,8 +45,12 @@ val mediaModule = module {
     single {
         TrackDBConverter()
     }
+
     single {
         PlaylistDBConverter()
+    }
+    single {
+        TrackAtPlaylistDBConverter()
     }
 
     single<FavoritesRepository> {
@@ -52,7 +62,7 @@ val mediaModule = module {
     }
 
     single<PlaylistRepository> {
-        PlaylistRepositoryImpl(get(), get())
+        PlaylistRepositoryImpl(get(), get(), get())
     }
 
     single<PlaylistInteractor> {

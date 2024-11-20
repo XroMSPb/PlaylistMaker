@@ -9,6 +9,7 @@ import ru.xrom.playlistmaker.search.domain.model.Track
 
 class TrackAdapter(
     private val onItemClickListener: OnItemClickListener,
+    private val onItemLongClickListener: OnItemLongClickListener? = null,
 ) : RecyclerView.Adapter<TrackViewHolder>() {
     var items = mutableListOf<Track>()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TrackViewHolder {
@@ -24,6 +25,11 @@ class TrackAdapter(
     override fun onBindViewHolder(holder: TrackViewHolder, position: Int) {
         holder.bind(items[position])
         holder.itemView.setOnClickListener { onItemClickListener.onItemClick(items[position]) }
+        if (onItemLongClickListener != null)
+            holder.itemView.setOnLongClickListener {
+                onItemLongClickListener.onItemLongClick(items[position])
+                true
+            }
     }
 
     fun clearItems() {

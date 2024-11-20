@@ -4,11 +4,17 @@ import kotlinx.coroutines.flow.Flow
 import ru.xrom.playlistmaker.media.domain.api.PlaylistInteractor
 import ru.xrom.playlistmaker.media.domain.api.PlaylistRepository
 import ru.xrom.playlistmaker.media.ui.model.Playlist
+import ru.xrom.playlistmaker.search.domain.model.Track
 
 class PlaylistInteractorImpl(
     private val repository: PlaylistRepository,
 ) : PlaylistInteractor {
     override fun getPlaylists(): Flow<List<Playlist>> = repository.getPlaylists()
+    override fun getPlaylistById(playlistId: Int): Flow<Playlist?> =
+        repository.getPlaylistById(playlistId)
+
+    override fun getAllTracks(playlistId: Int): Flow<List<Track>?> =
+        repository.getAllTracks(playlistId)
 
     override fun createPlaylist(
         playlistName: String,
@@ -18,11 +24,19 @@ class PlaylistInteractorImpl(
         return repository.createPlaylist(playlistName, playlistDescription, playlistImage)
     }
 
-    override fun addToPlaylist(trackId: String, playlistId: Int): Boolean {
-        return repository.addToPlaylist(trackId, playlistId)
+    override fun updatePlaylist(playlist: Playlist) {
+        repository.updatePlaylist(playlist)
     }
 
-    override fun removeFromPlaylist(trackId: String, playlistName: Int) {
-        repository.removeFromPlaylist(trackId, playlistName)
+    override fun addToPlaylist(track: Track, playlistId: Int): Boolean {
+        return repository.addToPlaylist(track, playlistId)
+    }
+
+    override suspend fun removeFromPlaylist(trackId: String, playlistId: Int) {
+        repository.removeFromPlaylist(trackId, playlistId)
+    }
+
+    override suspend fun deletePlaylist(playlistId: Int) {
+        repository.deletePlaylist(playlistId)
     }
 }
