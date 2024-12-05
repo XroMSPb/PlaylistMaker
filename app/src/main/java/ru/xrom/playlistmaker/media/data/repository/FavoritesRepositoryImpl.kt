@@ -12,6 +12,10 @@ class FavoritesRepositoryImpl(
     private val database: AppDatabase,
     private val trackDBConverter: TrackDBConverter,
 ) : FavoritesRepository {
+    override suspend fun isFavorite(trackId: String): Boolean {
+        return database.trackDao().isFavorite(trackId)
+    }
+
     override fun getTrackById(trackId: String): Flow<Track> = flow {
         val track = database.trackDao().getTrackById(trackId)
         emit(trackDBConverter.map(track))

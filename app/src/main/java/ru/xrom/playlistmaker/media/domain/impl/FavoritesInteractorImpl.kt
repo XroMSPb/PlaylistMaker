@@ -8,8 +8,8 @@ import ru.xrom.playlistmaker.search.domain.model.Track
 class FavoritesInteractorImpl(
     private val repository: FavoritesRepository,
 ) : FavoritesInteractor {
-    override fun isFavorite(trackId: String): Boolean {
-        return repository.getTrackById(trackId).let { true }
+    override suspend fun isFavorite(trackId: String): Boolean {
+        return repository.isFavorite(trackId)
     }
 
     override fun getTrackById(trackId: String): Flow<Track?> = repository.getTrackById(trackId)
