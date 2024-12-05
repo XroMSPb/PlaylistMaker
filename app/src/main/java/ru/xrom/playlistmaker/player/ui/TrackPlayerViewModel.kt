@@ -84,6 +84,14 @@ class TrackPlayerViewModel(
         ).format(trackPlayerInteractor.getCurrentPosition()) ?: "00:00"
     }
 
+    fun isTrackInFavorites(trackId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            favoriteState.postValue(
+                favoritesInteractor.isFavorite(trackId)
+            )
+        }
+    }
+
     fun onFavoriteClick(track: Track) {
         when (track.isFavorite) {
             true -> {

@@ -182,7 +182,7 @@ class TrackPlayerActivity : AppCompatActivity() {
         binding.playButton.setOnClickListener {
             viewModel.playingControl()
         }
-        updateFavoriteState(track.isFavorite)
+        viewModel.isTrackInFavorites(track.trackId)
     }
 
     private fun updateFavoriteState(isFavorite: Boolean) {

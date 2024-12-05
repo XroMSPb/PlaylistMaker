@@ -161,7 +161,10 @@ class NewPlaylistFragment() : Fragment() {
     private val callback = object : OnBackPressedCallback(true) {
         override fun handleOnBackPressed() {
             if (binding.playlistName.text.toString().isNotEmpty() && playlistId < 1) {
-                MaterialAlertDialogBuilder(context!!).setTitle(R.string.exit_title)
+                MaterialAlertDialogBuilder(
+                    context!!,
+                    R.style.AlertDialogTheme
+                ).setTitle(R.string.exit_title)
                     .setMessage(R.string.exit_message)
                     .setNeutralButton(android.R.string.cancel) { dialog, which ->
 

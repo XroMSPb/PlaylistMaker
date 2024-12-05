@@ -183,7 +183,7 @@ class PlaylistViewerFragment : Fragment() {
     private fun deletePlaylist(playlistName: String) {
         MaterialAlertDialogBuilder(
             requireContext(),
-            R.style.CustomAlertDialog
+            R.style.AlertDialogTheme
         ).setTitle(getString(R.string.delete_playlist))
             .setMessage(getString(R.string.delete_playlist_message).format(playlistName))
             .setNegativeButton(R.string.no) { _, _ ->
@@ -230,7 +230,7 @@ class PlaylistViewerFragment : Fragment() {
     private fun onTrackLongClick(track: Track) {
         MaterialAlertDialogBuilder(
             requireContext(),
-            R.style.CustomAlertDialog
+            R.style.AlertDialogTheme
         ).setTitle(getString(R.string.delete_track))
             .setNegativeButton(R.string.no) { _, _ ->
             }.setPositiveButton(R.string.yes) { dialog, which ->
