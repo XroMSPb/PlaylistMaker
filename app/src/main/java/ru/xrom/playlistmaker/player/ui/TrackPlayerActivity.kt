@@ -120,6 +120,7 @@ class TrackPlayerActivity : AppCompatActivity() {
 
             viewModel.observeFavoriteState().observe(this) { state ->
                 updateFavoriteState(state)
+                track.isFavorite = state
             }
 
             viewModel.observePlayingState().observe(this) { state ->
